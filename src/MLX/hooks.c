@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   miniRT.h                                           :+:    :+:            */
+/*   hooks.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/11 20:35:51 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/12 15:00:37 by rvan-mee      ########   odam.nl         */
+/*   Created: 2022/09/12 12:12:27 by rvan-mee      #+#    #+#                 */
+/*   Updated: 2022/09/12 12:39:15 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#include <mlx.h>
+#include <miniRT.h>
+#include <bmp.h>
 
-# include <stdio.h>
-# include <stdint.h>
-# include <stdbool.h>
-# include <unistd.h>
-# include <stdlib.h>
-
-# define WIDTH 1920
-# define HEIGHT 1080
-
-void	create_mlx(mlx_t **mlx, mlx_image_t **img);
-
-#endif
+void	keyhook(mlx_key_data_t keydata, void *param)
+{
+	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+		exit(EXIT_SUCCESS);
+	if (keydata.key == MLX_KEY_P && keydata.action == MLX_PRESS)
+		create_bmp(param);
+}

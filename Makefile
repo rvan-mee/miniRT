@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/09/12 12:16:06 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/09/12 12:36:20 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,10 @@ INCLUDE += -I $(INCD)
 
 # SOURCE FILES
 SRCD := src/
-SRCS := main.c
+SRCS := main.c								\
+		MLX/create_mlx.c					\
+		MLX/hooks.c							\
+		MLX/bmp.c
 SRCP := $(addprefix $(SRCD), $(SRCS))
 
 # OBJECT FILES

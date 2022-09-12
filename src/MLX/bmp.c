@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/08 19:15:41 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/12 15:02:27 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/12 16:24:57 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include <miniRT.h>
 #include <mlx.h>
 #include <bmp.h>
-#include <errno.h>
-#include <string.h>
+#include <unistd.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
 static int32_t	write_bmp_header(int32_t fd, t_bmp_data bmp_data)
 {

@@ -6,12 +6,13 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:32:16 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/12 12:38:46 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/12 16:24:02 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <mlx.h>
 #include <miniRT.h>
+#include <stdlib.h>
 
 void	create_mlx(mlx_t **mlx, mlx_image_t **img)
 {

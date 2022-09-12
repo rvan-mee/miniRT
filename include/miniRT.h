@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/12 16:22:36 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/12 17:20:46 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ typedef union u_rgba {
  *
  * Does [0.0,1.0] mean step is 0.1? Or could it also be 0.975234? No clue, but guess float is enough
  */
+
+typedef struct s_mlx_content {
+	mlx_t		*mlx;
+	mlx_image_t	*img;
+}	t_mlx_data;
 
 typedef struct s_ambient {
 	float	ratio; // [0.0, 1.0]

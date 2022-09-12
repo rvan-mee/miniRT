@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:31:51 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/12 16:22:59 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/12 17:20:46 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,10 @@
 
 int	main(void)
 {
-	mlx_t		*mlx;
-	mlx_image_t	*img;
+	t_mlx_data	mlx_data;
 
-	create_mlx(&mlx, &img);
-	mlx_loop(mlx);
-	mlx_terminate(mlx);
+	create_mlx(&mlx_data);
+	mlx_loop(mlx_data.mlx);
+	mlx_terminate(mlx_data.mlx);
 	return (true);
 }

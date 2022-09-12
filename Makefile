@@ -67,7 +67,7 @@ ifeq ($(shell uname -s), Darwin)
 	GLFW := $(shell brew --prefix glfw)/lib
 	MLX_ARG += -L $(GLFW)
 else
-	MLX_ARG = -ldl
+	MLX_ARG += -ldl
 endif
 
 #		RANDOM THINGS

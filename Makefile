@@ -20,9 +20,13 @@ INCLUDE += -I $(INCD)
 # SOURCE FILES
 SRCD := src/
 SRCS := main.c								\
-		MLX/create_mlx.c					\
-		MLX/hooks.c							\
-		MLX/bmp.c
+		mlx/create_mlx.c					\
+		mlx/hooks.c							\
+		mlx/bmp.c							\
+		\
+		parse/parse.c						\
+		parse/parse_object.c				\
+		parse/set_objects.c
 SRCP := $(addprefix $(SRCD), $(SRCS))
 
 # OBJECT FILES

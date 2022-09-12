@@ -15,29 +15,34 @@
 #include <parse.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <string.h>
-#include <sys/errno.h>
+#include <stdio.h>
 
-static bool	check_extention(char *config_file)
+#define ERR_EXTENSION	"Error\nWrong file extension: "
+#define ERR_OPEN		"Error\nFile failed to open: "
+#define ERR_USAGE		"Error\nPlease use ./miniRT [config file]\n"
+
+static bool	check_extension(const char *config_file)
 {
-	int32_t	len;
+	const size_t	len = ft_strlen(config_file);
 
-	len = ft_strlen(config_file);
 	if (ft_strncmp(&config_file[len - 3], ".rt", 4) != 0)
 	{
-		write(STDERR_FILENO, "Error\nWrong file extention\n", 28);
+		// TODO: Nice error function? With options for args etc (en dan false laten returnen voor 2 line errors hahaaaa
+		write(STDERR_FILENO, ERR_EXTENSION, 29);
+		write(STDERR_FILENO, config_file, len);
+		write(STDERR_FILENO, "\n", 1);
 		return (false);
 	}
 	return (true);
 }
 
-static bool	open_config_file(char *config_file, int32_t *fd)
+static bool	open_config_file(const char *config_file, int32_t *fd)
 {
-	*fd = open(config_file, R_OK);
+	*fd = open(config_file, O_RDONLY);
 	if (*fd == -1)
 	{
-		write(STDERR_FILENO, "Error\n", 7);
-		perror(errno);
+		write(STDERR_FILENO, ERR_OPEN, 28);
+		perror(config_file);
 		return (false);
 	}
 	return (true);
@@ -49,14 +54,14 @@ bool	parse_config_file(int32_t argc, char *argv[], t_scene *scene)
 
 	if (argc != 2)
 	{
-		write(STDERR_FILENO, "Error\nPlease use ./miniRT [config file]\n", 41);
+		write(STDERR_FILENO, ERR_USAGE, 41);
 		return (false);
 	}
-	if (!check_extention(argv[1]) || !open_config_file(argv[1], &fd))
+	if (!check_extension(argv[1]) || !open_config_file(argv[1], &fd))
 		return (false);
 	if (set_objects(fd, scene))
 	{
-		close (fd);
+		close(fd);
 		return (false);
 	}
 	close(fd);

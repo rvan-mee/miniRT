@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/09/11 19:43:19 by lsinke        ########   odam.nl          #
+#    Updated: 2022/09/12 12:36:20 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,10 @@ INCLUDE += -I $(INCD)
 
 # SOURCE FILES
 SRCD := src/
-SRCS := main.c
+SRCS := main.c								\
+		MLX/create_mlx.c					\
+		MLX/hooks.c							\
+		MLX/bmp.c
 SRCP := $(addprefix $(SRCD), $(SRCS))
 
 # OBJECT FILES
@@ -56,13 +59,13 @@ MLX42_N := libmlx42.a
 MLX42_I := $(addprefix $(MLX42_D), $(INCD))
 MLX42_L := $(addprefix $(MLX42_D), $(MLX42_N))
 
-LIBS += -lglfw
+MLX_ARG += -lglfw
 INCLUDE += -I $(MLX42_I)
 LIBS += $(MLX42_L)
 
 ifeq ($(shell uname -s), Darwin)
 	GLFW := $(shell brew --prefix glfw)/lib
-	CFLAGS += -L $(GLFW)
+	MLX_ARG += -L $(GLFW)
 else
 	MLX_ARG = -ldl
 endif
@@ -75,7 +78,7 @@ all: $(NAME)
 
 $(NAME): $(LIBS) $(OBJP)
 	@echo "Compiling main executable!"
-	$(COMPILE) $(OBJP) $(LIBS) -o $(NAME)
+	$(COMPILE) $(OBJP) $(MLX_ARG) $(LIBS) -o $(NAME)
 
 $(OBJD)%.o: $(SRCD)%.c $(HEADERS)
 	@mkdir -p $(@D)

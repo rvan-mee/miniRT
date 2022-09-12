@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
+/*   hooks.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/11 20:31:51 by rvan-mee      #+#    #+#                 */
+/*   Created: 2022/09/12 12:12:27 by rvan-mee      #+#    #+#                 */
 /*   Updated: 2022/09/12 17:20:46 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <mlx.h>
 #include <miniRT.h>
+#include <bmp.h>
+#include <stdlib.h>
 
-int	main(void)
+void	keyhook(mlx_key_data_t keydata, t_mlx_data *mlx_data)
 {
-	t_mlx_data	mlx_data;
-
-	create_mlx(&mlx_data);
-	mlx_loop(mlx_data.mlx);
-	mlx_terminate(mlx_data.mlx);
-	return (true);
+	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+		mlx_close_window(mlx_data->mlx);
+	if (keydata.key == MLX_KEY_P && keydata.action == MLX_PRESS)
+		create_bmp(mlx_data->img);
 }

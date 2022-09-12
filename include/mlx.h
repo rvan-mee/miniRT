@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
+/*   mlx.h                                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/11 20:31:51 by rvan-mee      #+#    #+#                 */
+/*   Created: 2022/09/11 20:32:46 by rvan-mee      #+#    #+#                 */
 /*   Updated: 2022/09/12 17:20:46 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <mlx.h>
-#include <miniRT.h>
+#ifndef MLX_H
+# define MLX_H
 
-int	main(void)
-{
-	t_mlx_data	mlx_data;
+# include <MLX42/MLX42.h>
+# include <miniRT.h>
 
-	create_mlx(&mlx_data);
-	mlx_loop(mlx_data.mlx);
-	mlx_terminate(mlx_data.mlx);
-	return (true);
-}
+void	keyhook(mlx_key_data_t keydata, t_mlx_data *mlx_data);
+void	create_mlx(t_mlx_data *mlx_data);
+
+#endif

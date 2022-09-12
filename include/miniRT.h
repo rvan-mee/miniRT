@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/12 17:20:46 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/12 19:29:44 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINIRT_H
 
 # include <stdint.h>
+# include <dynarr.h>
 # include <stdbool.h>
 # include <MLX42/MLX42.h>
 
@@ -23,6 +24,8 @@
 typedef double	t_dvec __attribute__ ((vector_size (4 * sizeof(double))));
 
 typedef enum e_object_type {
+	UNINITIALIZED,
+	ERROR,
 	AMBIENT,
 	CAMERA,
 	LIGHT,
@@ -30,6 +33,12 @@ typedef enum e_object_type {
 	PLANE,
 	CYLINDER
 }	t_obj_type;
+
+typedef enum e_dvec_type {
+	X,
+	Y,
+	Z
+}	t_dvec_type;
 
 typedef union u_rgba {
 	uint32_t	colour;
@@ -103,5 +112,12 @@ typedef struct s_object {
 		t_cylinder	cylinder;
 	};
 }	t_object;
+
+typedef struct s_scene {
+	t_dynarr	*objects;
+	t_object	*lights;
+	t_object	camera;
+	t_object	ambient;
+}	t_scene;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 11:28:47 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/13 14:53:17 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/13 20:22:30 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,62 +15,88 @@
 #include <libft.h>
 #include <unistd.h>
 
+#define WHITESPACE	"\t\n\v\f\r "
+
 #define LINE_ERROR		"Error\nLine `"
 #define OBJECT_ERROR	"' does not contain a valid object\n"
 #define COORD_ERROR		"' does not contain valid coordinates\n"
 #define VECTOR_ERROR	"' does not contain a valid orientation vector\n"
 #define COLOUR_ERROR	"' does not contain a valid colour\n"
 #define FORMAT_ERROR	"' does not contain a valid format\n"
-#define LRATIO_ERROR	"' does not contain a valid lightning ratio\n"
+#define LRATIO_ERROR	"' does not contain a valid lighting ratio\n"
+#define FOV_ERROR		"' does not contain a valid fov\n"
+#define BRIGHT_ERROR	"' does not contain a valid brightness\n"
+#define DIA_ERROR		"' does not contain a valid diameter\n"
+#define HEIGHT_ERROR	"' does not contain a valid height\n"
 
-static bool	parse_color(char *line, char **end, uint8_t *colour)
+static bool	parse_colour(char *line, char **end, uint8_t *colour)
 {
 	size_t	i;
 	int32_t	num;
-	char	str[4];
 
 	i = 0;
 	while (line[i] && ft_isdigit(line[i]))
 		i++;
-	if (i > 3 || i == 0 || line[i] == '\0')
+	if (i == 0)
 		return (false);
-	ft_strlcpy(str, line, i + 1);
-	num = ft_atoi(str);
-	if (num > 255 || num < 0)
+	num = ft_atoi(line);
+	if (num > 255)
 		return (false);
 	*colour = num;
 	*end = &line[i];
 	return (true);
 }
 
-bool	parse_line_error(char *line, t_parse_error err)
+bool	parse_line_error(const char *line, t_parse_error err)
 {
-	const char	*message[] = {OBJECT_ERROR, COORD_ERROR, VECTOR_ERROR, \
-							COLOUR_ERROR, FORMAT_ERROR, LRATIO_ERROR};
+	const char	*message[] = {\
+	[OBJECT] = OBJECT_ERROR,	\
+	[COORD] = COORD_ERROR,		\
+	[VECTOR] = VECTOR_ERROR,	\
+	[COLOUR] = COLOUR_ERROR,	\
+	[FORMAT] = FORMAT_ERROR,	\
+	[LRATIO] = LRATIO_ERROR,	\
+	[FOV] = FOV_ERROR,			\
+	[BRIGHT] = BRIGHT_ERROR,	\
+	[DIAMETER] = DIA_ERROR,		\
+	[OBJ_HEIGHT] = HEIGHT_ERROR	\
+	};
 
-	write(STDERR_FILENO, LINE_ERROR, 13);
-	write(STDERR_FILENO, line, ft_strlen(line));
-	write(STDERR_FILENO, message[err], ft_strlen(message[err]));
+	ft_putstr_fd(LINE_ERROR, STDERR_FILENO);
+	ft_putstr_fd(line, STDERR_FILENO);
+	ft_putstr_fd(message[err], STDERR_FILENO);
 	return (false);
 }
 
-bool	parse_vector(char *line, t_fvec *vector, bool normalized)
+bool	is_space(char c)
 {
-	return (true);
+	if (ft_strchr(WHITESPACE, c) != NULL)
+		return (true);
+	return (false);
 }
 
-bool	parse_rgb(char *line, t_rgba *colour)
+void	skip_spaces(char *line, char **end)
 {
-	while (*line && *line == ' ')
-		line++;
+	size_t	i;
+
+	i = 0;
+	while (line[i] && is_space(line[i]))
+		i++;
+	*end = &line[i];
+}
+
+bool	parse_rgb(char *line, char **end, t_rgba *colour)
+{
 	colour->a = 255;
-	if (!parse_color(line, &line, &colour->r) || *line != ',')
+	skip_spaces(line, &line);
+	if (!parse_colour(line, &line, &colour->r) || *line != ',')
 		return (false);
 	line++;
-	if (!parse_color(line, &line, &colour->g) || *line != ',')
+	if (!parse_colour(line, &line, &colour->g) || *line != ',')
 		return (false);
 	line++;
-	if (!parse_color(line, &line, &colour->b) || *line != '\n')
+	if (!parse_colour(line, &line, &colour->b))
 		return (false);
+	*end = line;
 	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:54:09 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/13 14:53:27 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/13 19:54:19 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,22 @@ typedef enum e_parse_error {
 	VECTOR,
 	COLOUR,
 	FORMAT,
-	LRATIO
+	LRATIO,
+	FOV,
+	BRIGHT,
+	DIAMETER,
+	OBJ_HEIGHT
 }	t_parse_error;
 
 bool	parse_config_file(int32_t argc, char *argv[], t_scene *scene);
 bool	parse_scene(int32_t fd, t_scene *dst);
 bool	parse_object(char *line, t_object *object);
 bool	set_objects(int32_t fd, t_scene *scene);
-bool	parse_rgb(char *line, t_rgba *colour);
-bool	parse_line_error(char *line, t_parse_error err);
-bool	parse_vector(char *line, t_fvec *vector, bool normalized);
+bool	parse_rgb(char *line, char **end, t_rgba *colour);
+bool	parse_line_error(const char *line, t_parse_error err);
+void	skip_spaces(char *start, char **end);
+bool	parse_vector(char *line, char **end, t_fvec *vector, bool normalized);
+bool	parse_float(float f, float min, float max);
+bool	is_space(char c);
 
 #endif

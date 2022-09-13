@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/09/13 14:07:14 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/09/13 18:40:30 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,9 @@ SRCS := main.c								\
 		parse/parse.c						\
 		parse/parse_scene.c					\
 		parse/parse_object.c				\
-		parse/parse_utils.c					
+		parse/parse_utils.c					\
+		parse/parse_vector.c				
+
 SRCP := $(addprefix $(SRCD), $(SRCS))
 
 # OBJECT FILES

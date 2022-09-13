@@ -29,7 +29,7 @@ static bool \
 
 	store = NULL;
 	if (obj->type == LIGHT)
-		return (dynarr_addone(lights, obj));
+		return (dynarr_addone(lights, &obj->light));
 	if (obj->type == CAMERA)
 		store = &dst->camera;
 	else if (obj->type == AMBIENT)
@@ -63,7 +63,10 @@ static bool \
 				return (cleanup(line, lights, objects));
 		free(line);
 	}
-	if (dst->ambient.type == AMBIENT && dst->camera.type == CAMERA
+	if (lights->length > 0
+		&& objects->length > 0
+		&& dst->ambient.type == AMBIENT
+		&& dst->camera.type == CAMERA
 		&& dynarr_finalize(lights) && dynarr_finalize(objects))
 		return (true);
 	return (cleanup(NULL, lights, objects));

@@ -24,8 +24,8 @@
 typedef double	t_dvec __attribute__ ((vector_size (4 * sizeof(double))));
 
 typedef enum e_object_type {
-	UNINITIALIZED,
-	ERROR,
+	UNINITIALIZED = 0,
+	ERROR = -1,
 	AMBIENT,
 	CAMERA,
 	LIGHT,
@@ -114,10 +114,12 @@ typedef struct s_object {
 }	t_object;
 
 typedef struct s_scene {
-	t_dynarr	*objects;
-	t_object	*lights;
 	t_object	camera;
 	t_object	ambient;
+	t_object	*lights;
+	size_t		lights_len;
+	t_object	*objects;
+	size_t		objects_len;
 }	t_scene;
 
 #endif

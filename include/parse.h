@@ -15,8 +15,8 @@
 
 # include <miniRT.h>
 
-bool		parse_config_file(int32_t argc, char *argv[], t_scene *scene);
-bool		set_objects(int32_t fd, t_scene *scene);
-t_object	parse_object(char *line);
+bool	parse_config_file(int32_t argc, char *argv[], t_scene *scene);
+bool	parse_scene(int32_t fd, t_scene *dst);
+bool	parse_object(char *line, t_object *object);
 
 #endif

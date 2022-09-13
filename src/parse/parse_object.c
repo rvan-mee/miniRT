@@ -15,49 +15,41 @@
 #include <libft.h>
 #include <unistd.h>
 
-static t_object	get_camera(char *line);
-static t_object	get_light(char *line);
-static t_object	get_sphere(char *line);
-static t_object	get_plane(char *line);
-static t_object	get_cylinder(char *line);
+static bool	get_camera(char *line, t_object *object);
+static bool	get_light(char *line, t_object *object);
+static bool	get_sphere(char *line, t_object *object);
+static bool	get_plane(char *line, t_object *object);
+static bool	get_cylinder(char *line, t_object *object);
 
-static t_object	get_ambient(char *line)
+static bool	get_ambient(char *line, t_object *object)
 {
-	t_object	object;
-
-	object.type = AMBIENT;
-	object.ambient.ratio = ft_strtof(line, &line);
+	object->type = AMBIENT;
+	object->ambient.ratio = ft_strtof(line, &line);
 	if (*line != ' ')
-		object.type = ERROR;
-
-
-
-	
-	return (object);
+	{
+		object->type = ERROR;
+		return (false);
+	}
+	return (true);
 }
 
-t_object	parse_object(char *line)
+bool	parse_object(char *line, t_object *object)
 {
-	t_object	object;
-
 	if (ft_strncmp(line, "A", 1) == 0)
-		object = get_ambient(&line[1]);
-	else if (ft_strncmp(line, "C", 1) == 0)
-		object = get_camera(&line[1]);
-	else if (ft_strncmp(line, "L", 1) == 0)
-		object = get_light(&line[1]);
-	else if (ft_strncmp(line, "sp", 2) == 0)
-		object = get_sphere(&line[2]);
-	else if (ft_strncmp(line, "pl", 2) == 0)
-		object = get_plane(&line[2]);
-	else if (ft_strncmp(line, "cy", 2) == 0)
-		object = get_cylinder(&line[2]);
-	else
-	{
-		write(STDERR_FILENO, "Error\nLine `", 13);
-		write(STDERR_FILENO, line, ft_strlen(line));
-		write(STDERR_FILENO, "' does not contain a valid object\n", 33);
-		object.type = ERROR;
-	}
-	return (object);
+		return (get_ambient(line + 1, object));
+	if (ft_strncmp(line, "C", 1) == 0)
+		return (get_camera(&line[1], object));
+	if (ft_strncmp(line, "L", 1) == 0)
+		return (get_light(&line[1], object));
+	if (ft_strncmp(line, "sp", 2) == 0)
+		return (get_sphere(&line[2], object));
+	if (ft_strncmp(line, "pl", 2) == 0)
+		return (get_plane(&line[2], object));
+	if (ft_strncmp(line, "cy", 2) == 0)
+		return (get_cylinder(&line[2], object));
+	write(STDERR_FILENO, "Error\nLine `", 13);
+	write(STDERR_FILENO, line, ft_strlen(line));
+	write(STDERR_FILENO, "' does not contain a valid object\n", 33);
+	object->type = ERROR;
+	return (false);
 }

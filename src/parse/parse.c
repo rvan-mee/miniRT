@@ -59,7 +59,7 @@ bool	parse_config_file(int32_t argc, char *argv[], t_scene *scene)
 	}
 	if (!check_extension(argv[1]) || !open_config_file(argv[1], &fd))
 		return (false);
-	if (set_objects(fd, scene))
+	if (!parse_scene(fd, scene))
 	{
 		close(fd);
 		return (false);

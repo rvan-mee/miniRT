@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   scene.c                                            :+:    :+:            */
+/*   parse_scene.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 02:00:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/13 02:00:19 by lsinke        ########   odam.nl         */
+/*   Updated: 2022/09/13 14:37:32 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static bool \
 		store = &dst->camera;
 	else if (obj->type == AMBIENT)
 		store = &dst->ambient;
-	else if (obj->type != ERROR)
+	else
 		return (dynarr_addone(objs, obj));
 	if (store != NULL && store->type != obj->type)
 	{
@@ -77,7 +77,7 @@ bool	parse_scene(int32_t fd, t_scene *dst)
 	t_dynarr	lights;
 	t_dynarr	objects;
 
-	*dst = (t_scene){0};
+	ft_bzero(dst, sizeof(t_scene));
 	if (!dynarr_create(&lights, 4, sizeof(t_light)) || \
 		!dynarr_create(&objects, 16, sizeof(t_object)))
 		return (cleanup(NULL, &lights, &objects));

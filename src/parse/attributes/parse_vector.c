@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <parse.h>
-#include <miniRT.h>
+#include "parse.h"
+#include "miniRT.h"
 
 bool	parse_vector(char **linep, t_fvec *vector, bool normalized)
 {

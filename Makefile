@@ -20,24 +20,25 @@ INCLUDE += -I $(INCD)
 
 # SOURCE FILES
 SRCD := src/
-SRCS := main.c								\
+SRCS := main.c										\
 		\
-		mlx/create_mlx.c					\
-		mlx/hooks.c							\
-		mlx/bmp.c							\
+		mlx/create_mlx.c							\
+		mlx/hooks.c									\
+		mlx/bmp.c									\
 		\
-		parse/parse.c						\
-		parse/parse_scene.c					\
-		parse/parse_object.c				\
-		parse/parse_utils.c					\
-		parse/parse_vector.c				\
-		parse/parse_ambient.c				\
-		parse/parse_camera.c				\
-		parse/parse_cylinder.c				\
-		parse/parse_plane.c					\
-		parse/parse_sphere.c				\
-		parse/parse_light.c					\
-		parse/parse_rgb.c
+		parse/parse.c								\
+		parse/parse_scene.c							\
+		parse/parse_object.c						\
+		parse/parse_utils.c							\
+		parse/objects/parse_ambient.c				\
+		parse/objects/parse_camera.c				\
+		parse/objects/parse_cylinder.c				\
+		parse/objects/parse_plane.c					\
+		parse/objects/parse_sphere.c				\
+		parse/objects/parse_light.c					\
+		parse/attributes/parse_float.c				\
+		parse/attributes/parse_rgb.c				\
+		parse/attributes/parse_vector.c				\
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

@@ -19,10 +19,10 @@ t_parse_error	parse_cylinder(char **linep, t_object *object)
 	char	*line;
 
 	line = *linep;
-	if (!parse_vector(line, &line, &object->cylinder.coords, false) \
+	if (!parse_vector(&line, &object->cylinder.coords, false) \
 		|| !is_space(*line))
 		return (COORD);
-	if (!parse_vector(line, &line, &object->cylinder.orientation, true) \
+	if (!parse_vector(&line, &object->cylinder.orientation, true) \
 		|| !is_space(*line))
 		return (VECTOR);
 	object->cylinder.diameter = ft_strtof(line, &line);

@@ -14,28 +14,41 @@
 #include <miniRT.h>
 #include <libft.h>
 
-bool	parse_float(float f, float min, float max)
+bool	parse_float(char **linep, float *dst, float min, float max)
 {
-	if (f < min || f > max)
+	char	*end;
+
+	*dst = ft_strtof(*linep, &end);
+	if (*linep == end || !ft_isdigit(end[-1]))
 		return (false);
-	return (true);
+	*linep = end;
+	if (min == max)
+		return (true);
+	return (*dst >= min && *dst <= max);
 }
 
-bool	parse_vector(char *line, char **end, t_fvec *vector, bool normalized)
+bool	parse_vector(char **linep, t_fvec *vector, bool normalized)
 {
-	(*vector)[X] = ft_strtof(line, &line);
-	if (line[0] != ',' || (!ft_isdigit(line[1]) && line[1] != '-'))
+	char	*line;
+	float	vals[3];
+	float	min;
+	float	max;
+
+	line = *linep;
+	min = 0;
+	max = 0;
+	if (normalized)
+	{
+		min = -1.0f;
+		max = +1.0f;
+	}
+	if (!parse_float(&line, vals + X, min, max) || *line++ != ',')
 		return (false);
-	line++;
-	(*vector)[Y] = ft_strtof(line, &line);
-	if (line[0] != ',' || (!ft_isdigit(line[1]) && line[1] != '-'))
+	if (!parse_float(&line, vals + Y, min, max) || *line++ != ',')
 		return (false);
-	line++;
-	(*vector)[Z] = ft_strtof(line, &line);
-	*end = line;
-	if (normalized && (!parse_float((*vector)[X], -1.0f, 1.0f) \
-	|| !parse_float((*vector)[Y], -1.0f, 1.0f) \
-	|| !parse_float((*vector)[Z], -1.0f, 1.0f)))
+	if (!parse_float(&line, vals + Z, min, max))
 		return (false);
+	*vector = (t_fvec){vals[X], vals[Y], vals[Z]};
+	*linep = line;
 	return (true);
 }

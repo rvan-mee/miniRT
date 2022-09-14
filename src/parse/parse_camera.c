@@ -18,16 +18,18 @@ t_parse_error	parse_camera(char **linep, t_object *object)
 	char	*line;
 
 	line = *linep;
-	if (!parse_vector(line, &line, &object->camera.coords, false) \
+	if (!parse_vector(&line, &object->camera.coords, false)
 		|| !is_space(*line))
 		return (COORD);
-	if (!parse_vector(line, &line, &object->camera.orientation, true) \
+	if (!parse_vector(&line, &object->camera.orientation, true)
 		|| !is_space(*line))
 		return (VECTOR);
 	object->camera.fov = ft_atoi(line);
 	if (object->camera.fov < 0 || object->camera.fov > 180)
 		return (FOV);
 	skip_spaces(&line);
+	if (*line == '+' || *line == '-')
+		++line;
 	while (*line && ft_isdigit(*line))
 		line++;
 	*linep = line;

@@ -19,7 +19,7 @@ t_parse_error	parse_sphere(char **linep, t_object *object)
 	char	*line;
 
 	line = *linep;
-	if (!parse_vector(line, &line, &object->sphere.coords, false) \
+	if (!parse_vector(&line, &object->sphere.coords, false) \
 		|| !is_space(*line))
 		return (COORD);
 	object->sphere.diameter = ft_strtof(line, &line);

@@ -41,8 +41,8 @@ t_parse_error	parse_cylinder(char **linep, t_object *object);
 bool			parse_rgb(char **linep, t_rgba *colour);
 bool			parse_line_error(const char *line, t_parse_error err);
 void			skip_spaces(char **linep);
-bool			parse_vector(char *line, char **end, t_fvec *vector, bool normalized);
-bool			parse_float(float f, float min, float max);
+bool			parse_vector(char **linep, t_fvec *vector, bool normalized);
+bool			parse_float(char **linep, float *dst, float min, float max);
 bool			is_space(char c);
 
 #endif

@@ -12,7 +12,6 @@
 
 #include <libft.h>
 #include <miniRT.h>
-#include <mlx.h>
 #include <bmp.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -33,7 +32,7 @@ static int32_t	write_bmp_header(int32_t fd, t_bmp_data bmp_data)
 	header.image_size_bytes = bmp_data.data_size;
 	if (write(fd, &header, sizeof(t_bmp_file_header)) == -1)
 	{
-		write(STDERR_FILENO, "Writing to BMP file failed\n", 28);
+		perror("Writing to BMP file failed");
 		return (-1);
 	}
 	return (0);
@@ -46,7 +45,7 @@ static int32_t	create_new_bmp_file(void)
 
 	fd = open(filename, O_RDWR | O_CREAT, 0664);
 	if (fd == -1)
-		write(STDERR_FILENO, "Error opening BMP file\n", 24);
+		perror("Error opening BMP file");
 	return (fd);
 }
 
@@ -88,7 +87,7 @@ static void	write_color_data(mlx_image_t *img, int32_t fd, t_bmp_data data)
 		y--;
 	}
 	if (write(fd, data.data, data.data_size) == -1)
-		write(STDERR_FILENO, "Writing to BMP file failed\n", 28);
+		perror("Writing to BMP file failed");
 	free(data.data);
 }
 
@@ -107,7 +106,7 @@ void	create_bmp(mlx_image_t *img)
 	if (!data.data || write_bmp_header(fd, data) == -1)
 	{
 		if (!data.data)
-			write(STDERR_FILENO, "Failed to allocate memory\n", 27);
+			perror("Failed to allocate memory");
 		close(fd);
 		exit(EXIT_FAILURE);
 	}

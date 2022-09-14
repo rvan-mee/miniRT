@@ -19,10 +19,10 @@ t_parse_error	parse_camera(char **linep, t_object *object)
 
 	line = *linep;
 	if (!parse_vector(&line, &object->camera.coords, false)
-		|| !is_space(*line))
+		|| !ft_isspace(*line))
 		return (COORD);
 	if (!parse_vector(&line, &object->camera.orientation, true)
-		|| !is_space(*line))
+		|| !ft_isspace(*line))
 		return (VECTOR);
 	object->camera.fov = ft_atoi(line);
 	if (object->camera.fov < 0 || object->camera.fov > 180)

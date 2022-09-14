@@ -20,10 +20,10 @@ t_parse_error	parse_plane(char **linep, t_object *object)
 
 	line = *linep;
 	if (!parse_vector(&line, &object->plane.coords, false) \
-		|| !is_space(*line))
+		|| !ft_isspace(*line))
 		return (COORD);
 	if (!parse_vector(&line, &object->plane.orientation, true) \
-		|| !is_space(*line))
+		|| !ft_isspace(*line))
 		return (VECTOR);
 	if (!parse_rgb(&line, &object->plane.colour))
 		return (COLOUR);

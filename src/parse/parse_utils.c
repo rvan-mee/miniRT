@@ -16,8 +16,6 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#define WHITESPACE	"\t\n\v\f\r "
-
 #define PARSE_ERROR		"Error\nLine `%s' %s"
 #define OBJECT_ERROR	"does not contain a valid object\n"
 #define COORD_ERROR		"does not contain valid coordinates\n"
@@ -49,18 +47,11 @@ bool	parse_line_error(const char *line, t_parse_error err)
 	return (false);
 }
 
-bool	is_space(char c)
-{
-	if (c != '\0' && ft_strchr(WHITESPACE, c) != NULL)
-		return (true);
-	return (false);
-}
-
 void	skip_spaces(char **linep)
 {
 	const char	*line = *linep;
 
-	while (is_space(*line))
+	while (ft_isspace(*line))
 		line++;
 	*linep = (char *) line;
 }

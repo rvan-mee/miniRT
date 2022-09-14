@@ -47,7 +47,7 @@ bool	parse_object(char *line, t_object *object)
 			break ;
 	}
 	line += id_len;
-	if (type == END || !is_space(*line))
+	if (type == END || !ft_isspace(*line))
 		return (parse_line_error(start_line, OBJECT));
 	object->type = type;
 	skip_spaces(&line);

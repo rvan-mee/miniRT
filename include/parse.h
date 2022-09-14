@@ -43,6 +43,5 @@ bool			parse_line_error(const char *line, t_parse_error err);
 void			skip_spaces(char **linep);
 bool			parse_vector(char **linep, t_fvec *vector, bool normalized);
 bool			parse_float(char **linep, float *dst, float min, float max);
-bool			is_space(char c);
 
 #endif

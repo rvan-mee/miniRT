@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <parse.h>
+#include <libft.h>
 
 t_parse_error	parse_light(char **linep, t_object *object)
 {
@@ -18,10 +19,10 @@ t_parse_error	parse_light(char **linep, t_object *object)
 
 	line = *linep;
 	if (!parse_vector(&line, &object->light.coords, false)
-		|| !is_space(*line))
+		|| !ft_isspace(*line))
 		return (COORD);
 	if (!parse_float(&line, &object->light.brightness, 0.0f, 1.0f)
-		|| !is_space(*line))
+		|| !ft_isspace(*line))
 		return (BRIGHT);
 	if (!parse_rgb(&line, &object->light.colour))
 		return (COLOUR);

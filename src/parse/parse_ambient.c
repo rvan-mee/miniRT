@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <parse.h>
+#include <libft.h>
 
 t_parse_error	parse_ambient(char **linep, t_object *object)
 {
@@ -18,7 +19,7 @@ t_parse_error	parse_ambient(char **linep, t_object *object)
 
 	line = *linep;
 	if (!parse_float(&line, &object->ambient.ratio, 0.0f, 1.0f)
-		|| !is_space(*line))
+		|| !ft_isspace(*line))
 		return (LRATIO);
 	if (!parse_rgb(&line, &object->ambient.colour))
 		return (COLOUR);

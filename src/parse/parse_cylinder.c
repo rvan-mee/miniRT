@@ -20,19 +20,19 @@ t_parse_error	parse_cylinder(char **linep, t_object *object)
 
 	line = *linep;
 	if (!parse_vector(&line, &object->cylinder.coords, false) \
-		|| !is_space(*line))
+		|| !ft_isspace(*line))
 		return (COORD);
 	if (!parse_vector(&line, &object->cylinder.orientation, true) \
-		|| !is_space(*line))
+		|| !ft_isspace(*line))
 		return (VECTOR);
 	object->cylinder.diameter = ft_strtof(line, &line);
-	if (!is_space(*line))
+	if (!ft_isspace(*line))
 		return (DIAMETER);
 	object->cylinder.height = ft_strtof(line, &line);
-	if (!is_space(*line))
+	if (!ft_isspace(*line))
 		return (OBJ_HEIGHT);
 	if (!parse_rgb(&line, &object->cylinder.colour) || \
-		!(is_space(*line) || *line == '\0'))
+		!(ft_isspace(*line) || *line == '\0'))
 		return (COLOUR);
 	*linep = line;
 	return (SUCCESS);

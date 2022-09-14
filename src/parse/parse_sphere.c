@@ -20,10 +20,10 @@ t_parse_error	parse_sphere(char **linep, t_object *object)
 
 	line = *linep;
 	if (!parse_vector(&line, &object->sphere.coords, false) \
-		|| !is_space(*line))
+		|| !ft_isspace(*line))
 		return (COORD);
 	object->sphere.diameter = ft_strtof(line, &line);
-	if (!is_space(*line))
+	if (!ft_isspace(*line))
 		return (DIAMETER);
 	if (!parse_rgb(&line, &object->sphere.colour))
 		return (COLOUR);

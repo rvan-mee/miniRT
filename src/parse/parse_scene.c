@@ -10,9 +10,26 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
-#include "get_next_line.h"
-#include "parse.h"
+#include <parse.h>
+#include <dynarr.h>
+#include <get_next_line.h>
+#include <errno.h>
+#include <unistd.h>
+#include <stdio.h>
+
+#define DUPLICATE_ERROR	"Error\nThere can only be one %s in the config file!\n"
+#define UNKNOWN_ERROR	"Error\nUnknown type %s\n"
+
+static const char	*g_type_strs[] = {\
+	[UNINITIALIZED] = "uninitialized",	\
+	[AMBIENT] = "ambient",				\
+	[CAMERA] = "camera",				\
+	[LIGHT] = "light",					\
+	[SPHERE] = "sphere",				\
+	[PLANE] = "plane",					\
+	[CYLINDER] = "cylinder",			\
+	[END] = "end",
+};
 
 static bool	cleanup(char *line, t_dynarr *lights, t_dynarr *objects)
 {
@@ -34,15 +51,18 @@ static bool \
 		store = &dst->camera;
 	else if (obj->type == AMBIENT)
 		store = &dst->ambient;
-	else
+	else if (obj->type != UNINITIALIZED && obj->type != END)
 		return (dynarr_addone(objs, obj));
 	if (store != NULL && store->type != obj->type)
 	{
 		*store = *obj;
 		return (true);
 	}
+	if (store != NULL)
+		dprintf(STDERR_FILENO, DUPLICATE_ERROR, g_type_strs[obj->type]);
+	else
+		dprintf(STDERR_FILENO, UNKNOWN_ERROR, g_type_strs[obj->type]);
 	return (false);
-	// Todo: bunch of error messages
 }
 
 static bool \
@@ -53,7 +73,7 @@ static bool \
 
 	while (true)
 	{
-		// todo: think about if we should maybe use errno to check if gnl returned NULL because of an error
+		errno = 0;
 		line = get_next_line(fd);
 		if (line == NULL)
 			break ;
@@ -63,11 +83,11 @@ static bool \
 				return (cleanup(line, lights, objects));
 		free(line);
 	}
-	if (lights->length > 0
+	if (errno == 0
+		&& lights->length > 0
 		&& objects->length > 0
 		&& dst->ambient.type == AMBIENT
-		&& dst->camera.type == CAMERA
-		&& dynarr_finalize(lights) && dynarr_finalize(objects))
+		&& dst->camera.type == CAMERA)
 		return (true);
 	return (cleanup(NULL, lights, objects));
 }

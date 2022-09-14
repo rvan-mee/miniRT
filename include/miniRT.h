@@ -13,8 +13,8 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
+# include <stddef.h>
 # include <stdint.h>
-# include <dynarr.h>
 # include <stdbool.h>
 # include <MLX42/MLX42.h>
 

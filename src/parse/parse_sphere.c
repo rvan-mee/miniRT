@@ -19,11 +19,11 @@ t_parse_error	parse_sphere(char **linep, t_object *object)
 	char	*line;
 
 	line = *linep;
-	if (!parse_vector(&line, &object->sphere.coords, false) \
+	if (!parse_vector(&line, &object->sphere.coords, false)
 		|| !ft_isspace(*line))
 		return (COORD);
-	object->sphere.diameter = ft_strtof(line, &line);
-	if (!ft_isspace(*line))
+	if (!parse_float(&line, &object->sphere.diameter, 0, 0)
+		|| !ft_isspace(*line))
 		return (DIAMETER);
 	if (!parse_rgb(&line, &object->sphere.colour))
 		return (COLOUR);

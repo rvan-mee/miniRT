@@ -12,20 +12,6 @@
 
 #include <parse.h>
 #include <miniRT.h>
-#include <libft.h>
-
-bool	parse_float(char **linep, float *dst, float min, float max)
-{
-	char	*end;
-
-	*dst = ft_strtof(*linep, &end);
-	if (*linep == end || !ft_isdigit(end[-1]))
-		return (false);
-	*linep = end;
-	if (min == max)
-		return (true);
-	return (*dst >= min && *dst <= max);
-}
 
 bool	parse_vector(char **linep, t_fvec *vector, bool normalized)
 {

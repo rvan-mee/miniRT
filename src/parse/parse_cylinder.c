@@ -25,11 +25,11 @@ t_parse_error	parse_cylinder(char **linep, t_object *object)
 	if (!parse_vector(&line, &object->cylinder.orientation, true) \
 		|| !ft_isspace(*line))
 		return (VECTOR);
-	object->cylinder.diameter = ft_strtof(line, &line);
-	if (!ft_isspace(*line))
+	if (!parse_float(&line, &object->cylinder.diameter, 0, 0)
+		|| !ft_isspace(*line))
 		return (DIAMETER);
-	object->cylinder.height = ft_strtof(line, &line);
-	if (!ft_isspace(*line))
+	if (!parse_float(&line, &object->cylinder.height, 0, 0)
+		|| !ft_isspace(*line))
 		return (OBJ_HEIGHT);
 	if (!parse_rgb(&line, &object->cylinder.colour) || \
 		!(ft_isspace(*line) || *line == '\0'))

@@ -29,7 +29,10 @@ SRCS := main.c								\
 		parse/parse_scene.c					\
 		parse/parse_object.c				\
 		parse/parse_utils.c					\
-		parse/parse_vector.c				
+		parse/parse_vector.c				\
+		parse/parse_ambient.c				\
+		parse/parse_camera.c				\
+		parse/parse_light.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

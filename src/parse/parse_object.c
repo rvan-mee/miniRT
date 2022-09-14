@@ -84,71 +84,6 @@ static t_parse_error	parse_sphere(char **linep, t_object *object)
 	return (true);
 }
 
-static t_parse_error	parse_light(char **linep, t_object *object)
-{
-	const char	*start_line = line;
-
-	line += 1;
-	object->type = LIGHT;
-	if (!is_space(*line))
-		return (parse_line_error(start_line, OBJECT));
-	if (!parse_vector(line, &line, &object->light.coords, false) \
-		|| !is_space(*line))
-		return (parse_line_error(start_line, COORD));
-	object->light.brightness = ft_strtof(line, &line);
-	if (!parse_float(object->light.brightness, 0.0f, 1.0f) \
-		|| !is_space(*line))
-		return (parse_line_error(start_line, BRIGHT));
-	if (!parse_rgb(line, &line, &object->light.colour))
-		return (parse_line_error(start_line, COLOUR));
-	if (!parse_line_end(line))
-		return (parse_line_error(start_line, FORMAT));
-	return (true);
-}
-
-static t_parse_error	parse_camera(char **linep, t_object *object)
-{
-	const char	*start_line = line;
-
-	line += 1;
-	object->type = CAMERA;
-	if (!is_space(*line))
-		return (parse_line_error(start_line, OBJECT));
-	if (!parse_vector(line, &line, &object->camera.coords, false) \
-		|| !is_space(*line))
-		return (parse_line_error(start_line, COORD));
-	if (!parse_vector(line, &line, &object->camera.orientation, true) \
-		|| !is_space(*line))
-		return (parse_line_error(start_line, VECTOR));
-	skip_spaces(line, &line);
-	object->camera.fov = ft_atoi(line);
-	if (object->camera.fov < 0 || object->camera.fov > 180)
-		return (parse_line_error(start_line, FOV));
-	while (*line && ft_isdigit(*line))
-		line++;
-	if (!parse_line_end(line))
-		return (parse_line_error(start_line, FORMAT));
-	return (true);
-}
-
-static t_parse_error	parse_ambient(char **linep, t_object *object)
-{
-	const char	*start_line = line;
-
-	line += 1;
-	object->type = AMBIENT;
-	if (!is_space(*line))
-		return (parse_line_error(start_line, OBJECT));
-	object->ambient.ratio = ft_strtof(line, &line);
-	if (!is_space(*line) || !parse_float(object->ambient.ratio, 0.0f, 1.0f))
-		return (parse_line_error(start_line, LRATIO));
-	if (!parse_rgb(line, &line, &object->ambient.colour))
-		return (parse_line_error(start_line, COLOUR));
-	if (!parse_line_end(line))
-		return (parse_line_error(start_line, FORMAT));
-	return (true);
-}
-
 static t_parse_error	(*g_parsefun[])(char **, t_object *) = {
 	[AMBIENT] = parse_ambient,
 	[CAMERA] = parse_camera,
@@ -184,6 +119,7 @@ bool	parse_object(char *line, t_object *object)
 	line += id_len;
 	if (type == END || !is_space(*line))
 		return (parse_line_error(start_line, OBJECT));
+	object->type = type;
 	skip_spaces(&line);
 	err = g_parsefun[type](&line, object);
 	if (err != SUCCESS)

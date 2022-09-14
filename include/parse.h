@@ -29,15 +29,17 @@ typedef enum e_parse_error {
 	OBJ_HEIGHT
 }	t_parse_error;
 
-bool	parse_config_file(int32_t argc, char *argv[], t_scene *scene);
-bool	parse_scene(int32_t fd, t_scene *dst);
-bool	parse_object(char *line, t_object *object);
-bool	set_objects(int32_t fd, t_scene *scene);
-bool	parse_rgb(char *line, char **end, t_rgba *colour);
-bool	parse_line_error(const char *line, t_parse_error err);
-void	skip_spaces(char **linep);
-bool	parse_vector(char *line, char **end, t_fvec *vector, bool normalized);
-bool	parse_float(float f, float min, float max);
-bool	is_space(char c);
+bool			parse_config_file(int32_t argc, char *argv[], t_scene *scene);
+bool			parse_scene(int32_t fd, t_scene *dst);
+bool			parse_object(char *line, t_object *object);
+t_parse_error	parse_ambient(char **linep, t_object *object);
+t_parse_error	parse_camera(char **linep, t_object *object);
+t_parse_error	parse_light(char **linep, t_object *object);
+bool			parse_rgb(char *line, char **end, t_rgba *colour);
+bool			parse_line_error(const char *line, t_parse_error err);
+void			skip_spaces(char **linep);
+bool			parse_vector(char *line, char **end, t_fvec *vector, bool normalized);
+bool			parse_float(float f, float min, float max);
+bool			is_space(char c);
 
 #endif

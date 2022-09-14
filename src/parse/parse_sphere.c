@@ -25,7 +25,7 @@ t_parse_error	parse_sphere(char **linep, t_object *object)
 	object->sphere.diameter = ft_strtof(line, &line);
 	if (!is_space(*line))
 		return (DIAMETER);
-	if (!parse_rgb(line, &line, &object->sphere.colour))
+	if (!parse_rgb(&line, &object->sphere.colour))
 		return (COLOUR);
 	*linep = line;
 	return (SUCCESS);

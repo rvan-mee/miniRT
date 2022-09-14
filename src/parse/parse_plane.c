@@ -25,7 +25,7 @@ t_parse_error	parse_plane(char **linep, t_object *object)
 	if (!parse_vector(line, &line, &object->plane.orientation, true) \
 		|| !is_space(*line))
 		return (VECTOR);
-	if (!parse_rgb(line, &line, &object->plane.colour))
+	if (!parse_rgb(&line, &object->plane.colour))
 		return (COLOUR);
 	*linep = line;
 	return (SUCCESS);

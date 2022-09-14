@@ -25,7 +25,7 @@ t_parse_error	parse_light(char **linep, t_object *object)
 	if (!parse_float(object->light.brightness, 0.0f, 1.0f) \
 		|| !is_space(*line))
 		return (BRIGHT);
-	if (!parse_rgb(line, &line, &object->light.colour))
+	if (!parse_rgb(&line, &object->light.colour))
 		return (COLOUR);
 	*linep = line;
 	return (SUCCESS);

@@ -31,8 +31,8 @@ t_parse_error	parse_cylinder(char **linep, t_object *object)
 	object->cylinder.height = ft_strtof(line, &line);
 	if (!is_space(*line))
 		return (OBJ_HEIGHT);
-	if (!parse_rgb(line, &line, &object->cylinder.colour) \
-		|| !is_space(*line))
+	if (!parse_rgb(&line, &object->cylinder.colour) || \
+		!(is_space(*line) || *line == '\0'))
 		return (COLOUR);
 	*linep = line;
 	return (SUCCESS);

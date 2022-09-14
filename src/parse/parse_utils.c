@@ -29,11 +29,13 @@
 #define DIA_ERROR		"' does not contain a valid diameter\n"
 #define HEIGHT_ERROR	"' does not contain a valid height\n"
 
-static bool	parse_colour(char *line, char **end, uint8_t *colour)
+static bool	parse_colour(char **linep, uint8_t *colour)
 {
+	char	*line;
 	size_t	i;
 	int32_t	num;
 
+	line = *linep;
 	i = 0;
 	while (line[i] && ft_isdigit(line[i]))
 		i++;
@@ -43,7 +45,7 @@ static bool	parse_colour(char *line, char **end, uint8_t *colour)
 	if (num > 255)
 		return (false);
 	*colour = num;
-	*end = &line[i];
+	*linep = &line[i];
 	return (true);
 }
 
@@ -70,7 +72,7 @@ bool	parse_line_error(const char *line, t_parse_error err)
 
 bool	is_space(char c)
 {
-	if (ft_strchr(WHITESPACE, c) != NULL)
+	if (c != '\0' && ft_strchr(WHITESPACE, c) != NULL)
 		return (true);
 	return (false);
 }
@@ -84,18 +86,19 @@ void	skip_spaces(char **linep)
 	*linep = (char *) line;
 }
 
-bool	parse_rgb(char *line, char **end, t_rgba *colour)
+bool	parse_rgb(char **linep, t_rgba *colour)
 {
+	char	*line;
+
+	line = *linep;
 	colour->a = 255;
 	skip_spaces(&line);
-	if (!parse_colour(line, &line, &colour->r) || *line != ',')
+	if (!parse_colour(&line, &colour->r) || *line++ != ',')
 		return (false);
-	line++;
-	if (!parse_colour(line, &line, &colour->g) || *line != ',')
+	if (!parse_colour(&line, &colour->g) || *line++ != ',')
 		return (false);
-	line++;
-	if (!parse_colour(line, &line, &colour->b))
+	if (!parse_colour(&line, &colour->b))
 		return (false);
-	*end = line;
+	*linep = line;
 	return (true);
 }

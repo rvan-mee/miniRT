@@ -36,7 +36,8 @@ SRCS := main.c								\
 		parse/parse_cylinder.c				\
 		parse/parse_plane.c					\
 		parse/parse_sphere.c				\
-		parse/parse_light.c
+		parse/parse_light.c					\
+		parse/parse_rgb.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

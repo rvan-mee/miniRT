@@ -6,12 +6,13 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/14 17:10:11 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/14 17:19:54 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/14 17:27:51 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <miniRT.h>
 #include <parse.h>
+#include <libft.h>
 
 t_parse_error	parse_cylinder(char **linep, t_object *object)
 {
@@ -34,5 +35,5 @@ t_parse_error	parse_cylinder(char **linep, t_object *object)
 		|| !is_space(*line))
 		return (COLOUR);
 	*linep = line;
-	return (SUCCES);
+	return (SUCCESS);
 }

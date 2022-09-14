@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/09/13 18:40:30 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/09/14 17:27:08 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,9 @@ SRCS := main.c								\
 		parse/parse_vector.c				\
 		parse/parse_ambient.c				\
 		parse/parse_camera.c				\
+		parse/parse_cylinder.c				\
+		parse/parse_plane.c					\
+		parse/parse_sphere.c				\
 		parse/parse_light.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))

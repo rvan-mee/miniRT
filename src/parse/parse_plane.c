@@ -6,9 +6,13 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/14 17:12:53 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/14 17:22:37 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/14 17:28:39 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <miniRT.h>
+#include <parse.h>
+#include <libft.h>
 
 t_parse_error	parse_plane(char **linep, t_object *object)
 {

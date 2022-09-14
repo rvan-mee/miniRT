@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 11:28:47 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/13 20:22:30 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/14 17:21:28 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,17 @@ static bool	parse_colour(char *line, char **end, uint8_t *colour)
 
 bool	parse_line_error(const char *line, t_parse_error err)
 {
-	const char	*message[] = {\
-	[OBJECT] = OBJECT_ERROR,	\
-	[COORD] = COORD_ERROR,		\
-	[VECTOR] = VECTOR_ERROR,	\
-	[COLOUR] = COLOUR_ERROR,	\
-	[FORMAT] = FORMAT_ERROR,	\
-	[LRATIO] = LRATIO_ERROR,	\
-	[FOV] = FOV_ERROR,			\
-	[BRIGHT] = BRIGHT_ERROR,	\
-	[DIAMETER] = DIA_ERROR,		\
-	[OBJ_HEIGHT] = HEIGHT_ERROR	\
+	const char	*message[] = {
+	[OBJECT] = OBJECT_ERROR,
+	[COORD] = COORD_ERROR,
+	[VECTOR] = VECTOR_ERROR,
+	[COLOUR] = COLOUR_ERROR,
+	[FORMAT] = FORMAT_ERROR,
+	[LRATIO] = LRATIO_ERROR,
+	[FOV] = FOV_ERROR,
+	[BRIGHT] = BRIGHT_ERROR,
+	[DIAMETER] = DIA_ERROR,
+	[OBJ_HEIGHT] = HEIGHT_ERROR
 	};
 
 	ft_putstr_fd(LINE_ERROR, STDERR_FILENO);

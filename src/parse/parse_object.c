@@ -6,83 +6,13 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 19:20:49 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/13 20:43:43 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/14 17:25:02 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <miniRT.h>
 #include <parse.h>
 #include <libft.h>
-
-static t_parse_error	parse_cylinder(char **linep, t_object *object)
-{
-	const char	*start_line = line;
-
-	line += 2;
-	object->type = CYLINDER;
-	if (!is_space(*line))
-		return (parse_line_error(start_line, OBJECT));
-	if (!parse_vector(line, &line, &object->cylinder.coords, false) \
-		|| !is_space(*line))
-		return (parse_line_error(start_line, COORD));
-	if (!parse_vector(line, &line, &object->cylinder.orientation, true) \
-		|| !is_space(*line))
-		return (parse_line_error(start_line, VECTOR));
-	object->cylinder.diameter = ft_strtof(line, &line);
-	if (!is_space(*line))
-		return (parse_line_error(start_line, DIAMETER));
-	object->cylinder.height = ft_strtof(line, &line);
-	if (!is_space(*line))
-		return (parse_line_error(start_line, OBJ_HEIGHT));
-	if (!parse_rgb(line, &line, &object->cylinder.colour) \
-		|| !is_space(*line))
-		return (parse_line_error(start_line, COLOUR));
-	if (!parse_line_end(line))
-		return (parse_line_error(start_line, FORMAT));
-	return (true);
-}
-
-static t_parse_error	parse_plane(char **linep, t_object *object)
-{
-	const char	*start_line = line;
-
-	line += 2;
-	object->type = PLANE;
-	if (!is_space(*line))
-		return (parse_line_error(start_line, OBJECT));
-	if (!parse_vector(line, &line, &object->plane.coords, false) \
-		|| !is_space(*line))
-		return (parse_line_error(start_line, COORD));
-	if (!parse_vector(line, &line, &object->plane.orientation, true) \
-		|| !is_space(*line))
-		return (parse_line_error(start_line, VECTOR));
-	if (!parse_rgb(line, &line, &object->plane.colour))
-		return (parse_line_error(start_line, COLOUR));
-	if (!parse_line_end(line))
-		return (parse_line_error(start_line, FORMAT));
-	return (true);
-}
-
-static t_parse_error	parse_sphere(char **linep, t_object *object)
-{
-	const char	*start_line = line;
-
-	line += 2;
-	object->type = SPHERE;
-	if (!is_space(*line))
-		return (parse_line_error(start_line, OBJECT));
-	if (!parse_vector(line, &line, &object->sphere.coords, false) \
-		|| !is_space(*line))
-		return (parse_line_error(start_line, COORD));
-	object->sphere.diameter = ft_strtof(line, &line);
-	if (!is_space(*line))
-		return (parse_line_error(start_line, DIAMETER));
-	if (!parse_rgb(line, &line, &object->sphere.colour))
-		return (parse_line_error(start_line, COLOUR));
-	if (!parse_line_end(line))
-		return (parse_line_error(start_line, FORMAT));
-	return (true);
-}
 
 static t_parse_error	(*g_parsefun[])(char **, t_object *) = {
 	[AMBIENT] = parse_ambient,

@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:54:09 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/13 19:54:19 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/14 17:25:29 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@ bool			parse_object(char *line, t_object *object);
 t_parse_error	parse_ambient(char **linep, t_object *object);
 t_parse_error	parse_camera(char **linep, t_object *object);
 t_parse_error	parse_light(char **linep, t_object *object);
+t_parse_error	parse_sphere(char **linep, t_object *object);
+t_parse_error	parse_plane(char **linep, t_object *object);
+t_parse_error	parse_cylinder(char **linep, t_object *object);
+bool			set_objects(int32_t fd, t_scene *scene);
 bool			parse_rgb(char *line, char **end, t_rgba *colour);
 bool			parse_line_error(const char *line, t_parse_error err);
 void			skip_spaces(char **linep);

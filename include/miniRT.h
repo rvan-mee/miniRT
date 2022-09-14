@@ -30,7 +30,8 @@ typedef enum e_object_type {
 	LIGHT,
 	SPHERE,
 	PLANE,
-	CYLINDER
+	CYLINDER,
+	END
 }	t_obj_type;
 
 typedef enum e_fvec_type {

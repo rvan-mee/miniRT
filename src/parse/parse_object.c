@@ -14,15 +14,7 @@
 #include <parse.h>
 #include <libft.h>
 
-static bool	parse_line_end(char *line)
-{
-	skip_spaces(line, &line);
-	if (*line != '\n' && *line != '\0')
-		return (false);
-	return (true);
-}
-
-static bool	parse_cylinder(char *line, t_object *object)
+static t_parse_error	parse_cylinder(char **linep, t_object *object)
 {
 	const char	*start_line = line;
 
@@ -50,7 +42,7 @@ static bool	parse_cylinder(char *line, t_object *object)
 	return (true);
 }
 
-static bool	parse_plane(char *line, t_object *object)
+static t_parse_error	parse_plane(char **linep, t_object *object)
 {
 	const char	*start_line = line;
 
@@ -71,7 +63,7 @@ static bool	parse_plane(char *line, t_object *object)
 	return (true);
 }
 
-static bool	parse_sphere(char *line, t_object *object)
+static t_parse_error	parse_sphere(char **linep, t_object *object)
 {
 	const char	*start_line = line;
 
@@ -92,7 +84,7 @@ static bool	parse_sphere(char *line, t_object *object)
 	return (true);
 }
 
-static bool	parse_light(char *line, t_object *object)
+static t_parse_error	parse_light(char **linep, t_object *object)
 {
 	const char	*start_line = line;
 
@@ -114,7 +106,7 @@ static bool	parse_light(char *line, t_object *object)
 	return (true);
 }
 
-static bool	parse_camera(char *line, t_object *object)
+static t_parse_error	parse_camera(char **linep, t_object *object)
 {
 	const char	*start_line = line;
 
@@ -139,7 +131,7 @@ static bool	parse_camera(char *line, t_object *object)
 	return (true);
 }
 
-static bool	parse_ambient(char *line, t_object *object)
+static t_parse_error	parse_ambient(char **linep, t_object *object)
 {
 	const char	*start_line = line;
 
@@ -157,20 +149,47 @@ static bool	parse_ambient(char *line, t_object *object)
 	return (true);
 }
 
+static bool	(*g_parsefun[])(char **, t_object *) = {
+	[AMBIENT] = parse_ambient,
+	[CAMERA] = parse_camera,
+	[LIGHT] = parse_light,
+	[SPHERE] = parse_sphere,
+	[PLANE] = parse_plane,
+	[CYLINDER] = parse_cylinder,
+};
+
+static const char	*g_ids[] = {
+	[AMBIENT] = "A",
+	[CAMERA] = "C",
+	[LIGHT] = "L",
+	[SPHERE] = "sp",
+	[PLANE] = "pl",
+	[CYLINDER] = "cy",
+};
+
 bool	parse_object(char *line, t_object *object)
 {
-	if (ft_strncmp(line, "A", 1) == 0)
-		return (parse_ambient(line, object));
-	if (ft_strncmp(line, "C", 1) == 0)
-		return (parse_camera(line, object));
-	if (ft_strncmp(line, "L", 1) == 0)
-		return (parse_light(line, object));
-	if (ft_strncmp(line, "sp", 2) == 0)
-		return (parse_sphere(line, object));
-	if (ft_strncmp(line, "pl", 2) == 0)
-		return (parse_plane(line, object));
-	if (ft_strncmp(line, "cy", 2) == 0)
-		return (parse_cylinder(line, object));
-	parse_line_error(line, OBJECT);
-	return (false);
+	const char		*start_line = line;
+	t_obj_type		type;
+	t_parse_error	err;
+	size_t			id_len;
+	
+	type = UNINITIALIZED;
+	while (++type != END)
+	{
+		id_len = ft_strlen(g_ids[type]);
+		if (ft_strncmp(g_ids[type], line, id_len) == 0)
+			break ;
+	}
+	line += id_len;
+	if (type == END || !is_space(*line))
+		return (parse_line_error(start_line, OBJECT));
+	skip_spaces(&line);
+	err = g_parsefun[type](&line, object);
+	if (err != SUCCESS)
+		return (parse_line_error(start_line, err));
+	skip_spaces(&line);
+	if (*line != '\0')
+		return (parse_line_error(start_line, FORMAT));
+	return (true);
 }

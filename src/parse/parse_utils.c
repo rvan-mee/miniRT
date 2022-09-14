@@ -75,20 +75,19 @@ bool	is_space(char c)
 	return (false);
 }
 
-void	skip_spaces(char *line, char **end)
+void	skip_spaces(char **linep)
 {
-	size_t	i;
+	const char	*line = *linep;
 
-	i = 0;
-	while (line[i] && is_space(line[i]))
-		i++;
-	*end = &line[i];
+	while (is_space(*line))
+		line++;
+	*linep = (char *) line;
 }
 
 bool	parse_rgb(char *line, char **end, t_rgba *colour)
 {
 	colour->a = 255;
-	skip_spaces(line, &line);
+	skip_spaces(&line);
 	if (!parse_colour(line, &line, &colour->r) || *line != ',')
 		return (false);
 	line++;

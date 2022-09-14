@@ -14,21 +14,21 @@
 #include <parse.h>
 #include <libft.h>
 
-static t_parse_error	(*g_parsefun[])(char **, t_object *) = {
-	[AMBIENT] = parse_ambient,
-	[CAMERA] = parse_camera,
-	[LIGHT] = parse_light,
-	[SPHERE] = parse_sphere,
-	[PLANE] = parse_plane,
+static t_parse_error	(*g_parsefun[])(char **, t_object *) = {\
+	[AMBIENT] = parse_ambient,									\
+	[CAMERA] = parse_camera,									\
+	[LIGHT] = parse_light,										\
+	[SPHERE] = parse_sphere,									\
+	[PLANE] = parse_plane,										\
 	[CYLINDER] = parse_cylinder,
 };
 
-static const char	*g_ids[] = {
-	[AMBIENT] = "A",
-	[CAMERA] = "C",
-	[LIGHT] = "L",
-	[SPHERE] = "sp",
-	[PLANE] = "pl",
+static const char		*g_ids[] = {\
+	[AMBIENT] = "A",				\
+	[CAMERA] = "C",					\
+	[LIGHT] = "L",					\
+	[SPHERE] = "sp",				\
+	[PLANE] = "pl",					\
 	[CYLINDER] = "cy",
 };
 
@@ -38,7 +38,7 @@ bool	parse_object(char *line, t_object *object)
 	t_obj_type		type;
 	t_parse_error	err;
 	size_t			id_len;
-	
+
 	type = UNINITIALIZED;
 	while (++type != END)
 	{

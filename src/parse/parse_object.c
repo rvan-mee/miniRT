@@ -149,7 +149,7 @@ static t_parse_error	parse_ambient(char **linep, t_object *object)
 	return (true);
 }
 
-static bool	(*g_parsefun[])(char **, t_object *) = {
+static t_parse_error	(*g_parsefun[])(char **, t_object *) = {
 	[AMBIENT] = parse_ambient,
 	[CAMERA] = parse_camera,
 	[LIGHT] = parse_light,

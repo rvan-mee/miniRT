@@ -49,7 +49,10 @@ OBJP := $(addprefix $(OBJD), $(OBJS))
 
 # HEADER FILES
 INCD := include/
-INCS := miniRT.h
+INCS := miniRT.h									\
+		parse.h										\
+		mlx.h										\
+		bmp.h
 INCP := $(addprefix $(INCD), $(INCS))
 
 HEADERS += $(INCP)
@@ -90,8 +93,17 @@ endif
 #		RANDOM THINGS
 COMPILE := @$(CC) $(CFLAGS) $(INCLUDE)
 
+# TEST
+
+TEST_DIR := test/
+TEST_LIB := $(addprefix $(TEST_DIR), $(addsuffix _test.a, $(NAME)))
+TEST_LIB_OBJS := $(filter-out $(OBJD)main.o, $(OBJP))
+
+TESTS := parse.sh
+TEST_P := $(addprefix $(TEST_DIR), $(TESTS))
+
 # RECIPES
-all: $(NAME)
+all: $(NAME) $(TEST_LIB)
 
 $(NAME): $(LIBS) $(OBJP)
 	@echo "Compiling main executable!"
@@ -108,7 +120,7 @@ $(LIBFT_L):
 $(MLX42_L):
 	@$(MAKE) -C $(MLX42_D)
 
-clean:
+clean: cleantest
 	@rm -rf $(OBJD)
 	@echo "Done cleaning $(CURDIR)/$(OBJD)"
 	@$(MAKE) -C $(LIBFT_D) clean
@@ -123,4 +135,11 @@ fclean:
 re: fclean
 	@$(MAKE)
 
-.PHONY: all clean fclean re -lglfw
+$(TEST_LIB): $(TEST_LIB_OBJS)
+	@ar -cr $(TEST_LIB) $(TEST_LIB_OBJS)
+	@echo "Done creating archive $(TEST_LIB)"
+
+cleantest:
+	@rm -f $(TEST_LIB)
+
+.PHONY: all clean fclean re cleantest

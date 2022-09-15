@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parse.h"
-#include "libft.h"
+#include <parse.h>
+#include <libft.h>
 
 static bool	parse_colour(char **linep, uint8_t *colour)
 {

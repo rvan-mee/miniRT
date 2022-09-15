@@ -49,7 +49,7 @@ OBJP := $(addprefix $(OBJD), $(OBJS))
 
 # HEADER FILES
 INCD := include/
-INCS := miniRT.h									\
+INCS := minirt.h									\
 		parse.h										\
 		mlx.h										\
 		bmp.h

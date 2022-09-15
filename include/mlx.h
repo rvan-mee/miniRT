@@ -14,7 +14,7 @@
 # define MLX_H
 
 # include <MLX42/MLX42.h>
-# include <miniRT.h>
+# include <minirt.h>
 
 void	keyhook(mlx_key_data_t keydata, t_mlx_data *mlx_data);
 void	create_mlx(t_mlx_data *mlx_data);

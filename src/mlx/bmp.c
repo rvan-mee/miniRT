@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <libft.h>
-#include <miniRT.h>
+#include <minirt.h>
 #include <bmp.h>
 #include <unistd.h>
 #include <fcntl.h>

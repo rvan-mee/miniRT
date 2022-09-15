@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <mlx.h>
-#include <miniRT.h>
 #include <stdlib.h>
 #include <parse.h>
 

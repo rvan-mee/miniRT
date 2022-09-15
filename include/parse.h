@@ -13,7 +13,7 @@
 #ifndef PARSE_H
 # define PARSE_H
 
-# include <miniRT.h>
+# include <minirt.h>
 
 typedef enum e_parse_error {
 	SUCCESS,

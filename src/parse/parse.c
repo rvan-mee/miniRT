@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <miniRT.h>
 #include <libft.h>
 #include <parse.h>
 #include <unistd.h>

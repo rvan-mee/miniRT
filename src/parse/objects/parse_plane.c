@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
-#include "parse.h"
-#include "libft.h"
+#include <parse.h>
+#include <libft.h>
 
 t_parse_error	parse_plane(char **linep, t_object *object)
 {

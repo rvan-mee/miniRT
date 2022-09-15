@@ -12,6 +12,12 @@
 
 #include <parse.h>
 
+static bool	is_normalized(t_fvec vec)
+{
+	vec *= vec;
+	return (vec[X] + vec[Y] + vec[Z] == 1.0f);
+}
+
 bool	parse_vector(char **linep, t_fvec *vector, bool normalized)
 {
 	char	*line;
@@ -35,5 +41,5 @@ bool	parse_vector(char **linep, t_fvec *vector, bool normalized)
 		return (false);
 	*vector = (t_fvec){vals[X], vals[Y], vals[Z]};
 	*linep = line;
-	return (true);
+	return (!normalized || is_normalized(*vector));
 }

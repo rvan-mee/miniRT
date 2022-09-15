@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#define DUPLICATE_ERROR		"Error\nThere can only be one %s in the config file!\n"
+#define DUPLICATE_ERROR		"Error\nThere can only be one %s!\n"
 #define UNKNOWN_ERROR		"Error\nUnknown type %s\n"
 #define NOT_ENOUGH_ERROR	"Error\nThere can't be zero %s!\n"
 

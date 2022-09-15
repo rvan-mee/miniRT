@@ -42,7 +42,11 @@ bool	parse_line_error(const char *line, t_parse_error err)
 	[DIAMETER] = DIA_ERROR,
 	[OBJ_HEIGHT] = HEIGHT_ERROR
 	};
+	char		*newline;
 
+	newline = ft_strchr(line, '\n');
+	if (newline != NULL)
+		*newline = '\0';
 	dprintf(STDERR_FILENO, PARSE_ERROR, line, message[err]);
 	return (false);
 }

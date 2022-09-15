@@ -17,8 +17,9 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#define DUPLICATE_ERROR	"Error\nThere can only be one %s in the config file!\n"
-#define UNKNOWN_ERROR	"Error\nUnknown type %s\n"
+#define DUPLICATE_ERROR		"Error\nThere can only be one %s in the config file!\n"
+#define UNKNOWN_ERROR		"Error\nUnknown type %s\n"
+#define NOT_ENOUGH_ERROR	"Error\nThere can't be zero %s!\n"
 
 static const char	*g_type_strs[] = {\
 	[UNINITIALIZED] = "uninitialized",	\
@@ -36,6 +37,23 @@ static bool	cleanup(char *line, t_dynarr *lights, t_dynarr *objects)
 	free(line);
 	dynarr_delete(lights);
 	dynarr_delete(objects);
+	return (false);
+}
+
+static bool	check_error(t_scene *dst, t_dynarr *lights, t_dynarr *objects)
+{
+	if (errno != 0)
+		perror("Error during parsing");
+	else if (lights->length == 0)
+		dprintf(STDERR_FILENO, NOT_ENOUGH_ERROR, "lights");
+	else if (objects->length == 0)
+		dprintf(STDERR_FILENO, NOT_ENOUGH_ERROR, "objects");
+	else if (dst->ambient.type != AMBIENT)
+		dprintf(STDERR_FILENO, NOT_ENOUGH_ERROR, "ambient");
+	else if (dst->camera.type != CAMERA)
+		dprintf(STDERR_FILENO, NOT_ENOUGH_ERROR, "camera");
+	else
+		return (true);
 	return (false);
 }
 
@@ -83,13 +101,7 @@ static bool \
 				return (cleanup(line, lights, objects));
 		free(line);
 	}
-	if (errno == 0
-		&& lights->length > 0
-		&& objects->length > 0
-		&& dst->ambient.type == AMBIENT
-		&& dst->camera.type == CAMERA)
-		return (true);
-	return (cleanup(NULL, lights, objects));
+	return (check_error(dst, lights, objects));
 }
 
 bool	parse_scene(int32_t fd, t_scene *dst)

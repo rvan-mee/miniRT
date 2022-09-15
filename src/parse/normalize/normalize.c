@@ -15,4 +15,5 @@
 void	normalize(t_scene *scene)
 {
 	normalize_coords(scene);
+	normalize_orientation(scene);
 }

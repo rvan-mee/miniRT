@@ -22,6 +22,7 @@
 # define HEIGHT 1080
 
 typedef float	t_fvec __attribute__ ((vector_size (4 * sizeof(float))));
+typedef t_fvec	t_fmat[4];
 
 typedef enum e_object_type {
 	UNINITIALIZED = 0,

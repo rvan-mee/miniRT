@@ -40,7 +40,10 @@ SRCS := main.c										\
 		parse/attributes/parse_rgb.c				\
 		parse/attributes/parse_vector.c				\
 		parse/normalize/normalize.c					\
-		parse/normalize/normalize_coords.c
+		parse/normalize/normalize_coords.c			\
+		parse/normalize/normalize_orientation.c		\
+		\
+		vec/product.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 
@@ -54,7 +57,8 @@ INCD := include/
 INCS := minirt.h									\
 		parse.h										\
 		mlx.h										\
-		bmp.h
+		bmp.h										\
+		vec.h
 INCP := $(addprefix $(INCD), $(INCS))
 
 HEADERS += $(INCP)
@@ -81,15 +85,16 @@ MLX42_N := libmlx42.a
 MLX42_I := $(addprefix $(MLX42_D), $(INCD))
 MLX42_L := $(addprefix $(MLX42_D), $(MLX42_N))
 
-MLX_ARG += -lglfw
+LINKER_FLAGS += -lglfw
+LINKER_FLAGS += -lm
 INCLUDE += -I $(MLX42_I)
 LIBS += $(MLX42_L)
 
 ifeq ($(shell uname -s), Darwin)
 	GLFW := $(shell brew --prefix glfw)/lib
-	MLX_ARG += -L $(GLFW)
+	LINKER_FLAGS += -L $(GLFW)
 else
-	MLX_ARG += -ldl
+	LINKER_FLAGS += -ldl
 endif
 
 #		RANDOM THINGS
@@ -109,7 +114,7 @@ all: $(NAME) $(TEST_LIB)
 
 $(NAME): $(LIBS) $(OBJP)
 	@echo "Compiling main executable!"
-	$(COMPILE) $(OBJP) $(MLX_ARG) $(LIBS) -o $(NAME)
+	$(COMPILE) $(OBJP) $(LINKER_FLAGS) $(LIBS) -o $(NAME)
 
 $(OBJD)%.o: $(SRCD)%.c $(HEADERS)
 	@mkdir -p $(@D)

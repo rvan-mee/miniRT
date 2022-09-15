@@ -41,7 +41,7 @@ typedef enum e_fvec_type {
 }	t_fvec_type;
 
 typedef union u_rgba {
-	uint32_t	colour;
+	uint32_t	rgba;
 	struct {
 		uint8_t	a;
 		uint8_t	b;
@@ -50,35 +50,26 @@ typedef union u_rgba {
 	};
 }	t_rgba;
 
-/*
- * NOTES:
- *
- * Orientation is apparently not a unit vector - subject gives 0,0,0 as valid example.
- * Someone in slack said they interpreted this as rotation around axis (1.0 == 1 PI rad)
- *
- * Does [0.0,1.0] mean step is 0.1? Or could it also be 0.975234? No clue, but guess float is enough
- */
-
 typedef struct s_mlx_content {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 }	t_mlx_data;
 
 typedef struct s_ambient {
-	float	ratio; // [0.0, 1.0]
+	float	ratio;
 	t_rgba	colour;
 }	t_ambient;
 
 typedef struct s_camera {
 	t_fvec	coords;
-	t_fvec	orientation; // see notes
-	uint8_t	fov; // [0, 180]
+	t_fvec	orientation;
+	uint8_t	fov;
 }	t_camera;
 
 typedef struct s_light {
 	t_fvec	coords;
-	float	brightness; // [0.0, 1.0]
-	t_rgba	colour; // unused in mandatory
+	float	brightness;
+	t_rgba	colour;
 }	t_light;
 
 typedef struct s_sphere {
@@ -89,13 +80,13 @@ typedef struct s_sphere {
 
 typedef struct s_plane {
 	t_fvec	coords;
-	t_fvec	orientation; // see notes
+	t_fvec	orientation;
 	t_rgba	colour;
 }	t_plane;
 
 typedef struct s_cylinder {
 	t_fvec	coords;
-	t_fvec	orientation; // see notes
+	t_fvec	orientation;
 	float	diameter;
 	float	height;
 	t_rgba	colour;

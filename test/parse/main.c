@@ -24,13 +24,13 @@ static void	print_sphere(t_sphere obj)
 {
 	print_fvec("sphere coords", obj.coords);
 	printf("diameter: %f\t", obj.diameter);
-	printf("colour: %8X\n", obj.colour.colour);
+	printf("colour: %8X\n", obj.colour.rgba);
 }
 static void	print_plane(t_plane obj)
 {
 	print_fvec("plane coords", obj.coords);
 	print_fvec("orientation", obj.orientation);
-	printf("colour: %8X\n", obj.colour.colour);
+	printf("colour: %8X\n", obj.colour.rgba);
 }
 static void	print_cylinder(t_cylinder obj)
 {
@@ -38,7 +38,7 @@ static void	print_cylinder(t_cylinder obj)
 	print_fvec("orientation", obj.orientation);
 	printf("diameter: %f\t", obj.diameter);
 	printf("height: %f\t", obj.height);
-	printf("colour: %8X\n", obj.colour.colour);
+	printf("colour: %8X\n", obj.colour.rgba);
 }
 
 int	main(void)
@@ -51,13 +51,13 @@ int	main(void)
 	printf("fov: %u\n", scene.camera.camera.fov);
 
 	printf("ambient ratio: %f\t", scene.ambient.ambient.ratio);
-	printf("colour: %8X\n", scene.ambient.ambient.colour.colour);
+	printf("colour: %8X\n", scene.ambient.ambient.colour.rgba);
 
 	for (size_t i = 0; i < scene.lights_len; i++) {
 		printf("light %lu ", i);
 		print_fvec("coords", scene.lights[i].coords);
 		printf("brightness: %f\t", i, scene.lights[i].brightness);
-		printf("colour: %8X\n", scene.lights[i].colour.colour);
+		printf("colour: %8X\n", scene.lights[i].colour.rgba);
 	}
 
 	for (size_t i = 0; i < scene.objects_len; ++i) {

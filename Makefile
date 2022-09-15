@@ -39,6 +39,8 @@ SRCS := main.c										\
 		parse/attributes/parse_float.c				\
 		parse/attributes/parse_rgb.c				\
 		parse/attributes/parse_vector.c				\
+		parse/normalize/normalize.c					\
+		parse/normalize/normalize_coords.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

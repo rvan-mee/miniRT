@@ -44,6 +44,7 @@ static bool	open_config_file(const char *config_file, int32_t *fd)
 bool	parse_config_file(int32_t argc, char *argv[], t_scene *scene)
 {
 	int32_t	fd;
+	bool	success;
 
 	if (argc != 2)
 	{
@@ -52,11 +53,10 @@ bool	parse_config_file(int32_t argc, char *argv[], t_scene *scene)
 	}
 	if (!check_extension(argv[1]) || !open_config_file(argv[1], &fd))
 		return (false);
-	if (!parse_scene(fd, scene))
-	{
-		close(fd);
-		return (false);
-	}
+	success = parse_scene(fd, scene);
 	close(fd);
+	if (!success)
+		return (false);
+	normalize(scene);
 	return (true);
 }

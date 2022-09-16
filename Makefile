@@ -98,7 +98,7 @@ else
 endif
 
 #		RANDOM THINGS
-COMPILE := @$(CC) $(CFLAGS) $(INCLUDE)
+COMPILE := @$(CC) $(INCLUDE) $(CFLAGS)
 
 # TEST
 
@@ -114,7 +114,7 @@ all: $(NAME) $(TEST_LIB)
 
 $(NAME): $(LIBS) $(OBJP)
 	@echo "Compiling main executable!"
-	$(COMPILE) $(OBJP) $(LINKER_FLAGS) $(LIBS) -o $(NAME)
+	$(COMPILE) $(OBJP) $(LIBS) $(LINKER_FLAGS) -o $(NAME)
 
 $(OBJD)%.o: $(SRCD)%.c $(HEADERS)
 	@mkdir -p $(@D)

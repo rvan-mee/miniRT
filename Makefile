@@ -43,7 +43,7 @@ SRCS := main.c										\
 		parse/normalize/normalize_coords.c			\
 		parse/normalize/normalize_orientation.c		\
 		\
-		vec/product.c
+		math/product.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

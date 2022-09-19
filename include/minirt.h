@@ -64,7 +64,7 @@ typedef struct s_ambient {
 typedef struct s_camera {
 	t_fvec	coords;
 	t_fvec	orientation;
-	uint8_t	fov;
+	float	fov;
 }	t_camera;
 
 typedef struct s_light {
@@ -113,5 +113,10 @@ typedef struct s_scene {
 	t_object	*objects;
 	size_t		objects_len;
 }	t_scene;
+
+struct s_ray {
+	t_fvec	origine;
+	t_fvec	direction;
+};
 
 #endif

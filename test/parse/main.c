@@ -49,7 +49,7 @@ int	main(void)
 	printf(result ? "true\n" : "false\n");
 	print_fvec("camera coords", scene.camera.camera.coords);
 	print_fvec("orientation", scene.camera.camera.orientation);
-	printf("fov: %u\n", scene.camera.camera.fov);
+	printf("fov: %f\n", scene.camera.camera.fov);
 
 	printf("ambient ratio: %f\t", scene.ambient.ambient.ratio);
 	printf("colour: %8X\n", scene.ambient.ambient.colour.rgba);

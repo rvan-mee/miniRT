@@ -12,9 +12,11 @@
 
 #include <parse.h>
 #include <libft.h>
+#include <math.h>
 
-static bool	parse_fov(char **linep, uint8_t *dst)
+static bool	parse_fov(char **linep, float *dst)
 {
+	static const float	deg_per_rad = (float) (180.0 / M_PI);
 	char	*line;
 	int32_t	num;
 
@@ -22,7 +24,7 @@ static bool	parse_fov(char **linep, uint8_t *dst)
 	num = ft_atoi(line);
 	if (num < 0 || num > 180)
 		return (false);
-	*dst = num;
+	*dst = (float) num / deg_per_rad;
 	skip_spaces(&line);
 	if (*line == '+' || *line == '-')
 		++line;

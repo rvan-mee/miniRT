@@ -10,23 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <vec.h>
+#include <ft_math.h>
 #include <math.h>
-
-static void	identity_matrix(t_fmat matrix)
-{
-	const t_fmat	identity = {
-			(t_fvec){1.0f, 0.0f, 0.0f, 0.0f},
-			(t_fvec){0.0f, 1.0f, 0.0f, 0.0f},
-			(t_fvec){0.0f, 0.0f, 1.0f, 0.0f},
-			(t_fvec){0.0f, 0.0f, 0.0f, 1.0f}
-	};
-
-	matrix[0] = identity[0];
-	matrix[1] = identity[1];
-	matrix[2] = identity[2];
-	matrix[3] = identity[3];
-}
 
 static void	axis_angle_to_matrix(t_fmat dst, t_fvec a, float angle)
 {
@@ -63,24 +48,27 @@ static void	build_rotation_matrix(t_fmat dst, t_fvec cam_orientation)
 
 static void	rotate_vector(t_fvec *vecp, t_fmat mat)
 {
-	const t_fvec	vec = *vecp;
+	*vecp = mult_vec_mat(*vecp, mat);
+}
 
-	*vecp = ((t_fvec){
-			vec[X] * mat[X][0] +
-			vec[Y] * mat[X][1] +
-			vec[Z] * mat[X][2],
-			vec[X] * mat[Y][0] +
-			vec[Y] * mat[Y][1] +
-			vec[Z] * mat[Y][2],
-			vec[X] * mat[Z][0] +
-			vec[Y] * mat[Z][1] +
-			vec[Z] * mat[Z][2]
-	});
+static void	rotate_object(t_object *object, t_fmat matrix)
+{
+	if (object->type == PLANE)
+	{
+		rotate_vector(&object->plane.coords, matrix);
+		rotate_vector(&object->plane.orientation, matrix);
+	}
+	else if (object->type == CYLINDER)
+	{
+		rotate_vector(&object->cylinder.coords, matrix);
+		rotate_vector(&object->cylinder.orientation, matrix);
+	}
+	else if (object->type == SPHERE)
+		rotate_vector(&object->sphere.coords, matrix);
 }
 
 void	normalize_orientation(t_scene *scene)
 {
-	t_object	*obj;
 	t_fmat		matrix;
 	size_t		i;
 
@@ -91,19 +79,5 @@ void	normalize_orientation(t_scene *scene)
 		rotate_vector(&scene->lights[i].coords, matrix);
 	i = scene->objects_len;
 	while (i--)
-	{
-		obj = scene->objects + i;
-		if (obj->type == PLANE)
-		{
-			rotate_vector(&obj->plane.coords, matrix);
-			rotate_vector(&obj->plane.orientation, matrix);
-		}
-		else if (obj->type == CYLINDER)
-		{
-			rotate_vector(&obj->cylinder.coords, matrix);
-			rotate_vector(&obj->cylinder.orientation, matrix);
-		}
-		else if (obj->type == SPHERE)
-			rotate_vector(&obj->sphere.coords, matrix);
-	}
+		rotate_object(scene->objects + i, matrix);
 }

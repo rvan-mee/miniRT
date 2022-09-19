@@ -43,7 +43,8 @@ SRCS := main.c										\
 		parse/normalize/normalize_coords.c			\
 		parse/normalize/normalize_orientation.c		\
 		\
-		math/product.c
+		math/product.c								\
+		math/matrix.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 
@@ -58,7 +59,7 @@ INCS := minirt.h									\
 		parse.h										\
 		mlx.h										\
 		bmp.h										\
-		vec.h
+		ft_math.h
 INCP := $(addprefix $(INCD), $(INCS))
 
 HEADERS += $(INCP)

@@ -13,6 +13,21 @@
 #include <vec.h>
 #include <math.h>
 
+static void	identity_matrix(t_fmat matrix)
+{
+	const t_fmat	identity = {
+			(t_fvec){1.0f, 0.0f, 0.0f, 0.0f},
+			(t_fvec){0.0f, 1.0f, 0.0f, 0.0f},
+			(t_fvec){0.0f, 0.0f, 1.0f, 0.0f},
+			(t_fvec){0.0f, 0.0f, 0.0f, 1.0f}
+	};
+
+	matrix[0] = identity[0];
+	matrix[1] = identity[1];
+	matrix[2] = identity[2];
+	matrix[3] = identity[3];
+}
+
 static void	axis_angle_to_matrix(t_fmat dst, t_fvec a, float angle)
 {
 	const float	c = cosf(angle);
@@ -38,6 +53,8 @@ static void	build_rotation_matrix(t_fmat dst, t_fvec cam_orientation)
 	float				axis_len;
 
 	angle = acosf(dot_product(cam_orientation, z_unit));
+	if (angle == 0.0)
+		return (identity_matrix(dst));
 	axis = cross_product(cam_orientation, z_unit);
 	axis_len = sqrtf(axis[X] * axis[X] + axis[Y] * axis[Y] + axis[Z] * axis[Z]);
 	axis /= axis_len;
@@ -69,13 +86,24 @@ void	normalize_orientation(t_scene *scene)
 
 	build_rotation_matrix(matrix, scene->camera.camera.orientation);
 	rotate_vector(&scene->camera.camera.orientation, matrix);
-	i = 0;
-	while (i < scene->objects_len)
+	i = scene->lights_len;
+	while (i--)
+		rotate_vector(&scene->lights[i].coords, matrix);
+	i = scene->objects_len;
+	while (i--)
 	{
-		obj = scene->objects + i++;
+		obj = scene->objects + i;
 		if (obj->type == PLANE)
+		{
+			rotate_vector(&obj->plane.coords, matrix);
 			rotate_vector(&obj->plane.orientation, matrix);
+		}
 		else if (obj->type == CYLINDER)
+		{
+			rotate_vector(&obj->cylinder.coords, matrix);
 			rotate_vector(&obj->cylinder.orientation, matrix);
+		}
+		else if (obj->type == SPHERE)
+			rotate_vector(&obj->sphere.coords, matrix);
 	}
 }

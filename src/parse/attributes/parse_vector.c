@@ -11,11 +11,15 @@
 /* ************************************************************************** */
 
 #include <parse.h>
+#include <float.h>
+#include <math.h>
 
 static bool	is_normalized(t_fvec vec)
 {
+	static const float	cutoff = FLT_EPSILON * 128;
+
 	vec *= vec;
-	return (vec[X] + vec[Y] + vec[Z] == 1.0f);
+	return (fabsf(vec[X] + vec[Y] + vec[Z] - 1.0f) < cutoff);
 }
 
 bool	parse_vector(char **linep, t_fvec *vector, bool normalized)

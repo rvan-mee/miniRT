@@ -18,15 +18,16 @@
 #include <stdio.h>
 int	main(int argc, char *argv[])
 {
-	// t_mlx_data	mlx_data;
+	t_mlx_data	mlx_data;
 	t_scene		scene;
 
 	if (!parse_config_file(argc, argv, &scene))
 		return (EXIT_FAILURE);
 	else
 		printf("parsing successful\n");
-	// create_mlx(&mlx_data);
-	// mlx_loop(mlx_data.mlx);
-	// mlx_terminate(mlx_data.mlx);
+	create_mlx(&mlx_data);
+	if (render(&mlx_data, &scene, WIDTH, HEIGHT))
+		mlx_loop(mlx_data.mlx);
+	mlx_terminate(mlx_data.mlx);
 	return (EXIT_SUCCESS);
 }

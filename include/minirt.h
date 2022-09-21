@@ -127,4 +127,6 @@ typedef struct s_hit {
 	size_t		screen_y;
 }	t_hit;
 
+bool	render(t_mlx_data *mlx, t_scene *scene, size_t width, size_t height);
+
 #endif

@@ -42,7 +42,7 @@ bool	shade(t_scene *scene, t_dynarr *hits, uint32_t *pixels)
 	return (true);
 }
 
-bool	render(t_scene *scene, size_t width, size_t height)
+bool	render(t_mlx_data *mlx, t_scene *scene, size_t width, size_t height)
 {
 	uint32_t	*pixels;
 	t_dynarr	hits;
@@ -56,5 +56,6 @@ bool	render(t_scene *scene, size_t width, size_t height)
 		return (false);
 	if (!shade(scene, &hits, pixels))
 		return (false);
+	ft_memcpy(mlx->img->pixels, pixels, width * height * sizeof(uint32_t));
 	return (true);
 }

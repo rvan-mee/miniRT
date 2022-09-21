@@ -114,9 +114,17 @@ typedef struct s_scene {
 	size_t		objects_len;
 }	t_scene;
 
-struct s_ray {
-	t_fvec	origine;
+typedef struct s_ray {
+	t_fvec	origin;
 	t_fvec	direction;
-};
+}	t_ray;
+
+typedef struct s_hit {
+	t_ray		ray;
+	t_object	*object;
+	float		distance;
+	size_t		screen_x;
+	size_t		screen_y;
+}	t_hit;
 
 #endif

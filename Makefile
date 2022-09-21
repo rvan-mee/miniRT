@@ -45,7 +45,9 @@ SRCS := main.c										\
 		\
 		math/product.c								\
 		math/matrix.c								\
-		math/normalize_vector.c
+		math/normalize_vector.c						\
+		\
+		ray/cast_rays.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

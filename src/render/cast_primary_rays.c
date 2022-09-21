@@ -12,18 +12,13 @@
 
 #include <minirt.h>
 #include <ft_math.h>
-#include <dynarr.h>
+#include <render.h>
 #include <math.h>
 #include <float.h>
 
 #define ASPECT_RATIO	0
 #define PIXELS_WIDTH	1
 #define PIXELS_HEIGHT	2
-
-// TODO: Remove when able
-float	intersect_plane(t_object *, t_ray *);
-float	intersect_cylinder(t_object *, t_ray *);
-float	intersect_sphere(t_object *, t_ray *);
 
 static t_fvec	get_direction(
 		const size_t screen[2],
@@ -41,17 +36,6 @@ static t_fvec	get_direction(
 	coords[Y] *= params[PIXELS_HEIGHT];
 	coords[Z] = 1;
 	return (normalize_vector(coords));
-}
-
-static float	intersect(t_object *obj, t_ray *ray)
-{
-	static float	(*intersect_functions[])(t_object *, t_ray *) = {\
-		[PLANE] = intersect_plane, \
-		[CYLINDER] = intersect_cylinder, \
-		[SPHERE] = intersect_sphere
-	};
-
-	return (intersect_functions[obj->type](obj, ray));
 }
 
 static bool	trace(

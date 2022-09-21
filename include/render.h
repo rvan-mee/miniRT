@@ -27,4 +27,9 @@ bool	shade(
 		t_dynarr *hits,
 		uint32_t *pixels);
 
+float	intersect(t_object *object, t_ray *ray);
+float	intersect_plane(t_object *object, t_ray *ray);
+float	intersect_cylinder(t_object *object, t_ray *ray);
+float	intersect_sphere(t_object *object, t_ray *ray);
+
 #endif //RENDER_H

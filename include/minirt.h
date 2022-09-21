@@ -44,10 +44,10 @@ typedef enum e_fvec_type {
 typedef union u_rgba {
 	uint32_t	rgba;
 	struct {
-		uint8_t	a;
-		uint8_t	b;
-		uint8_t	g;
 		uint8_t	r;
+		uint8_t	g;
+		uint8_t	b;
+		uint8_t	a;
 	};
 }	t_rgba;
 
@@ -79,6 +79,13 @@ typedef struct s_sphere {
 	t_rgba	colour;
 }	t_sphere;
 
+/**
+ * A infinitely big plane (not aero)
+ *
+ * `orientation' is the normal of the planes' surface. This means that checking
+ * for collision is pretty easy; if a line is perpendicular to the normal, the
+ * plane is not hit!
+ */
 typedef struct s_plane {
 	t_fvec	coords;
 	t_fvec	orientation;

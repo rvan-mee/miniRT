@@ -48,7 +48,9 @@ SRCS := main.c										\
 		math/normalize_vector.c						\
 		\
 		render/render.c								\
-		render/cast_primary_rays.c
+		render/cast_primary_rays.c					\
+		render/intersect/intersect.c				\
+		render/intersect/intersect_plane.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

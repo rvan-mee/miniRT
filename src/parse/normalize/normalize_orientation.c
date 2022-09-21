@@ -35,14 +35,12 @@ static void	build_rotation_matrix(t_fmat dst, t_fvec cam_orientation)
 	static const t_fvec	z_unit = {0, 0, 1};
 	float				angle;
 	t_fvec				axis;
-	float				axis_len;
 
 	angle = acosf(dot_product(cam_orientation, z_unit));
 	if (angle == 0.0)
 		return (identity_matrix(dst));
 	axis = cross_product(cam_orientation, z_unit);
-	axis_len = sqrtf(axis[X] * axis[X] + axis[Y] * axis[Y] + axis[Z] * axis[Z]);
-	axis /= axis_len;
+	axis = normalize_vector(axis);
 	axis_angle_to_matrix(dst, axis, angle);
 }
 

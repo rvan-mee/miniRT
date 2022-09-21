@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_math.h                                          :+:    :+:            */
+/*   normalize.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/15 20:39:55 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/15 20:39:55 by lsinke        ########   odam.nl         */
+/*   Created: 2022/09/21 15:56:53 by lsinke        #+#    #+#                 */
+/*   Updated: 2022/09/21 15:56:53 by lsinke        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_MATH_H
-# define FT_MATH_H
-# include <minirt.h>
+#include <minirt.h>
+#include <math.h>
 
-t_fvec	normalize_vector(t_fvec vec);
-float	dot_product(t_fvec a, t_fvec b);
-t_fvec	cross_product(t_fvec a, t_fvec b);
+t_fvec	normalize_vector(t_fvec vec)
+{
+	float	magnitude;
 
-void	identity_matrix(t_fmat matrix);
-t_fvec	mult_vec_mat(t_fvec vec, t_fmat mat);
-
-#endif
+	magnitude = sqrtf(vec[X] * vec[X] + vec[Y] * vec[Y] + vec[Z] * vec[Z]);
+	return (vec / magnitude);
+}

@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   mlx.h                                              :+:    :+:            */
+/*   ft_math.h                                          :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
+/*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/11 20:32:46 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/12 17:20:46 by rvan-mee      ########   odam.nl         */
+/*   Created: 2022/09/15 20:39:55 by lsinke        #+#    #+#                 */
+/*   Updated: 2022/09/15 20:39:55 by lsinke        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MLX_H
-# define MLX_H
-
-# include <MLX42/MLX42.h>
+#ifndef FT_MATH_H
+# define FT_MATH_H
 # include <minirt.h>
 
-void	keyhook(mlx_key_data_t keydata, t_mlx_data *mlx_data);
-void	create_mlx(t_mlx_data *mlx_data);
+float	dot_product(t_fvec a, t_fvec b);
+t_fvec	cross_product(t_fvec a, t_fvec b);
+
+void	identity_matrix(t_fmat matrix);
+t_fvec	mult_vec_mat(t_fvec vec, t_fmat mat);
 
 #endif

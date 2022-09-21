@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/09/12 12:36:20 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/09/14 17:27:08 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,14 +15,37 @@ NAME := miniRT
 CC := gcc
 
 CFLAGS += -Wall -Werror -Wextra
+CFLAGS += -g
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES
 SRCD := src/
-SRCS := main.c								\
-		MLX/create_mlx.c					\
-		MLX/hooks.c							\
-		MLX/bmp.c
+SRCS := main.c										\
+		\
+		mlx/create_mlx.c							\
+		mlx/hooks.c									\
+		mlx/bmp.c									\
+		\
+		parse/parse.c								\
+		parse/parse_scene.c							\
+		parse/parse_object.c						\
+		parse/parse_utils.c							\
+		parse/objects/parse_ambient.c				\
+		parse/objects/parse_camera.c				\
+		parse/objects/parse_cylinder.c				\
+		parse/objects/parse_plane.c					\
+		parse/objects/parse_sphere.c				\
+		parse/objects/parse_light.c					\
+		parse/attributes/parse_float.c				\
+		parse/attributes/parse_rgb.c				\
+		parse/attributes/parse_vector.c				\
+		parse/normalize/normalize.c					\
+		parse/normalize/normalize_coords.c			\
+		parse/normalize/normalize_orientation.c		\
+		\
+		math/product.c								\
+		math/matrix.c
+
 SRCP := $(addprefix $(SRCD), $(SRCS))
 
 # OBJECT FILES
@@ -32,7 +55,11 @@ OBJP := $(addprefix $(OBJD), $(OBJS))
 
 # HEADER FILES
 INCD := include/
-INCS := miniRT.h
+INCS := minirt.h									\
+		parse.h										\
+		mlx.h										\
+		bmp.h										\
+		ft_math.h
 INCP := $(addprefix $(INCD), $(INCS))
 
 HEADERS += $(INCP)
@@ -59,26 +86,36 @@ MLX42_N := libmlx42.a
 MLX42_I := $(addprefix $(MLX42_D), $(INCD))
 MLX42_L := $(addprefix $(MLX42_D), $(MLX42_N))
 
-MLX_ARG += -lglfw
+LINKER_FLAGS += -lglfw
+LINKER_FLAGS += -lm
 INCLUDE += -I $(MLX42_I)
 LIBS += $(MLX42_L)
 
 ifeq ($(shell uname -s), Darwin)
 	GLFW := $(shell brew --prefix glfw)/lib
-	MLX_ARG += -L $(GLFW)
+	LINKER_FLAGS += -L $(GLFW)
 else
-	MLX_ARG = -ldl
+	LINKER_FLAGS += -ldl
 endif
 
 #		RANDOM THINGS
-COMPILE := @$(CC) $(CFLAGS) $(INCLUDE)
+COMPILE := @$(CC) $(INCLUDE) $(CFLAGS)
+
+# TEST
+
+TEST_DIR := test/
+TEST_LIB := $(addprefix $(TEST_DIR), $(addsuffix _test.a, $(NAME)))
+TEST_LIB_OBJS := $(filter-out $(OBJD)main.o, $(OBJP))
+
+TESTS := parse.sh
+TEST_P := $(addprefix $(TEST_DIR), $(TESTS))
 
 # RECIPES
-all: $(NAME)
+all: $(NAME) $(TEST_LIB)
 
 $(NAME): $(LIBS) $(OBJP)
 	@echo "Compiling main executable!"
-	$(COMPILE) $(OBJP) $(MLX_ARG) $(LIBS) -o $(NAME)
+	$(COMPILE) $(OBJP) $(LIBS) $(LINKER_FLAGS) -o $(NAME)
 
 $(OBJD)%.o: $(SRCD)%.c $(HEADERS)
 	@mkdir -p $(@D)
@@ -91,7 +128,7 @@ $(LIBFT_L):
 $(MLX42_L):
 	@$(MAKE) -C $(MLX42_D)
 
-clean:
+clean: cleantest
 	@rm -rf $(OBJD)
 	@echo "Done cleaning $(CURDIR)/$(OBJD)"
 	@$(MAKE) -C $(LIBFT_D) clean
@@ -106,4 +143,11 @@ fclean:
 re: fclean
 	@$(MAKE)
 
-.PHONY: all clean fclean re -lglfw
+$(TEST_LIB): $(TEST_LIB_OBJS)
+	@ar -cr $(TEST_LIB) $(TEST_LIB_OBJS)
+	@echo "Done creating archive $(TEST_LIB)"
+
+cleantest:
+	@rm -f $(TEST_LIB)
+
+.PHONY: all clean fclean re cleantest

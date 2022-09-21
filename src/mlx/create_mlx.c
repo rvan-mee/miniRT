@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <mlx.h>
-#include <miniRT.h>
+#include <minirt.h>
 #include <stdlib.h>
 
 void	create_mlx(t_mlx_data *mlx_data)

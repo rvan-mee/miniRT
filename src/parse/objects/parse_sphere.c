@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
+/*   parse_sphere.c                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/11 20:31:51 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/14 14:43:43 by rvan-mee      ########   odam.nl         */
+/*   Created: 2022/09/14 17:16:38 by rvan-mee      #+#    #+#                 */
+/*   Updated: 2022/09/14 17:28:56 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <mlx.h>
-#include <stdlib.h>
 #include <parse.h>
+#include <libft.h>
 
-
-#include <stdio.h>
-int	main(int argc, char *argv[])
+t_parse_error	parse_sphere(char **linep, t_object *object)
 {
-	// t_mlx_data	mlx_data;
-	t_scene		scene;
+	char	*line;
 
-	if (!parse_config_file(argc, argv, &scene))
-		return (EXIT_FAILURE);
-	else
-		printf("parsing successful\n");
-	// create_mlx(&mlx_data);
-	// mlx_loop(mlx_data.mlx);
-	// mlx_terminate(mlx_data.mlx);
-	return (EXIT_SUCCESS);
+	line = *linep;
+	if (!parse_vector(&line, &object->sphere.coords, false)
+		|| !ft_isspace(*line))
+		return (COORD);
+	if (!parse_float(&line, &object->sphere.diameter, 0, 0)
+		|| !ft_isspace(*line))
+		return (DIAMETER);
+	if (!parse_rgb(&line, &object->sphere.colour))
+		return (COLOUR);
+	*linep = line;
+	return (SUCCESS);
 }

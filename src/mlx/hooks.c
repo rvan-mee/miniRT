@@ -10,10 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <mlx.h>
-#include <miniRT.h>
+#include <minirt.h>
 #include <bmp.h>
-#include <stdlib.h>
 
 void	keyhook(mlx_key_data_t keydata, t_mlx_data *mlx_data)
 {

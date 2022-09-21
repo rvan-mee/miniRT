@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   mlx.h                                              :+:    :+:            */
+/*   normalize.c                                        :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
+/*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/11 20:32:46 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/12 17:20:46 by rvan-mee      ########   odam.nl         */
+/*   Created: 2022/09/15 19:11:11 by lsinke        #+#    #+#                 */
+/*   Updated: 2022/09/15 19:11:11 by lsinke        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MLX_H
-# define MLX_H
+#include <parse.h>
 
-# include <MLX42/MLX42.h>
-# include <minirt.h>
-
-void	keyhook(mlx_key_data_t keydata, t_mlx_data *mlx_data);
-void	create_mlx(t_mlx_data *mlx_data);
-
-#endif
+void	normalize(t_scene *scene)
+{
+	normalize_coords(scene);
+	normalize_orientation(scene);
+}

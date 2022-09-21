@@ -13,6 +13,35 @@
 #include <render.h>
 #include <libft.h>
 
+static uint32_t	get_colour(t_object *object)
+{
+	switch (object->type) {
+		case SPHERE:
+			return (object->sphere.colour.rgba);
+		case PLANE:
+			return (object->plane.colour.rgba);
+		case CYLINDER:
+			return (object->cylinder.colour.rgba);
+		default:
+			return (0);
+	}
+}
+
+bool	shade(t_scene *scene, t_dynarr *hits, uint32_t *pixels)
+{
+	size_t	i;
+	t_hit	*hit;
+
+	(void) scene;
+	hit = hits->arr;
+	i = hits->length;
+	while (i--)
+	{
+		pixels[hit[i].screen_x + hit[i].screen_y * WIDTH] = get_colour(hit[i].object);
+	}
+	return (true);
+}
+
 bool	render(t_scene *scene, size_t width, size_t height)
 {
 	uint32_t	*pixels;

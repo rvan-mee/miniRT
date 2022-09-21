@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   cast_rays.c                                        :+:    :+:            */
+/*   cast_primary_rays.c                                :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
@@ -54,7 +54,11 @@ static float	intersect(t_object *obj, t_ray *ray)
 	return (intersect_functions[obj->type](obj, ray));
 }
 
-static bool	trace(t_scene *scene, t_ray *ray, size_t screen[2], t_dynarr *hits)
+static bool	trace(
+		t_scene *scene,
+		t_ray *ray,
+		const size_t screen[2],
+		t_dynarr *hits)
 {
 	size_t		i;
 	t_hit		hit;
@@ -78,8 +82,11 @@ static bool	trace(t_scene *scene, t_ray *ray, size_t screen[2], t_dynarr *hits)
 }
 
 //TODO: Move canvas width/height to scene struct
-// Maybe rename to cast_primary_rays?
-bool	cast_rays(t_scene *scene, size_t width, size_t height, t_dynarr *hits)
+bool	cast_primary_rays(
+		t_scene *scene,
+		size_t width,
+		size_t height,
+		t_dynarr *hits)
 {
 	const float	params[] = {
 		[ASPECT_RATIO] = (float) width / (float) height,
@@ -97,6 +104,7 @@ bool	cast_rays(t_scene *scene, size_t width, size_t height, t_dynarr *hits)
 		{
 			//todo: everything below this should probably be a function
 			// so we're actually able to reuse it when acsting from other point
+			// or trace should be a separate function? (not static)
 			ray.origin = (t_fvec){0, 0, 0, 0};
 			ray.direction = get_direction(screen, width, height, params);
 			if (!trace(scene, &ray, screen, hits))

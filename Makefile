@@ -47,7 +47,8 @@ SRCS := main.c										\
 		math/matrix.c								\
 		math/normalize_vector.c						\
 		\
-		ray/cast_rays.c
+		render/render.c								\
+		render/cast_primary_rays.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 
@@ -62,7 +63,8 @@ INCS := minirt.h									\
 		parse.h										\
 		mlx.h										\
 		bmp.h										\
-		ft_math.h
+		ft_math.h									\
+		render.h
 INCP := $(addprefix $(INCD), $(INCS))
 
 HEADERS += $(INCP)

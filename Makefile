@@ -45,11 +45,13 @@ SRCS := main.c										\
 		\
 		math/product.c								\
 		math/matrix.c								\
+		math/quadratic.c							\
 		math/normalize_vector.c						\
 		\
 		render/render.c								\
 		render/cast_primary_rays.c					\
 		render/intersect/intersect.c				\
+		render/intersect/intersect_sphere.c			\
 		render/intersect/intersect_plane.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))

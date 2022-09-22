@@ -47,7 +47,7 @@ SRCS := main.c										\
 		math/matrix.c								\
 		math/quadratic.c							\
 		\
-		intersect/intersect_sphere.c
+		render/intersect/intersect_sphere.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

@@ -24,11 +24,11 @@ bool	solve_quadratic(t_quadratic *quadratic, float t[2])
 	a = quadratic->a;
 	b = quadratic->b;
 	c = quadratic->c;
-	discriminant = (b * b) - (4 * a * c);
-	if (discriminant < 0.0)
+	discriminant = b * b - 4 * a * c;
+	if (discriminant < 0.0f)
 		return (false);
 	discriminant = sqrtf(discriminant);
-	a = 1.0 / (2.0 * a);
+	a = 1.0f / (2.0f * a);
 	t[0] = (-b + discriminant) * a;
 	t[1] = (-b - discriminant) * a;
 	return (true);

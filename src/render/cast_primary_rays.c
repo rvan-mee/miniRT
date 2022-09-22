@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 15:46:41 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/21 15:46:41 by lsinke        ########   odam.nl         */
+/*   Updated: 2022/09/22 19:09:26 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ bool	cast_primary_rays(
 		size_t height,
 		t_dynarr *hits)
 {
-	const float	params[] = {
-		[ASPECT_RATIO] = (float) width / (float) height,
-		[PIXELS_WIDTH] = tanf(scene->camera.camera.fov / 2),
+	const float	params[] = {\
+		[ASPECT_RATIO] = (float) width / (float) height, \
+		[PIXELS_WIDTH] = tanf(scene->camera.camera.fov / 2), \
 		[PIXELS_HEIGHT] = params[PIXELS_WIDTH] / params[ASPECT_RATIO]
 	};
 	t_ray		ray;
@@ -87,7 +87,7 @@ bool	cast_primary_rays(
 		while (screen[Y] < height)
 		{
 			//todo: everything below this should probably be a function
-			// so we're actually able to reuse it when acsting from other point
+			// so we're actually able to reuse it when casting from other point
 			// or trace should be a separate function? (not static)
 			ray.origin = (t_fvec){0, 0, 0, 0};
 			ray.direction = get_direction(screen, width, height, params);

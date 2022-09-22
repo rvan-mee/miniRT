@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/14 17:18:22 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/14 17:18:22 by lsinke        ########   odam.nl         */
+/*   Updated: 2022/09/22 19:10:08 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 
 static bool	parse_fov(char **linep, float *dst)
 {
-	static const float	deg_per_rad = (float) (180.0 / M_PI);
-	char	*line;
-	int32_t	num;
+	static const float	deg_per_rad = (float)(180.0 / M_PI);
+	char				*line;
+	int32_t				num;
 
 	line = *linep;
 	num = ft_atoi(line);

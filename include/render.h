@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 18:30:32 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/21 18:30:32 by lsinke        ########   odam.nl         */
+/*   Updated: 2022/09/22 19:00:02 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@
 # define MISS INFINITY
 
 bool	cast_primary_rays(
-		t_scene *scene,
-		size_t width,
-		size_t height,
-		t_dynarr *hits);
+			t_scene *scene,
+			size_t width,
+			size_t height,
+			t_dynarr *hits);
 
 bool	shade(
-		t_scene *scene,
-		t_dynarr *hits,
-		uint32_t *pixels);
+			t_scene *scene,
+			t_dynarr *hits,
+			uint32_t *pixels);
 
 float	intersect(t_object *object, t_ray *ray);
 float	intersect_plane(t_object *object, t_ray *ray);

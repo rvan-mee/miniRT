@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 18:32:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/21 18:32:19 by lsinke        ########   odam.nl         */
+/*   Updated: 2022/09/22 19:07:09 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,19 @@
 
 static uint32_t	get_colour(t_object *object)
 {
-	switch (object->type) {
-		case SPHERE:
-			return (object->sphere.colour.rgba);
-		case PLANE:
-			return (object->plane.colour.rgba);
-		case CYLINDER:
-			return (object->cylinder.colour.rgba);
-		default:
-			return (0);
-	}
+	if (object->type == SPHERE)
+		return (object->sphere.colour.rgba);
+	if (object->type == PLANE)
+		return (object->plane.colour.rgba);
+	if (object->type == CYLINDER)
+		return (object->cylinder.colour.rgba);
+	return (0);
 }
 
 bool	shade(t_scene *scene, t_dynarr *hits, uint32_t *pixels)
 {
 	size_t	i;
+	size_t	pixel_index;
 	t_hit	*hit;
 
 	(void) scene;
@@ -37,7 +35,8 @@ bool	shade(t_scene *scene, t_dynarr *hits, uint32_t *pixels)
 	i = hits->length;
 	while (i--)
 	{
-		pixels[hit[i].screen_x + hit[i].screen_y * WIDTH] = get_colour(hit[i].object);
+		pixel_index = hit[i].screen_x + hit[i].screen_y * WIDTH;
+		pixels[pixel_index] = get_colour(hit[i].object);
 	}
 	return (true);
 }

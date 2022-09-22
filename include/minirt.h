@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/13 16:07:58 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/21 18:54:48 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ typedef enum e_object_type {
 typedef enum e_fvec_type {
 	X,
 	Y,
-	Z
+	Z,
+	MAG
 }	t_fvec_type;
 
 typedef union u_rgba {
@@ -114,9 +115,9 @@ typedef struct s_scene {
 	size_t		objects_len;
 }	t_scene;
 
-struct s_ray {
-	t_fvec	origine;
+typedef struct s_ray {
+	t_fvec	origin;
 	t_fvec	direction;
-};
+}	t_ray;
 
 #endif

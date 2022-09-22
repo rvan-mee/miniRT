@@ -16,7 +16,7 @@ float	intersect(t_object *object, t_ray *ray)
 {
 	static float	(*intersect_functions[])(t_object *, t_ray *) = {
 		[PLANE] = intersect_plane,
-		//[CYLINDER] = intersect_cylinder,
+		[CYLINDER] = intersect_cylinder,
 		[SPHERE] = intersect_sphere
 	};
 

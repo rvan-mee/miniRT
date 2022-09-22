@@ -22,7 +22,7 @@ static bool	parse_fov(char **linep, float *dst)
 
 	line = *linep;
 	num = ft_atoi(line);
-	if (num < 0 || num > 180)
+	if (num <= 0 || num >= 180)
 		return (false);
 	*dst = (float) num / deg_per_rad;
 	skip_spaces(&line);

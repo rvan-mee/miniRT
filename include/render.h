@@ -15,6 +15,9 @@
 
 # include <dynarr.h>
 # include <minirt.h>
+# include <math.h>
+
+# define MISS INFINITY
 
 bool	cast_primary_rays(
 		t_scene *scene,

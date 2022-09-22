@@ -30,7 +30,7 @@ static t_fvec	get_direction(
 
 	coords[X] = ((float) screen[X] + 0.5f) / (float) width;
 	coords[Y] = ((float) screen[Y] + 0.5f) / (float) height;
-	coords[X] = 1 - 2 * coords[X];
+	coords[X] = 2 * coords[X] - 1;
 	coords[Y] = 1 - 2 * coords[Y];
 	coords[X] *= params[PIXELS_WIDTH];
 	coords[Y] *= params[PIXELS_HEIGHT];

@@ -52,7 +52,8 @@ SRCS := main.c										\
 		render/cast_primary_rays.c					\
 		render/intersect/intersect.c				\
 		render/intersect/intersect_sphere.c			\
-		render/intersect/intersect_plane.c
+		render/intersect/intersect_plane.c			\
+		render/intersect/intersect_cylinder.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

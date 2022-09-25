@@ -53,7 +53,8 @@ SRCS := main.c										\
 		render/intersect/intersect.c				\
 		render/intersect/intersect_sphere.c			\
 		render/intersect/intersect_plane.c			\
-		render/intersect/intersect_cylinder.c
+		render/intersect/intersect_cylinder.c		\
+		render/calculate_normal.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

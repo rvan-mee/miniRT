@@ -35,11 +35,11 @@ typedef enum e_object_type {
 	END
 }	t_obj_type;
 
-typedef enum e_fvec_type {
+enum e_axis {
 	X,
 	Y,
 	Z
-}	t_fvec_type;
+};
 
 typedef union u_rgba {
 	uint32_t	rgba;
@@ -76,6 +76,7 @@ typedef struct s_light {
 typedef struct s_sphere {
 	t_fvec	coords;
 	float	diameter;
+	float	radius_sq;
 	t_rgba	colour;
 }	t_sphere;
 
@@ -94,9 +95,11 @@ typedef struct s_plane {
 
 typedef struct s_cylinder {
 	t_fvec	coords;
+	t_fvec	top;
 	t_fvec	orientation;
 	float	diameter;
 	float	height;
+	float	radius_sq;
 	t_rgba	colour;
 }	t_cylinder;
 
@@ -128,8 +131,10 @@ typedef struct s_ray {
 
 typedef struct s_hit {
 	t_ray		ray;
-	t_object	*object;
 	float		distance;
+	t_fvec		hit;
+	t_object	*object;
+	t_fvec		normal;
 	size_t		screen_x;
 	size_t		screen_y;
 }	t_hit;

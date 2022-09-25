@@ -48,9 +48,7 @@ static bool	trace(
 	t_hit		hit;
 	float		hit_distance;
 
-	hit = (t_hit){
-		*ray, NULL, FLT_MAX, screen[X], screen[Y]
-	};
+	hit = (t_hit){*ray, FLT_MAX, {}, NULL, {}, screen[X], screen[Y]};
 	i = scene->objects_len;
 	while (i--)
 	{
@@ -62,6 +60,8 @@ static bool	trace(
 	}
 	if (hit.distance == FLT_MAX)
 		return (true);
+	hit.hit = hit.ray.origin + hit.ray.direction * hit.distance;
+	calculate_normal(&hit);
 	return (dynarr_addone(hits, &hit));
 }
 

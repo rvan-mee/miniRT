@@ -13,6 +13,13 @@
 #include <parse.h>
 #include <libft.h>
 
+static void	pre_calc(t_sphere *sphere)
+{
+	const float	radius = sphere->diameter / 2;
+
+	sphere->radius_sq = radius * radius;
+}
+
 t_parse_error	parse_sphere(char **linep, t_object *object)
 {
 	char	*line;
@@ -26,6 +33,7 @@ t_parse_error	parse_sphere(char **linep, t_object *object)
 		return (DIAMETER);
 	if (!parse_rgb(&line, &object->sphere.colour))
 		return (COLOUR);
+	pre_calc(&object->sphere);
 	*linep = line;
 	return (SUCCESS);
 }

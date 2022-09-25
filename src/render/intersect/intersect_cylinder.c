@@ -13,23 +13,22 @@
 #include <ft_math.h>
 #include <render.h>
 
-//TODO: Precalculate a lot off this stuff
-// Radius squared
-// Top cap mid vector
-static bool	check_height(float tee, t_ray *ray, const t_cylinder *cyl)
+static bool	check_height(
+		const t_cylinder *cyl,
+		const t_ray *ray,
+		float tee)
 {
-	float	hit_proj[2];
-	t_fvec	hit = ray->origin + ray->direction * tee;
-	t_fvec	cyl_top = cyl->height * cyl->orientation;
+	const t_fvec	hit = ray->origin + ray->direction * tee;
+	float			hit_height;
 
-	hit_proj[0] = dot_product(hit - cyl->coords, cyl_top);
-	if (hit_proj[0] < 0)
-		return (false);
-	hit_proj[1] = dot_product(cyl_top, cyl_top);
-	return (hit_proj[0] <= hit_proj[1]);
+	hit_height = dot_product(hit - cyl->coords, cyl->orientation);
+	return (hit_height >= 0 && hit_height <= cyl->height * cyl->height);
 }
 
-static uint8_t	intersect_inf_cyl(const t_cylinder *cyl, t_ray *ray, float t[2])
+static uint8_t	intersect_inf_cyl(
+		const t_cylinder *cyl,
+		const t_ray *ray,
+		float t[2])
 {
 	t_quadratic	quad;
 	t_fvec		p[2];
@@ -39,7 +38,7 @@ static uint8_t	intersect_inf_cyl(const t_cylinder *cyl, t_ray *ray, float t[2])
 	p[1] = cross_product(ray->direction, cyl->orientation);
 	quad.a = dot_product(p[1], p[1]);
 	quad.b = dot_product(p[0], p[1]) * 2.0f;
-	quad.c = dot_product(p[0], p[0]) - powf(cyl->diameter / 2, 2.0f);
+	quad.c = dot_product(p[0], p[0]) - cyl->radius_sq;
 	if (!solve_quadratic(&quad, t))
 		return (0);
 	if (t[0] == t[1])
@@ -53,25 +52,24 @@ static uint8_t	intersect_inf_cyl(const t_cylinder *cyl, t_ray *ray, float t[2])
 	return (2);
 }
 
-static float	intersect_tops(const t_cylinder *cyl, t_ray *ray, float angle_diff)
+static float	intersect_tops(
+		const t_cylinder *cyl,
+		const t_ray *ray,
+		float angle_diff)
 {
-	const float	radius_squared = powf(cyl->diameter / 2, 2);
-	t_fvec		top_mid;
+	t_fvec		rel_cap_mid;
 	t_fvec		hit;
 	float		dist[2];
 
-	top_mid = cyl->coords - ray->origin;
-	dist[0] = dot_product(top_mid, cyl->orientation) / angle_diff;
-	hit = ray->origin + ray->direction * dist[0];
-	hit -= top_mid;
-	if (dot_product(hit, hit) > radius_squared)
+	rel_cap_mid = cyl->coords - ray->origin;
+	dist[0] = dot_product(rel_cap_mid, cyl->orientation) / angle_diff;
+	hit = ray->origin + ray->direction * dist[0] - rel_cap_mid;
+	if (dot_product(hit, hit) > cyl->radius_sq)
 		dist[0] = MISS;
-	top_mid = cyl->coords + cyl->orientation * cyl->height;
-	top_mid -= ray->origin;
-	dist[1] = dot_product(top_mid, cyl->orientation) / angle_diff;
-	hit = ray->origin + ray->direction * dist[1];
-	hit -= top_mid;
-	if (dot_product(hit, hit) > radius_squared)
+	rel_cap_mid += cyl->top;
+	dist[1] = dot_product(rel_cap_mid, cyl->orientation) / angle_diff;
+	hit = ray->origin + ray->direction * dist[1] - rel_cap_mid;
+	if (dot_product(hit, hit) > cyl->radius_sq)
 		dist[1] = MISS;
 	if (dist[0] < dist[1] && dist[0] >= 0)
 		return (dist[0]);
@@ -95,7 +93,7 @@ static float	intersect_tops(const t_cylinder *cyl, t_ray *ray, float angle_diff)
  */
 float	intersect_cylinder(t_object *object, t_ray *ray)
 {
-	// TODO: Norminette, optimization(?), end caps, names
+	// TODO: Norminette, optimization(?), names
 	const t_cylinder	*cyl = &object->cylinder;
 	const float			angle_diff = dot_product(cyl->orientation, ray->direction);
 	float				t[2];
@@ -104,9 +102,9 @@ float	intersect_cylinder(t_object *object, t_ray *ray)
 		return (intersect_tops(cyl, ray, angle_diff));
 	else if (intersect_inf_cyl(cyl, ray, t))
 	{
-		if (t[0] > 0 && check_height(t[0], ray, cyl))
+		if (t[0] > 0 && check_height(cyl, ray, t[0]))
 			return (fminf(intersect_tops(cyl, ray, angle_diff), t[0]));
-		if (t[1] > 0 && check_height(t[1], ray, cyl))
+		if (t[1] > 0 && check_height(cyl, ray, t[1]))
 			return (fminf(intersect_tops(cyl, ray, angle_diff), t[1]));
 	}
 	if (angle_diff == 0.0f)

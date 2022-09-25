@@ -35,4 +35,6 @@ float	intersect_plane(t_object *object, t_ray *ray);
 float	intersect_cylinder(t_object *object, t_ray *ray);
 float	intersect_sphere(t_object *object, t_ray *ray);
 
+void	calculate_normal(t_hit *hit);
+
 #endif //RENDER_H

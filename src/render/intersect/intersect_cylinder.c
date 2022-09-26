@@ -22,7 +22,7 @@ static bool	check_height(
 	float			hit_height;
 
 	hit_height = dot_product(hit - cyl->coords, cyl->orientation);
-	return (hit_height >= 0 && hit_height <= cyl->height * cyl->height);
+	return (hit_height >= 0 && hit_height < cyl->height);
 }
 
 static uint8_t	intersect_inf_cyl(

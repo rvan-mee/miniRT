@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/09/22 15:57:04 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/09/26 15:18:36 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,8 @@ SRCS := main.c										\
 		render/intersect/intersect_sphere.c			\
 		render/intersect/intersect_plane.c			\
 		render/intersect/intersect_cylinder.c		\
-		render/calculate_normal.c
+		render/calculate_normal.c					\
+		render/shading/shading.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

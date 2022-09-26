@@ -12,6 +12,7 @@
 
 #include <ft_math.h>
 #include <math.h>
+#include <float.h>
 
 static void	axis_angle_to_matrix(t_fmat dst, t_fvec a, float angle)
 {
@@ -39,6 +40,13 @@ static void	build_rotation_matrix(t_fmat dst, t_fvec cam_orientation)
 	angle = acosf(dot_product(cam_orientation, z_unit));
 	if (angle == 0.0)
 		return (identity_matrix(dst));
+	if (fabs(angle - M_PI) < FLT_EPSILON * 128)
+	{
+		dst[0] = (t_fvec){-1.f, 0.0f, 0.0f};
+		dst[1] = (t_fvec){0.0f, -1.f, 0.0f};
+		dst[2] = (t_fvec){0.0f, 0.0f, 1.0f};
+		return ;
+	}
 	axis = cross_product(cam_orientation, z_unit);
 	axis = normalize_vector(axis);
 	axis_angle_to_matrix(dst, axis, angle);
@@ -60,6 +68,7 @@ static void	rotate_object(t_object *object, t_fmat matrix)
 	{
 		rotate_vector(&object->cylinder.coords, matrix);
 		rotate_vector(&object->cylinder.orientation, matrix);
+		rotate_vector(&object->cylinder.top, matrix);
 	}
 	else if (object->type == SPHERE)
 		rotate_vector(&object->sphere.coords, matrix);

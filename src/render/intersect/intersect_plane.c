@@ -25,7 +25,7 @@ float	intersect_plane(t_object *object, t_ray *ray)
 
 	plane = &object->plane;
 	perpendicularity = dot_product(ray->direction, plane->orientation);
-	if (perpendicularity < FLT_EPSILON * 128)
+	if (fabsf(perpendicularity) < FLT_EPSILON * 128)
 		return (MISS);
 	diff = plane->coords - ray->origin;
 	distance = dot_product(diff, plane->orientation) / perpendicularity;

@@ -60,7 +60,7 @@ static bool	trace(
 	}
 	if (hit.distance == FLT_MAX)
 		return (true);
-	hit.hit = hit.ray.origin + hit.ray.direction * hit.distance;
+	hit.hit = hit.ray.origin + hit.ray.direction * (hit.distance * (1 - 128 * FLT_EPSILON));
 	calculate_normal(&hit);
 	return (dynarr_addone(hits, &hit));
 }

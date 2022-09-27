@@ -67,25 +67,26 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 
 	i = 0;
 	j = 0;
-	ray.origin = hit->hit + (hit->normal * 1024 * __FLT_EPSILON__);
+	ray.origin = hit->hit;
 	if (hit->screen_x == 1345 && hit->screen_y == 608)
 		test();
 	while (i < scene->lights_len)
 	{
 		has_angle = false;
 		ray.direction = lights[i].coords;
-		distance_to_light = dist_between_vecs(ray.origin, lights[i].coords);
+		distance_to_light = dot_product(ray.origin, lights[i].coords);
 		ray.direction = normalize_vector(ray.direction - ray.origin);
-		facing_ratio = fmax(0.0f, dot_product(ray.direction, hit->normal));
-		if (facing_ratio < 0 || facing_ratio > 1)
+		facing_ratio = dot_product(ray.direction, hit->normal);
+		if (facing_ratio < 0 && facing_ratio > 1)
 		{
 			i++;
+			has_angle = true;
 			continue ;
 		}
 		while (j < scene->objects_len)
 		{
 			distance = intersect(&scene->objects[j], &ray);
-			if ((distance != MISS && distance < distance_to_light) && distance > 0)
+			if ((distance != MISS && distance * distance < distance_to_light) && distance > 0)
 			{
 				has_angle = true;
 				break ;
@@ -95,7 +96,15 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 		i++;
 	}
 	if (hit->object->type != PLANE && !has_angle)
-		return (0xFF000000 + ((int)((float)colour.r * facing_ratio) << 16) + ((int)((float)colour.g * facing_ratio) << 8) + (int)((float)colour.b * facing_ratio));
+	{
+		t_rgba	col;
+
+		col = colour;
+		col.r = (uint8_t) ((float) col.r * fmaxf(facing_ratio, 0.0f));
+		col.g = (uint8_t) ((float) col.g * fmaxf(facing_ratio, 0.0f));
+		col.b = (uint8_t) ((float) col.b * fmaxf(facing_ratio, 0.0f));
+		return (col.rgba);
+	}
 	if (!has_angle)
 		return (colour.rgba);
 	return (0xFF000000);

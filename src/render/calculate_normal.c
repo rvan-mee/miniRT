@@ -46,6 +46,6 @@ void	calculate_normal(t_hit *hit)
 		[CYLINDER] = cylinder_normal,
 	};
 	lut[hit->object->type](hit);
-	if (dot_product(hit->ray.direction, hit->normal) < 0)
+	if (dot_product(hit->ray.direction, hit->normal) > 0)
 		hit->normal = -hit->normal;
 }

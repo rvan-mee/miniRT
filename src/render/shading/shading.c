@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/26 14:45:10 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/26 18:23:24 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/27 14:00:19 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 
 	i = 0;
 	j = 0;
-	ray.origin = hit->hit;
+	ray.origin = hit->hit + (hit->normal * 1024 * __FLT_EPSILON__);
 	if (hit->screen_x == 1345 && hit->screen_y == 608)
 		test();
 	while (i < scene->lights_len)
@@ -76,7 +76,7 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 		ray.direction = lights[i].coords;
 		distance_to_light = dist_between_vecs(ray.origin, lights[i].coords);
 		ray.direction = normalize_vector(ray.direction - ray.origin);
-		facing_ratio = dot_product(ray.direction, hit->normal);
+		facing_ratio = fmax(0.0f, dot_product(ray.direction, hit->normal));
 		if (facing_ratio < 0 || facing_ratio > 1)
 		{
 			i++;
@@ -94,6 +94,8 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 		}
 		i++;
 	}
+	if (hit->object->type != PLANE && !has_angle)
+		return (0xFF000000 + ((int)((float)colour.r * facing_ratio) << 16) + ((int)((float)colour.g * facing_ratio) << 8) + (int)((float)colour.b * facing_ratio));
 	if (!has_angle)
 		return (colour.rgba);
 	return (0xFF000000);

@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/26 14:45:10 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/27 14:00:19 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/27 15:46:07 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,38 +28,23 @@ static t_rgba	get_obj_rgba(t_object *object)
 	return (rgb);
 }
 
-// t_fvec	normalize_vector(t_fvec vec)
-// {
-// 	const float	mag = dot_product(vec, vec);
-// 	t_fvec		norm;
-
-// 	norm[X] = vec[X] / mag;
-// 	norm[Y] = vec[Y] / mag;
-// 	norm[Z] = vec[Z] / mag;
-// 	return (norm);
-// }
-
-float	dist_between_vecs(t_fvec a, t_fvec b)
+uint32_t	set_shade_colour(t_rgba colour, float facing_ratio)
 {
-	return (sqrt(dot_product(a, b)));
-}
+	t_rgba	col;
 
-uint32_t	change_rgb(t_rgba colour, int8_t p)
-{
-	return ((colour.r * (255 / p) << 24) + (colour.g * (255 / p) << 16) + (colour.b * (255 / p) << 8) + 255);
-}
-
-void	test(void)
-{
+	col = colour;
+	col.r = (uint8_t) ((float) col.r * facing_ratio);
+	col.g = (uint8_t) ((float) col.g * facing_ratio);
+	col.b = (uint8_t) ((float) col.b * facing_ratio);
+	return (col.rgba);
 }
 
 uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 {
 	const t_light	*lights = scene->lights;
-	bool			has_angle;
+	bool			light_hits;
 	float			distance;
 	float			distance_to_light;
-	t_rgba			colour = get_obj_rgba(object);
 	float			facing_ratio;
 	t_ray			ray;
 	size_t			i;
@@ -68,19 +53,16 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 	i = 0;
 	j = 0;
 	ray.origin = hit->hit;
-	if (hit->screen_x == 1345 && hit->screen_y == 608)
-		test();
 	while (i < scene->lights_len)
 	{
-		has_angle = false;
+		light_hits = false;
 		ray.direction = lights[i].coords;
 		distance_to_light = dot_product(ray.origin, lights[i].coords);
 		ray.direction = normalize_vector(ray.direction - ray.origin);
-		facing_ratio = dot_product(ray.direction, hit->normal);
-		if (facing_ratio < 0 && facing_ratio > 1)
+		facing_ratio = fmaxf(dot_product(ray.direction, hit->normal), 0.0f);
+		if (facing_ratio < 0 || facing_ratio > 1)
 		{
 			i++;
-			has_angle = true;
 			continue ;
 		}
 		while (j < scene->objects_len)
@@ -88,24 +70,14 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 			distance = intersect(&scene->objects[j], &ray);
 			if ((distance != MISS && distance * distance < distance_to_light) && distance > 0)
 			{
-				has_angle = true;
+				light_hits = true;
 				break ;
 			}
 			j++;
 		}
 		i++;
 	}
-	if (hit->object->type != PLANE && !has_angle)
-	{
-		t_rgba	col;
-
-		col = colour;
-		col.r = (uint8_t) ((float) col.r * fmaxf(facing_ratio, 0.0f));
-		col.g = (uint8_t) ((float) col.g * fmaxf(facing_ratio, 0.0f));
-		col.b = (uint8_t) ((float) col.b * fmaxf(facing_ratio, 0.0f));
-		return (col.rgba);
-	}
-	if (!has_angle)
-		return (colour.rgba);
+	if (!light_hits)
+		return (set_shade_colour(get_obj_rgba(object), facing_ratio));
 	return (0xFF000000);
 }

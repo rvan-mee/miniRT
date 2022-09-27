@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   miniRT.h                                           :+:    :+:            */
+/*   minirt.h                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/26 18:05:38 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/27 20:02:19 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,13 @@ typedef struct s_hit {
 	size_t		screen_x;
 	size_t		screen_y;
 }	t_hit;
+
+typedef struct s_minirt {
+	t_mlx_data	mlx_data;
+	t_scene		scene;
+	char		**argv;
+	int			argc;
+}	t_minirt;
 
 bool	render(t_mlx_data *mlx, t_scene *scene, size_t width, size_t height);
 

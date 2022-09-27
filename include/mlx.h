@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:32:46 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/12 17:20:46 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/27 14:54:26 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <MLX42/MLX42.h>
 # include <minirt.h>
 
-void	keyhook(mlx_key_data_t keydata, t_mlx_data *mlx_data);
+void	keyhook(mlx_key_data_t keydata, t_minirt *mlx_data);
 void	create_mlx(t_mlx_data *mlx_data);
 
 #endif

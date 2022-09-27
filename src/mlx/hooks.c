@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 12:12:27 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/27 19:59:30 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/27 20:32:07 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ static void	move_cam(t_minirt *data, enum keys key)
 		cam->coords[Z] -= STEPS;
 	else if (key == MLX_KEY_D)
 		cam->coords[X] += STEPS;
-	printf("New camera position: %f, %f, %f\n", cam->coords[X], cam->coords[Y], cam->coords[Z]);
 	normalize(&data->scene);
 	if (!render(&data->mlx_data, &data->scene, WIDTH, HEIGHT))
 		mlx_close_window(data->mlx_data.mlx);
@@ -79,7 +78,6 @@ static void	rotate_cam(t_minirt *data, enum keys key)
 		cam->orientation = rodrigues_rotation(cam->orientation, -rot_x, DEG * ROT_AMOUNT);
 	else if (key == MLX_KEY_RIGHT)
 		cam->orientation = rodrigues_rotation(cam->orientation, rot_x, DEG * ROT_AMOUNT);
-	printf("New camera rotation: %f, %f, %f\n", cam->orientation[X], cam->orientation[Y], cam->orientation[Z]);
 	normalize(&data->scene);
 	if (!render(&data->mlx_data, &data->scene, WIDTH, HEIGHT))
 		mlx_close_window(data->mlx_data.mlx);

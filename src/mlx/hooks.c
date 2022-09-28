@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 12:12:27 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/27 20:32:07 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/28 12:43:21 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <stdlib.h>
 
 #define STEPS 2.5f
-#define ROT_AMOUNT 5
+#define ROT_AMOUNT 15
 #define DEG 0.0174533
 
 static void	reload_scene(t_minirt *data)

@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/22 14:35:26 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/22 14:35:26 by lsinke        ########   odam.nl         */
+/*   Updated: 2022/09/28 15:52:37 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,15 @@ static float	intersect_tops(
 
 	rel_cap_mid = cyl->coords - ray->origin;
 	dist[0] = dot_product(rel_cap_mid, cyl->orientation) / angle_diff;
-	hit = ray->origin + ray->direction * dist[0] - rel_cap_mid;
-	if (dot_product(hit, hit) > cyl->radius_sq)
+	hit = ray->direction * dist[0] - rel_cap_mid;
+	if (dist[0] < 0 || dot_product(hit, hit) > cyl->radius_sq)
 		dist[0] = MISS;
 	rel_cap_mid += cyl->top;
 	dist[1] = dot_product(rel_cap_mid, cyl->orientation) / angle_diff;
-	hit = ray->origin + ray->direction * dist[1] - rel_cap_mid;
-	if (dot_product(hit, hit) > cyl->radius_sq)
+	hit = ray->direction * dist[1] - rel_cap_mid;
+	if (dist[1] < 0 || dot_product(hit, hit) > cyl->radius_sq)
 		dist[1] = MISS;
-	if (dist[0] < dist[1] && dist[0] >= 0)
-		return (dist[0]);
-	if (dist[1] < dist[0] && dist[1] >= 0)
-		return (dist[1]);
-	return (MISS);
+	return (fminf(dist[0], dist[1]));
 }
 
 /*

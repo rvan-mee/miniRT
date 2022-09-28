@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/15 20:41:36 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/15 20:41:36 by lsinke        ########   odam.nl         */
+/*   Updated: 2022/09/28 14:50:20 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ static void	build_rotation_matrix(t_fmat dst, t_fvec cam_orientation)
 	if (fabs(angle - M_PI) < FLT_EPSILON * 128)
 	{
 		dst[0] = (t_fvec){-1.f, 0.0f, 0.0f};
-		dst[1] = (t_fvec){0.0f, -1.f, 0.0f};
-		dst[2] = (t_fvec){0.0f, 0.0f, 1.0f};
+		dst[1] = (t_fvec){0.0f, 1.f, 0.0f};
+		dst[2] = (t_fvec){0.0f, 0.0f, -1.0f};
 		return ;
 	}
 	axis = cross_product(cam_orientation, z_unit);

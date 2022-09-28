@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/26 14:45:10 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/27 15:46:07 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/28 12:28:00 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 	float			distance;
 	float			distance_to_light;
 	float			facing_ratio;
+	t_fvec			ray_to_light;
 	t_ray			ray;
 	size_t			i;
 	size_t			j;
@@ -57,7 +58,8 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 	{
 		light_hits = false;
 		ray.direction = lights[i].coords;
-		distance_to_light = dot_product(ray.origin, lights[i].coords);
+		ray_to_light = ray.origin - lights[i].coords;
+		distance_to_light = dot_product(ray_to_light, ray_to_light);
 		ray.direction = normalize_vector(ray.direction - ray.origin);
 		facing_ratio = fmaxf(dot_product(ray.direction, hit->normal), 0.0f);
 		if (facing_ratio < 0 || facing_ratio > 1)

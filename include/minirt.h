@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/27 20:02:19 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/09/28 12:45:06 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # include <stdbool.h>
 # include <MLX42/MLX42.h>
 
-# define WIDTH 1920
-# define HEIGHT 1080
+# define WIDTH 300
+# define HEIGHT 300
 
 typedef float	t_fvec __attribute__ ((vector_size (4 * sizeof(float))));
 typedef t_fvec	t_fmat[4];

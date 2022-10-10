@@ -57,8 +57,11 @@ SRCS := main.c										\
 		render/intersect/intersect_cylinder.c		\
 		render/calculate_normal.c					\
 		render/shading/shading.c					\
+		\
 		tree/new_tree.c								\
-		tree/sort_points.c
+		tree/new_node.c								\
+		tree/sort_points.c							\
+		tree/destroy_tree.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

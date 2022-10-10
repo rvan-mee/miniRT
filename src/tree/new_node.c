@@ -74,8 +74,6 @@ t_rtnode	*new_node(t_treeb *b, uint32_t min, uint32_t max, uint8_t depth)
 	uint8_t		ax;
 
 	node = b->tree->nodes + b->node_i++;
-	if (!node)
-		return (NULL);
 	node->size = max - min + 1;
 	node->axis = depth % 3;
 	ax = 3;

@@ -80,15 +80,25 @@ typedef struct s_partdata {
 t_rttree	*new_tree(t_point *points[], uint32_t length);
 /**
  * Recursively construct a node and its' children.
- * @param b
- * @param min
- * @param max
- * @param depth
- * @return
+ *
+ * If the amount of points for this node gets below LEAF_SIZE, the new
+ * node will be a leaf node. This means it contains up to LEAF_SIZE points,
+ * sorted along the super key of the axis of the node (So, if depth % 3 == Y,
+ * the points inside the node will be sorted ascending in yzx).
+ *
+ * If the node is not a leaf, it splits all points up along the median of the
+ * splitting axis, and sets that point as node.point, then recursively creates
+ * the left and right nodes.
  */
 t_rtnode	*new_node(t_treeb *b, uint32_t min, uint32_t max, uint8_t depth);
-
-void		destroy_tree(t_rttree *tree);
+/**
+ * Does not actually sort the points, but allocates 4 index arrays.
+ *
+ *  idx 1) Indices of the original points, sorted by xyz
+ *  idx 2) Indices of the original points, sorted by yzx
+ *  idx 3) Indices of the original points, sorted by zxy
+ *  idx 4) Temporary index array, used in partitioning.
+ */
 uint32_t	**presort_data(t_point *points[], uint32_t length);
 
 #endif

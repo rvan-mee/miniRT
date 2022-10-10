@@ -60,8 +60,7 @@ SRCS := main.c										\
 		\
 		tree/new_tree.c								\
 		tree/new_node.c								\
-		tree/sort_points.c							\
-		tree/destroy_tree.c
+		tree/sort_points.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   new_tree.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/10/10 18:32:19 by lsinke        #+#    #+#                 */
+/*   Updated: 2022/10/10 18:32:19 by lsinke        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <rt_tree.h>
 #include <malloc.h>
 
@@ -34,8 +46,8 @@ static void	print_shit(t_treeb *b)
 	while (i < b->tree->length)
 	{
 		printf("[%2u] (%.1f, %.1f, %.1f)\t%u\t%u\t%u\n", i,
-				b->objs[i]->pos[0], b->objs[i]->pos[1], b->objs[i]->pos[2],
-				b->idxs[0][i], b->idxs[1][i], b->idxs[2][i]);
+			b->objs[i]->pos[0], b->objs[i]->pos[1], b->objs[i]->pos[2],
+			b->idxs[0][i], b->idxs[1][i], b->idxs[2][i]);
 		++i;
 	}
 }

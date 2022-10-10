@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   rt_tree.h                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/10/10 18:32:19 by lsinke        #+#    #+#                 */
+/*   Updated: 2022/10/10 18:32:19 by lsinke        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef RT_TREE_H
 # define RT_TREE_H
 
@@ -20,10 +32,10 @@ struct s_rtnode {
 			t_point		*point;
 			t_rtnode	*l;
 			t_rtnode	*r;
-		}	node;
+		};
 		struct {
 			t_point		**points;
-		}	leaf;
+		};
 	};
 	t_fvec		min;
 	t_fvec		max;

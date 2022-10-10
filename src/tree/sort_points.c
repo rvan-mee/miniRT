@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   sort_points.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/10/10 18:32:19 by lsinke        #+#    #+#                 */
+/*   Updated: 2022/10/10 18:32:19 by lsinke        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <sort.h>
 #include <ft_math.h>
 #include <libft.h>
@@ -14,7 +26,7 @@ static void	*new_tab(uint8_t k, uint32_t length, uint32_t data_size)
 	dim = 0;
 	while (dim < k)
 	{
-		rv[dim] = (void *) (rv + k) + dim * length * data_size;
+		rv[dim] = (void *)(rv + k) + dim * length * data_size;
 		++dim;
 	}
 	return (rv);

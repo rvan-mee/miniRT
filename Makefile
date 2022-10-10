@@ -47,6 +47,7 @@ SRCS := main.c										\
 		math/matrix.c								\
 		math/quadratic.c							\
 		math/normalize_vector.c						\
+		math/vector_utils.c							\
 		\
 		render/render.c								\
 		render/cast_primary_rays.c					\
@@ -55,7 +56,9 @@ SRCS := main.c										\
 		render/intersect/intersect_plane.c			\
 		render/intersect/intersect_cylinder.c		\
 		render/calculate_normal.c					\
-		render/shading/shading.c
+		render/shading/shading.c					\
+		tree/new_tree.c								\
+		tree/sort_points.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

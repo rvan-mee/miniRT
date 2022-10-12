@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/09/26 15:18:36 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/10/12 20:46:51 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ NAME := miniRT
 CC := gcc
 
 CFLAGS += -Wall -Werror -Wextra
+# -fsanitize=address -g
 CFLAGS += -g
 INCLUDE += -I $(INCD)
 
@@ -36,6 +37,7 @@ SRCS := main.c										\
 		parse/objects/parse_plane.c					\
 		parse/objects/parse_sphere.c				\
 		parse/objects/parse_light.c					\
+		parse/objects/parse_triangle.c				\
 		parse/attributes/parse_float.c				\
 		parse/attributes/parse_rgb.c				\
 		parse/attributes/parse_vector.c				\
@@ -54,6 +56,7 @@ SRCS := main.c										\
 		render/intersect/intersect_sphere.c			\
 		render/intersect/intersect_plane.c			\
 		render/intersect/intersect_cylinder.c		\
+		render/intersect/intersect_triangle.c		\
 		render/calculate_normal.c					\
 		render/shading/shading.c
 

@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 02:00:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/13 14:37:32 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/04 19:09:21 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static const char	*g_type_strs[] = {\
 	[SPHERE] = "sphere",				\
 	[PLANE] = "plane",					\
 	[CYLINDER] = "cylinder",			\
+	[TRIANGLE] = "triangle",			\
 	[END] = "end",
 };
 

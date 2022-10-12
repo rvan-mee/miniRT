@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 15:46:41 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/22 19:09:26 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/12 13:53:53 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,12 @@ static bool	trace(
 		const size_t screen[2],
 		t_dynarr *hits)
 {
-	size_t		i;
-	t_hit		hit;
+	const float	d_offset = (1 - 128 * FLT_EPSILON);
 	float		hit_distance;
+	t_hit		hit;
+	size_t		i;
 
-	hit = (t_hit){*ray, FLT_MAX, {}, NULL, {}, screen[X], screen[Y]};
+	hit = (t_hit){(*ray), FLT_MAX, {}, NULL, {}, screen[X], screen[Y]};
 	i = scene->objects_len;
 	while (i--)
 	{
@@ -60,7 +61,7 @@ static bool	trace(
 	}
 	if (hit.distance == FLT_MAX)
 		return (true);
-	hit.hit = hit.ray.origin + hit.ray.direction * (hit.distance * (1 - 128 * FLT_EPSILON));
+	hit.hit = hit.ray.origin + hit.ray.direction * (hit.distance * d_offset);
 	calculate_normal(&hit);
 	return (dynarr_addone(hits, &hit));
 }

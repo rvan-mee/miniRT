@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/28 12:45:06 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/11 19:57:05 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # include <stdbool.h>
 # include <MLX42/MLX42.h>
 
-# define WIDTH 300
-# define HEIGHT 300
+# define WIDTH 500
+# define HEIGHT 500
 
 typedef float	t_fvec __attribute__ ((vector_size (4 * sizeof(float))));
 typedef t_fvec	t_fmat[4];
@@ -32,6 +32,7 @@ typedef enum e_object_type {
 	SPHERE,
 	PLANE,
 	CYLINDER,
+	TRIANGLE,
 	END
 }	t_obj_type;
 
@@ -80,6 +81,13 @@ typedef struct s_sphere {
 	t_rgba	colour;
 }	t_sphere;
 
+typedef struct s_triangle {
+	t_fvec	vert[3];
+	t_rgba	colour;
+	t_fvec	v0v1;
+	t_fvec	v0v2;
+}	t_triangle;
+
 /**
  * A infinitely big plane (not aero)
  *
@@ -112,6 +120,7 @@ typedef struct s_object {
 		t_sphere	sphere;
 		t_plane		plane;
 		t_cylinder	cylinder;
+		t_triangle	triangle;
 	};
 }	t_object;
 

@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/26 14:45:10 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/28 12:28:00 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/11 19:57:17 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ static t_rgba	get_obj_rgba(t_object *object)
 		return (object->plane.colour);
 	if (object->type == CYLINDER)
 		return (object->cylinder.colour);
+	if (object->type == TRIANGLE)
+		return (object->triangle.colour);
 	return (rgb);
 }
 

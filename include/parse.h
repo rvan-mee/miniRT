@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:54:09 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/30 17:13:54 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/14 13:05:39 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,7 @@ bool			parse_float(char **linep, float *dst, float min, float max);
 void			normalize(t_scene *scene);
 void			normalize_coords(t_scene *scene);
 void			normalize_orientation(t_scene *scene);
+bool			check_extension(const char *config_file, char *ext);
+bool			open_file(const char *path, int32_t *fd);
 
 #endif

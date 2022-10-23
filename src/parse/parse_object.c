@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 19:20:49 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/04 19:10:09 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/16 14:39:26 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static const char		*g_ids[] = {\
 	[PLANE] = "pl",					\
 	[CYLINDER] = "cy",				\
 	[TRIANGLE] = "tr",				\
+	[COMMENT] = "#",				\
 };
 
 bool	parse_object(char *line, t_object *object)
@@ -44,6 +45,8 @@ bool	parse_object(char *line, t_object *object)
 	while (++type != END)
 	{
 		id_len = ft_strlen(g_ids[type]);
+		if (ft_strncmp(g_ids[type], line, id_len) == 0 && type == COMMENT)
+			return (object->type = COMMENT, true);
 		if (ft_strncmp(g_ids[type], line, id_len) == 0)
 			break ;
 	}

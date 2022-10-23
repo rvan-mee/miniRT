@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 02:00:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/04 19:09:21 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/16 14:35:56 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 #define DUPLICATE_ERROR		"Error\nThere can only be one %s!\n"
 #define UNKNOWN_ERROR		"Error\nUnknown type %s\n"
-#define NOT_ENOUGH_ERROR	"Error\nThere can't be zero %s!\n"
+#define NOT_ENOUGH_ERROR	"Error\nThere can't be zero %ss!\n"
 
 static const char	*g_type_strs[] = {\
 	[UNINITIALIZED] = "uninitialized",	\
@@ -30,6 +30,7 @@ static const char	*g_type_strs[] = {\
 	[PLANE] = "plane",					\
 	[CYLINDER] = "cylinder",			\
 	[TRIANGLE] = "triangle",			\
+	[COMMENT] = "comment",				\
 	[END] = "end",
 };
 
@@ -64,6 +65,8 @@ static bool \
 	t_object	*store;
 
 	store = NULL;
+	if (obj->type == COMMENT)
+		return (true);
 	if (obj->type == LIGHT)
 		return (dynarr_addone(lights, &obj->light));
 	if (obj->type == CAMERA)

@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 18:30:32 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/12 13:43:24 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/20 13:44:49 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,13 @@ typedef struct s_tri_intersect
 	float	t;
 }	t_tri_intersect;
 
-bool	cast_primary_rays(
-			t_scene *scene,
-			size_t width,
-			size_t height,
-			t_dynarr *hits);
+bool	trace(
+		t_scene *scene,
+		t_ray *ray,
+		const size_t screen[2],
+		t_dynarr *hits);
 
-bool	shade(
-			t_scene *scene,
-			t_dynarr *hits,
-			uint32_t *pixels);
+bool	cast_primary_rays(t_minirt *data, t_dynarr *hits, size_t y);
 
 float	intersect(t_object *object, t_ray *ray);
 float	intersect_plane(t_object *object, t_ray *ray);

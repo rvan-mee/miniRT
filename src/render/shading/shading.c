@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/26 14:45:10 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/11 19:57:17 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/23 17:55:31 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ uint32_t	set_shade_colour(t_rgba colour, float facing_ratio)
 	col.r = (uint8_t) ((float) col.r * facing_ratio);
 	col.g = (uint8_t) ((float) col.g * facing_ratio);
 	col.b = (uint8_t) ((float) col.b * facing_ratio);
+	col.a = 0xFF;
 	return (col.rgba);
 }
 
@@ -83,5 +84,5 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 	}
 	if (!light_hits)
 		return (set_shade_colour(get_obj_rgba(object), facing_ratio));
-	return (0xFF000000);
+	return (0x00000FF);
 }

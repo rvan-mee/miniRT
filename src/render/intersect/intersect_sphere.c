@@ -6,13 +6,14 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 15:45:26 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/22 15:57:32 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/20 15:52:19 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <render.h>
 #include <ft_math.h>
 
+#include <stdio.h>
 float	intersect_sphere(t_object *obj, t_ray *ray)
 {
 	t_sphere	*sphere;

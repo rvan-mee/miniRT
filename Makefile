@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/10/12 20:46:51 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/10/23 18:57:05 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,9 @@ NAME := miniRT
 
 CC := gcc
 
-CFLAGS += -Wall -Werror -Wextra
-# -fsanitize=address -g
-CFLAGS += -g
+CFLAGS += -Wall -Werror -Wextra -march=native -O3 -fsanitize=address -g
+# -fsanitize=address -g 
+# -fsanitize=thread -g
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES
@@ -58,7 +58,11 @@ SRCS := main.c										\
 		render/intersect/intersect_cylinder.c		\
 		render/intersect/intersect_triangle.c		\
 		render/calculate_normal.c					\
-		render/shading/shading.c
+		render/shading/shading.c					\
+		\
+		threading/threads.c							\
+		threading/work.c							\
+		threading/create_work.c							
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 
@@ -74,7 +78,8 @@ INCS := minirt.h									\
 		mlx.h										\
 		bmp.h										\
 		ft_math.h									\
-		render.h
+		render.h									\
+		thread.h									
 INCP := $(addprefix $(INCD), $(INCS))
 
 HEADERS += $(INCP)

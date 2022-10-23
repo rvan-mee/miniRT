@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:31:51 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/12 14:31:43 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/23 17:33:39 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 #include <stdlib.h>
 #include <parse.h>
 #include <stdio.h>
+#include <thread.h>
 
-void	f(void)
-{
-	system("leaks -q miniRT");
-}
+// void	f(void)
+// {
+// 	system("leaks -q miniRT");
+// }
 
 int	main(int argc, char *argv[])
 {
@@ -26,12 +27,18 @@ int	main(int argc, char *argv[])
 
 	data.argv = argv;
 	data.argc = argc;
-	atexit(f);
+	data.width = WIDTH;
+	data.height = HEIGHT;
+	data.thread.job_lst = NULL;
+	// atexit(f);
 	if (!parse_config_file(argc, argv, &data.scene))
 		return (EXIT_FAILURE);
-	create_mlx(&data.mlx_data);
-	if (render(&data.mlx_data, &data.scene, WIDTH, HEIGHT))
-		mlx_loop(data.mlx_data.mlx);
-	mlx_terminate(data.mlx_data.mlx);
+	create_mlx(&data);
+	if (init_work_threads(&data))
+	{
+		mlx_loop(data.mlx);
+		join_threads(&data);
+	}
+	mlx_terminate(data.mlx);
 	return (EXIT_SUCCESS);
 }

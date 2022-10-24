@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/23 18:18:00 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/24 15:08:05 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,8 @@ typedef struct s_hit {
 typedef struct s_jobs {
 	size_t			start_pixels[2];		
 	size_t			end_pixels[2];
+	size_t			size[2];
+	t_camera		camera;
 	t_ray			**rays;
 	struct s_jobs	*next_job;
 }	t_jobs;
@@ -161,8 +163,6 @@ typedef struct s_threading
 	pthread_mutex_t	quit_lock;
 	pthread_t		threads[THREAD_C];
 	size_t			created_threads;
-	pthread_mutex_t	y_lock;
-	size_t			y;
 	t_jobs			*job_lst;
 	pthread_mutex_t	job_lock;
 }	t_threading;

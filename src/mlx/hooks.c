@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 12:12:27 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/23 20:12:07 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/24 20:20:08 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void	reload_scene(t_minirt *data, enum keys key)
 		return ;
 	mlx_resize_image(data->img, data->width, data->height);
 	mlx_set_window_size(data->mlx, data->width, data->height);
-	// normalize(&data->scene);
 	reset_work(data);
 }
 
@@ -53,7 +52,6 @@ static void	move_cam(t_minirt *data, enum keys key)
 		cam->coords[Y] -= STEPS;
 	else if (key == MLX_KEY_E)
 		cam->coords[Y] += STEPS;
-	// normalize(&data->scene);
 	reset_work(data);
 }
 
@@ -84,16 +82,13 @@ static void	rotate_cam(t_minirt *data, enum keys key)
 		*orientation = rodrigues_rotation(*orientation, -rot_y, amount);
 	else if (key == MLX_KEY_RIGHT)
 		*orientation = rodrigues_rotation(*orientation, rot_y, amount);
-	// normalize(&data->scene);
 	reset_work(data);
 }
 
 static void	create_picture(t_minirt *data, enum keys key)
 {
 	(void)key;
-	pthread_mutex_lock(&data->thread.job_lock);
 	create_bmp(data->img);
-	pthread_mutex_unlock(&data->thread.job_lock);
 }
 
 // MLX_KEY_MENU is the last var inside the enum
@@ -112,18 +107,16 @@ static void	(*g_hook_func[MLX_KEY_MENU + 1])(t_minirt *, enum keys) = {\
 	[MLX_KEY_RIGHT] = rotate_cam,						\
 };
 
-void	clear_lob_lst(t_minirt *data);
-
 void	keyhook(mlx_key_data_t keydata, t_minirt *data)
 {
+	pthread_mutex_lock(&data->thread.job_lock);
 	if (keydata.action == MLX_PRESS && g_hook_func[keydata.key])
 		g_hook_func[keydata.key](data, keydata.key);
 	else if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{
 		quit_working(data);
-		pthread_mutex_lock(&data->thread.job_lock);
-		clear_lob_lst(data);
-		pthread_mutex_unlock(&data->thread.job_lock);
+		clear_job_lst(data);
 		mlx_close_window(data->mlx);
 	}
+	pthread_mutex_unlock(&data->thread.job_lock);
 }

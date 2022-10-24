@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/10/23 18:57:05 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/10/24 20:21:52 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME := miniRT
 
 CC := gcc
 
-CFLAGS += -Wall -Werror -Wextra -march=native -O3 -fsanitize=address -g
+CFLAGS += -Wall -Werror -Wextra -march=native -O3
 # -fsanitize=address -g 
 # -fsanitize=thread -g
 INCLUDE += -I $(INCD)
@@ -62,6 +62,9 @@ SRCS := main.c										\
 		\
 		threading/threads.c							\
 		threading/work.c							\
+		threading/work_utils.c						\
+		threading/reset_work.c						\
+		threading/create_rays.c						\
 		threading/create_work.c							
 
 SRCP := $(addprefix $(SRCD), $(SRCS))

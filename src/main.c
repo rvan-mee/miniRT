@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:31:51 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/24 20:21:18 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/25 14:24:08 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 #include <stdio.h>
 #include <thread.h>
 
-// void	f(void)
-// {
-// 	system("leaks -q miniRT");
-// }
+void	f(void)
+{
+	system("leaks -q miniRT");
+}
 
 int	main(int argc, char *argv[])
 {
@@ -30,7 +30,7 @@ int	main(int argc, char *argv[])
 	data.width = WIDTH;
 	data.height = HEIGHT;
 	data.thread.job_lst = NULL;
-	// atexit(f);
+	atexit(f);
 	if (!parse_config_file(argc, argv, &data.scene))
 		return (EXIT_FAILURE);
 	create_mlx(&data);

@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/24 12:56:11 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/24 16:40:16 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/25 18:02:13 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@
 #define PIXELS_WIDTH	1
 #define PIXELS_HEIGHT	2
 
-static t_ray	calculate_primary_ray(t_minirt *data, t_jobs *job, size_t x, size_t y)
+static t_ray	get_ray(t_minirt *data, t_jobs *job, size_t x, size_t y)
 {
 	const float	params[] = {\
 		[ASPECT_RATIO] = (float) data->width / (float) data->height, \
 		[PIXELS_WIDTH] = tanf(job->camera.fov / 2), \
 		[PIXELS_HEIGHT] = params[PIXELS_WIDTH] / params[ASPECT_RATIO]
 	};
-	t_ray	ray;
-	t_fvec	coords;
+	t_ray		ray;
+	t_fvec		coords;
 
 	ray.origin = job->camera.coords;
 	// use offset from camera direction
@@ -80,7 +80,7 @@ bool	create_rays(t_minirt *data, t_jobs *job)
 		x = start[X];
 		while (x < end[X])
 		{
-			job->rays[y - start[Y]][x - start[X]] = calculate_primary_ray(data, job, x, y);
+			job->rays[y - start[Y]][x - start[X]] = get_ray(data, job, x, y);
 			x++;
 		}
 		y++;

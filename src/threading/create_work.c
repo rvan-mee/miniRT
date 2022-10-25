@@ -6,12 +6,14 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/17 18:35:59 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/24 20:15:38 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/25 18:02:43 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <thread.h>
 #include <libft.h>
+
+#define DIFF 1
 
 static bool	lst_add(t_jobs **head, t_jobs *new)
 {
@@ -51,36 +53,58 @@ static t_jobs	*new_job_node(t_minirt *data, size_t start[2], size_t end[2])
 	return (new_node);
 }
 
+static void	set_offset(t_minirt *data, size_t offset[3])
+{
+	const size_t	width = data->width;
+	const size_t	height = data->height;
+
+	if (height < width)
+		offset[0] = height / BLOCK_C;
+	else
+		offset[0] = width / BLOCK_C;
+	offset[X + DIFF] = width % offset[0];
+	offset[Y + DIFF] = height % offset[0];
+}
+
+// function for norm :/
+static void	increment(size_t *start, size_t *end, size_t *offset, int coord)
+{
+	if (coord == X)
+	{
+		start[X] = end[X];
+		end[X] += offset[0];
+		return ;
+	}
+	start[Y] = end[Y];
+	end[Y] += offset[0];
+}
+
 // is it faster to go >>> down <<< down >>>
 // or >>> down reset left >>> down reset left >>>
 bool	create_work(t_minirt *data)
 {
-	const size_t	x_diff[2] = {data->width / THREAD_C, data->width % THREAD_C};
-	const size_t	y_diff[2] = {data->height / THREAD_C, data->height % THREAD_C};
-	size_t			start[2];
-	size_t			end[2];
+	size_t	offset[3];
+	size_t	start[2];
+	size_t	end[2];
 
-	start[X] = 0;
+	set_offset(data, offset);
 	start[Y] = 0;
-	end[Y] = y_diff[0];
-	while (start[Y] < data->height)
+	end[Y] = offset[0];
+	while (end[Y] <= data->height)
 	{
 		start[X] = 0;
-		end[X] = x_diff[0];
-		while (end[X] - x_diff[0] + x_diff[1] < data->width)
+		end[X] = offset[0];
+		if (end[Y] + offset[0] > data->height)
+			end[Y] += offset[Y + DIFF];
+		while (end[X] <= data->width)
 		{
-			if (data->width - end[X] == x_diff[1])
-				end[X] += x_diff[1];
+			if (end[X] + offset[0] > data->width)
+				end[X] += offset[X + DIFF];
 			if (!lst_add(&data->thread.job_lst, new_job_node(data, start, end)))
-				return (false); // clear list
-			// printf("creating work: start: %zu %zu  end: %zu %zu\n", start[Y], start[X], end[Y], end[X]);
-			start[X] += x_diff[0];
-			end[X] += x_diff[0];
+				return (clear_job_lst(data), false);
+			increment(start, end, offset, X);
 		}
-		start[Y] += y_diff[0];
-		end[Y] += y_diff[0];
-		if (data->height - end[Y] == y_diff[1])
-			end[Y] += y_diff[1];
+		increment(start, end, offset, Y);
 	}
 	return (true);
 }

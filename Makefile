@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/10/24 20:21:52 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/10/26 21:45:18 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,9 +63,10 @@ SRCS := main.c										\
 		threading/threads.c							\
 		threading/work.c							\
 		threading/work_utils.c						\
+		threading/add_job_node.c					\
 		threading/reset_work.c						\
 		threading/create_rays.c						\
-		threading/create_work.c							
+		threading/create_render_queue.c					
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 

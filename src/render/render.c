@@ -6,16 +6,17 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 18:32:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/23 18:13:52 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/26 21:45:02 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <render.h>
 #include <thread.h>
+#include <stdlib.h>
 
 uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit);
 
-bool	set_color(t_minirt *data, t_dynarr *hits)
+static bool	set_color(t_minirt *data, t_dynarr *hits)
 {
 	size_t		i;
 	uint32_t	colour;
@@ -31,10 +32,9 @@ bool	set_color(t_minirt *data, t_dynarr *hits)
 	return (true);
 }
 
-bool	render(t_minirt	*data, t_jobs *job)
+static bool	render(t_minirt	*data, t_render *block, \
+					size_t width, size_t height)
 {
-	const size_t	width = job->end_pixels[X] - job->start_pixels[X];
-	const size_t	height = job->end_pixels[Y] - job->start_pixels[Y];
 	t_dynarr		hits;
 	size_t			screen[2];
 	size_t			x;
@@ -46,11 +46,11 @@ bool	render(t_minirt	*data, t_jobs *job)
 	while (y < height)
 	{
 		x = 0;
-		screen[Y] = job->start_pixels[Y] + y;
+		screen[Y] = block->start_pixels[Y] + y;
 		while (x < width)
 		{
-			screen[X] = job->start_pixels[X] + x;
-			if (!trace(&data->scene, &job->rays[y][x], screen, &hits))
+			screen[X] = block->start_pixels[X] + x;
+			if (!trace(&data->scene, &block->rays[y][x], screen, &hits))
 				return (false); // TODO: dynarr_delete(&hits);
 			x++;
 		}
@@ -61,4 +61,36 @@ bool	render(t_minirt	*data, t_jobs *job)
 	}
 	dynarr_delete(&hits);
 	return (true);
+}
+
+static void	free_data(t_minirt *data, t_render *block)
+{
+	quit_working(data);
+	free(block);
+	pthread_mutex_lock(&data->thread.job_lock);
+	clear_job_lst(data);
+	mlx_close_window(data->mlx);
+	pthread_mutex_unlock(&data->thread.job_lock);
+}
+
+void	start_render(t_minirt *data, void *func_data)
+{
+	size_t		width;
+	size_t		height;
+	t_render	*block;
+
+	block = (t_render *)func_data;
+	width = block->end_pixels[X] - block->start_pixels[X];
+	height = block->end_pixels[Y] - block->start_pixels[Y];
+	if (!block)
+		return ;
+	if (!create_rays(data, block))
+	{
+		free_data(data, block);
+		return ;
+	}
+	if (!render(data, block, width, height))
+		quit_working(data);
+	clean_rays(block->rays);
+	free(block);
 }

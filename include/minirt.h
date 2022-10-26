@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/25 20:22:03 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/26 21:43:26 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 
 typedef float	t_fvec __attribute__ ((vector_size (4 * sizeof(float))));
 typedef t_fvec	t_fmat[4];
-
+typedef struct s_minirt	t_minirt;
 typedef enum e_object_type {
 	UNINITIALIZED = 0,
 	AMBIENT,
@@ -148,12 +148,18 @@ typedef struct s_hit {
 	size_t		screen_y;
 }	t_hit;
 
-typedef struct s_jobs {
+typedef struct s_render_block
+{
 	size_t			start_pixels[2];		
 	size_t			end_pixels[2];
 	size_t			size[2];
 	t_camera		camera;
 	t_ray			**rays;
+}	t_render;
+
+typedef struct s_jobs {
+	void			(*job)(t_minirt *, void *);
+	void			*job_param;
 	struct s_jobs	*next_job;
 }	t_jobs;
 
@@ -178,6 +184,6 @@ typedef struct s_minirt {
 	t_threading	thread;
 }	t_minirt;
 
-bool	render(t_minirt	*data, t_jobs *job);
+void	start_render(t_minirt *data, void *func_data);
 
 #endif

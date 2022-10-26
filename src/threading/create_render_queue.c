@@ -1,56 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   create_work.c                                      :+:    :+:            */
+/*   create_render_queue.c                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/10/17 18:35:59 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/25 18:02:43 by rvan-mee      ########   odam.nl         */
+/*   Created: 2022/10/26 13:37:49 by rvan-mee      #+#    #+#                 */
+/*   Updated: 2022/10/26 21:46:59 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <thread.h>
+#include <render.h>
 #include <libft.h>
 
 #define DIFF 1
 
-static bool	lst_add(t_jobs **head, t_jobs *new)
+static t_render	*new_render_block(t_minirt *data, size_t start[2], size_t end[2])
 {
-	t_jobs	*tmp;
+	t_render	*render_block;
 
-	tmp = *head;
-	if (!new)
-		return (false);
-	if (!tmp)
-	{
-		*head = new;
-		return (true);
-	}
-	while (tmp->next_job)
-		tmp = tmp->next_job;
-	tmp->next_job = new;
-	return (true);
-}
-
-static t_jobs	*new_job_node(t_minirt *data, size_t start[2], size_t end[2])
-{
-	t_jobs			*new_node;
-
-	new_node = ft_calloc(1, sizeof(t_jobs));
-	if (!new_node)
+	render_block = malloc(sizeof(t_render));
+	if (!render_block)
 		return (NULL);
-	new_node->next_job = NULL;
-	new_node->start_pixels[X] = start[X];
-	new_node->start_pixels[Y] = start[Y];
-	new_node->end_pixels[X] = end[X];
-	new_node->end_pixels[Y] = end[Y];
-	new_node->size[X] = end[X] - start[X];
-	new_node->size[Y] = end[Y] - start[Y];
-	new_node->camera.coords = data->scene.camera.camera.coords;
-	new_node->camera.fov = data->scene.camera.camera.fov;
-	new_node->camera.orientation = data->scene.camera.camera.orientation;
-	return (new_node);
+	render_block->rays = NULL;
+	render_block->start_pixels[X] = start[X];
+	render_block->start_pixels[Y] = start[Y];
+	render_block->end_pixels[X] = end[X];
+	render_block->end_pixels[Y] = end[Y];
+	render_block->size[X] = end[X] - start[X];
+	render_block->size[Y] = end[Y] - start[Y];
+	render_block->camera.coords = data->scene.camera.camera.coords;
+	render_block->camera.fov = data->scene.camera.camera.fov;
+	render_block->camera.orientation = data->scene.camera.camera.orientation;
+	return (render_block);
 }
 
 static void	set_offset(t_minirt *data, size_t offset[3])
@@ -81,11 +64,12 @@ static void	increment(size_t *start, size_t *end, size_t *offset, int coord)
 
 // is it faster to go >>> down <<< down >>>
 // or >>> down reset left >>> down reset left >>>
-bool	create_work(t_minirt *data)
+bool	create_render_queue(t_minirt *data)
 {
-	size_t	offset[3];
-	size_t	start[2];
-	size_t	end[2];
+	size_t		offset[3];
+	size_t		start[2];
+	size_t		end[2];
+	t_render	*new_block;
 
 	set_offset(data, offset);
 	start[Y] = 0;
@@ -100,8 +84,10 @@ bool	create_work(t_minirt *data)
 		{
 			if (end[X] + offset[0] > data->width)
 				end[X] += offset[X + DIFF];
-			if (!lst_add(&data->thread.job_lst, new_job_node(data, start, end)))
-				return (clear_job_lst(data), false);
+			new_block = new_render_block(data, start, end);
+			if (!new_block
+				|| !add_new_job_node(data, start_render, new_block))
+				return (clear_job_lst(data), free(new_block), false);
 			increment(start, end, offset, X);
 		}
 		increment(start, end, offset, Y);

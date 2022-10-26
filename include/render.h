@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 18:30:32 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/20 13:44:49 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/26 21:32:47 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,7 @@ float	intersect_sphere(t_object *object, t_ray *ray);
 float	intersect_triangle(t_object *obj, t_ray *ray);
 
 void	calculate_normal(t_hit *hit);
+
+void	start_render(t_minirt *data, void *func_data);
 
 #endif //RENDER_H

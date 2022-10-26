@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/24 12:27:15 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/24 20:11:32 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/26 21:35:53 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,12 @@ void	clear_job_lst(t_minirt *data)
 		to_free_next = to_free->next_job;
 	while (to_free && to_free_next)
 	{
+		free(to_free->job_param);
 		free(to_free);
 		to_free = to_free_next;
 		to_free_next = to_free->next_job;
 	}
+	free(to_free->job_param);
 	free(to_free);
 }
 
@@ -56,7 +58,7 @@ bool	reset_work(t_minirt *data)
 {
 	clear_job_lst(data);
 	wipe_image(data);
-	create_work(data);
+	create_render_queue(data);
 	if (!data->thread.job_lst)
 		return (false);
 	return (true);

@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 15:46:41 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/20 16:17:43 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 20:51:54 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ bool	trace(
 	t_hit		hit;
 	size_t		i;
 
-	hit = (t_hit){*ray, FLT_MAX, {}, NULL, {}, screen[X], screen[Y]};
+	hit = (t_hit){(*ray), FLT_MAX, {}, NULL, {}, screen[X], screen[Y], 0, 0};
 	if (USE_BVH)
 	{
 		if (!intersect_bvh(&scene->bvh, ray, &hit))

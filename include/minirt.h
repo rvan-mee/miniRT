@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/29 18:39:28 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/29 22:15:20 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,6 @@ typedef struct s_threading
 	size_t			created_threads;
 	t_jobs			*job_lst;
 	pthread_mutex_t	job_lock;
-	sem_t			*print_lock;
 }	t_threading;
 
 typedef struct s_texture

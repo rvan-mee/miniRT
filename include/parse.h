@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:54:09 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/14 13:05:39 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/28 20:51:07 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define PARSE_H
 
 # include <minirt.h>
+
+typedef struct s_bmp t_bmp;
 
 typedef enum e_parse_error {
 	SUCCESS,
@@ -49,5 +51,6 @@ void			normalize_coords(t_scene *scene);
 void			normalize_orientation(t_scene *scene);
 bool			check_extension(const char *config_file, char *ext);
 bool			open_file(const char *path, int32_t *fd);
+t_bmp			*parse_bmp(char *path);
 
 #endif

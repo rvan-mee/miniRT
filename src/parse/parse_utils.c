@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 11:28:47 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/14 18:10:39 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/29 16:40:46 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,10 @@ bool	parse_line_error(const char *line, t_parse_error err)
 
 bool	check_extension(const char *path, char *ext)
 {
-	const size_t	len = ft_strlen(path);
+	const size_t	len_path = ft_strlen(path);
+	const size_t	len_ext = ft_strlen(ext);
 
-	if (ft_strncmp(&path[len - 3], ext, ft_strlen(ext)) == 0)
+	if (ft_strncmp(&path[len_path - len_ext], ext, len_ext) == 0)
 		return (true);
 	dprintf(STDERR_FILENO, ERR_EXTENSION, path);
 	return (false);

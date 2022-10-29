@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/10/26 21:45:18 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/11/07 20:50:15 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ SRCS := main.c										\
 		parse/normalize/normalize.c					\
 		parse/normalize/normalize_coords.c			\
 		parse/normalize/normalize_orientation.c		\
+		parse/texture/parse_bmp.c					\
 		\
 		math/product.c								\
 		math/matrix.c								\
@@ -59,6 +60,8 @@ SRCS := main.c										\
 		render/intersect/intersect_triangle.c		\
 		render/calculate_normal.c					\
 		render/shading/shading.c					\
+		render/texture/get_uv_colour.c				\
+		render/texture/sphere_uv.c					\
 		\
 		bvh/new_bvh.c								\
 		bvh/morton.c								\
@@ -101,7 +104,8 @@ INCS := minirt.h									\
 		ft_math.h									\
 		render.h									\
 		bvh.h										\
-		thread.h
+		texture.h									\
+		thread.h									
 INCP := $(addprefix $(INCD), $(INCS))
 
 HEADERS += $(INCP)

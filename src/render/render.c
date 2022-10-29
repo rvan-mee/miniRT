@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 18:32:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/26 21:45:02 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/28 20:25:07 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <thread.h>
 
-uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit);
+uint32_t	get_hit_colour(t_minirt *data, t_scene *scene, t_object *object, t_hit *hit);
 
 static bool	set_color(t_minirt *data, t_dynarr *hits)
 {
@@ -29,7 +29,7 @@ static bool	set_color(t_minirt *data, t_dynarr *hits)
 	i = hits->length;
 	while (i--)
 	{
-		colour = get_hit_colour(&data->scene, hit[i].object, &hit[i]);
+		colour = get_hit_colour(data, &data->scene, hit[i].object, &hit[i]);
 		mlx_put_pixel(data->img, hit[i].screen_x, hit[i].screen_y, colour);
 	}
 	return (true);

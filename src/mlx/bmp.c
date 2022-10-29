@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/08 19:15:41 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/12 16:24:57 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/28 20:49:46 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-static int32_t	write_bmp_header(int32_t fd, t_bmp_data bmp_data)
+static int32_t	write_bmp_header(int32_t fd, t_bmp bmp_data)
 {
 	static t_bmp_file_header	header;
 
@@ -62,7 +62,7 @@ static t_rgb	get_pixel_color(mlx_image_t *img, int32_t x, int32_t y)
 	return (color);
 }
 
-static void	write_color_data(mlx_image_t *img, int32_t fd, t_bmp_data data)
+static void	write_color_data(mlx_image_t *img, int32_t fd, t_bmp data)
 {
 	t_rgb			colors;
 	uint32_t		x;
@@ -91,10 +91,10 @@ static void	write_color_data(mlx_image_t *img, int32_t fd, t_bmp_data data)
 	free(data.data);
 }
 
-void	create_bmp(mlx_image_t *img)
+void	create_bmp(mlx_image_t *img) // TODO: take width and height from t_minirt *data
 {
-	int32_t		fd;
-	t_bmp_data	data;
+	int32_t	fd;
+	t_bmp	data;
 
 	fd = create_new_bmp_file();
 	if (fd == -1)

@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/26 21:43:26 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/29 18:39:28 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <dynarr.h>
 # include <MLX42/MLX42.h>
 # include <pthread.h>
+# include <bmp.h>
 
 # define WIDTH 1920
 # define HEIGHT 1080
@@ -147,6 +148,8 @@ typedef struct s_hit {
 	t_fvec		normal;
 	size_t		screen_x;
 	size_t		screen_y;
+	float		u;
+	float		v;
 }	t_hit;
 
 typedef struct s_render_block
@@ -172,7 +175,13 @@ typedef struct s_threading
 	size_t			created_threads;
 	t_jobs			*job_lst;
 	pthread_mutex_t	job_lock;
+	sem_t			*print_lock;
 }	t_threading;
+
+typedef struct s_texture
+{
+	t_bmp		*bmp;
+}	t_texture;
 
 typedef struct s_minirt {
 	mlx_t		*mlx;
@@ -183,6 +192,7 @@ typedef struct s_minirt {
 	size_t		width;
 	size_t		height;
 	t_threading	thread;
+	t_texture	texture;
 }	t_minirt;
 
 typedef struct s_aabb {

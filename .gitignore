@@ -65,3 +65,4 @@ miniRT
 
 # test exes
 *.test
+*_portrait.bmp

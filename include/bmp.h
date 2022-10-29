@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/09 14:23:46 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/12 15:00:50 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/28 20:52:08 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,15 @@ typedef struct rgb
 	int8_t	blue;
 }	t_rgb;
 
-typedef struct s_bm_data {
+typedef struct s_bmp {
 	int32_t			padding;
 	int32_t			line_size;
+	int32_t			width;
+	int32_t			height;
 	int32_t			data_size;
 	unsigned char	*data;
-}	t_bmp_data;
+	char			*name;
+}	t_bmp;
 
 typedef struct s_bmp_file_header {
 	uint16_t	type;

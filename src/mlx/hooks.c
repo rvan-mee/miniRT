@@ -36,9 +36,9 @@ static void	reload_scene(t_minirt *data)
 
 static void	move_cam(t_minirt *data, enum keys key)
 {
-	t_camera *cam;
+	t_object *cam;
 
-	cam = &data->scene.camera.camera;
+	cam = &data->scene.camera;
 	if (key == MLX_KEY_W)
 		cam->coords[Z] += STEPS;
 	else if (key == MLX_KEY_A)

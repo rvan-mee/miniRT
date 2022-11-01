@@ -21,7 +21,7 @@ float	intersect_sphere(t_object *obj, t_ray *ray)
 	float		t[2];
 
 	sphere = &obj->sphere;
-	cam_to_sphere = ray->origin - sphere->coords;
+	cam_to_sphere = ray->origin - obj->coords;
 	quadratic.a = dot_product(ray->direction, ray->direction);
 	quadratic.b = dot_product(cam_to_sphere, ray->direction) * 2;
 	quadratic.c = dot_product(cam_to_sphere, cam_to_sphere) - sphere->radius_sq;

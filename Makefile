@@ -15,7 +15,7 @@ NAME := miniRT
 CC := gcc
 
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -g
+CFLAGS += -march=native -O3
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES
@@ -58,9 +58,19 @@ SRCS := main.c										\
 		render/calculate_normal.c					\
 		render/shading/shading.c					\
 		\
+		bvh/new_bvh.c								\
+		bvh/morton.c								\
+		bvh/cluster.c								\
+		bvh/aac_merge.c								\
+		\
+		aabb/aabb_combine.c							\
+		aabb/aabb_sa.c								\
+		\
 		tree/new_tree.c								\
 		tree/new_node.c								\
-		tree/sort_points.c
+		tree/sort_points.c							\
+		\
+		calc_bounds.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 
@@ -76,7 +86,8 @@ INCS := minirt.h									\
 		mlx.h										\
 		bmp.h										\
 		ft_math.h									\
-		render.h
+		render.h									\
+		bvh.h
 INCP := $(addprefix $(INCD), $(INCS))
 
 HEADERS += $(INCP)

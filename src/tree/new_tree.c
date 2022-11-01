@@ -11,18 +11,21 @@
 /* ************************************************************************** */
 
 #include <rt_tree.h>
-#include <malloc.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-static bool	init_tree(t_rttree **dst, uint32_t length)
+static bool	init_tree(t_rttree **dst, const uint32_t length)
 {
 	t_rttree	*tree;
 	uint8_t		node_depth;
 	size_t		mem_req[3];
+	uint32_t	len;
 
 	node_depth = 1;
-	while (length > ((1u << node_depth) - 1) * LEAF_SIZE)
+	len = length;
+	while (len > ((1u << node_depth) - 1) * LEAF_SIZE)
 	{
-		length -= 1 << (node_depth - 1);
+		len -= 1 << (node_depth - 1);
 		node_depth++;
 	}
 	mem_req[0] = sizeof(t_rttree);
@@ -32,13 +35,14 @@ static bool	init_tree(t_rttree **dst, uint32_t length)
 	if (!tree)
 		return (false);
 	tree->root_node = NULL;
+	tree->length = length;
 	tree->nodes = ((void *) tree) + mem_req[0];
 	tree->leafs = ((void *) tree) + mem_req[0] + mem_req[1];
 	*dst = tree;
 	return (true);
 }
 
-static void	print_shit(t_treeb *b)
+void	print_shit(t_treeb *b)
 {
 	uint32_t	i;
 
@@ -52,15 +56,17 @@ static void	print_shit(t_treeb *b)
 	}
 }
 
-t_rttree	*new_tree(t_point *points[], uint32_t length)
+t_rttree	*new_tree(t_point *points[], const uint32_t length)
 {
 	t_treeb		builder;
 
+	builder.leaf_i = 0;
+	builder.node_i = 0;
 	builder.objs = points;
 	builder.idxs = presort_data(points, length);
 	if (builder.idxs == NULL)
 		return (NULL);
-	if (init_tree(&builder.tree, length))
+	if (!init_tree(&builder.tree, length))
 		return (free(builder.idxs), NULL);
 	print_shit(&builder);
 	builder.tree->root_node = new_node(&builder, 0, length - 1, 0);

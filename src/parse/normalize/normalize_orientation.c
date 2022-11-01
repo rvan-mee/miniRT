@@ -61,17 +61,17 @@ static void	rotate_object(t_object *object, t_fmat matrix)
 {
 	if (object->type == PLANE)
 	{
-		rotate_vector(&object->plane.coords, matrix);
+		rotate_vector(&object->coords, matrix);
 		rotate_vector(&object->plane.orientation, matrix);
 	}
 	else if (object->type == CYLINDER)
 	{
-		rotate_vector(&object->cylinder.coords, matrix);
+		rotate_vector(&object->coords, matrix);
 		rotate_vector(&object->cylinder.orientation, matrix);
 		rotate_vector(&object->cylinder.top, matrix);
 	}
 	else if (object->type == SPHERE)
-		rotate_vector(&object->sphere.coords, matrix);
+		rotate_vector(&object->coords, matrix);
 }
 
 void	normalize_orientation(t_scene *scene)

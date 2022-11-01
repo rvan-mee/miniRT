@@ -20,11 +20,11 @@ static t_rgba	get_obj_rgba(t_object *object)
 
 	rgb.rgba = 0;
 	if (object->type == SPHERE)
-		return (object->sphere.colour);
+		return (object->colour);
 	if (object->type == PLANE)
-		return (object->plane.colour);
+		return (object->colour);
 	if (object->type == CYLINDER)
-		return (object->cylinder.colour);
+		return (object->colour);
 	return (rgb);
 }
 
@@ -41,11 +41,11 @@ uint32_t	set_shade_colour(t_rgba colour, float facing_ratio)
 
 uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 {
-	const t_light	*lights = scene->lights;
-	bool			light_hits;
+	const t_object	*lights = scene->lights;
+	bool			light_hits = 0;
 	float			distance;
 	float			distance_to_light;
-	float			facing_ratio;
+	float			facing_ratio = 0;
 	t_fvec			ray_to_light;
 	t_ray			ray;
 	size_t			i;

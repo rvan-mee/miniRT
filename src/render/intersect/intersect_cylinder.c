@@ -14,6 +14,7 @@
 #include <render.h>
 
 static bool	check_height(
+		const t_object *obj,
 		const t_cylinder *cyl,
 		const t_ray *ray,
 		float tee)
@@ -21,11 +22,12 @@ static bool	check_height(
 	const t_fvec	hit = ray->origin + ray->direction * tee;
 	float			hit_height;
 
-	hit_height = dot_product(hit - cyl->coords, cyl->orientation);
+	hit_height = dot_product(hit - obj->coords, cyl->orientation);
 	return (hit_height >= 0 && hit_height < cyl->height);
 }
 
 static uint8_t	intersect_inf_cyl(
+		const t_object *obj,
 		const t_cylinder *cyl,
 		const t_ray *ray,
 		float t[2])
@@ -34,7 +36,7 @@ static uint8_t	intersect_inf_cyl(
 	t_fvec		p[2];
 	float		temp;
 
-	p[0] = cross_product(ray->origin - cyl->coords, cyl->orientation);
+	p[0] = cross_product(ray->origin - obj->coords, cyl->orientation);
 	p[1] = cross_product(ray->direction, cyl->orientation);
 	quad.a = dot_product(p[1], p[1]);
 	quad.b = dot_product(p[0], p[1]) * 2.0f;
@@ -53,15 +55,16 @@ static uint8_t	intersect_inf_cyl(
 }
 
 static float	intersect_tops(
+		const t_object *obj,
 		const t_cylinder *cyl,
 		const t_ray *ray,
 		float angle_diff)
 {
-	t_fvec		rel_cap_mid;
-	t_fvec		hit;
-	float		dist[2];
+	t_fvec				rel_cap_mid;
+	t_fvec				hit;
+	float				dist[2];
 
-	rel_cap_mid = cyl->coords - ray->origin;
+	rel_cap_mid = obj->coords - ray->origin;
 	dist[0] = dot_product(rel_cap_mid, cyl->orientation) / angle_diff;
 	hit = ray->direction * dist[0] - rel_cap_mid;
 	if (dist[0] < 0 || dot_product(hit, hit) > cyl->radius_sq)
@@ -87,23 +90,23 @@ static float	intersect_tops(
  *
  * t^2 * |P1|^2 + 2tP0.P1 + |P0|^2 - r^2|D|^2 = 0
  */
-float	intersect_cylinder(t_object *object, t_ray *ray)
+float	intersect_cylinder(t_object *obj, t_ray *ray)
 {
 	// TODO: Norminette, optimization(?), names
-	const t_cylinder	*cyl = &object->cylinder;
+	const t_cylinder	*cyl = &obj->cylinder;
 	const float			angle_diff = dot_product(cyl->orientation, ray->direction);
 	float				t[2];
 
 	if (angle_diff == 1.0f)
-		return (intersect_tops(cyl, ray, angle_diff));
-	else if (intersect_inf_cyl(cyl, ray, t))
+		return (intersect_tops(obj, cyl, ray, angle_diff));
+	else if (intersect_inf_cyl(obj, cyl, ray, t))
 	{
-		if (t[0] > 0 && check_height(cyl, ray, t[0]))
-			return (fminf(intersect_tops(cyl, ray, angle_diff), t[0]));
-		if (t[1] > 0 && check_height(cyl, ray, t[1]))
-			return (fminf(intersect_tops(cyl, ray, angle_diff), t[1]));
+		if (t[0] > 0 && check_height(obj, cyl, ray, t[0]))
+			return (fminf(intersect_tops(obj, cyl, ray, angle_diff), t[0]));
+		if (t[1] > 0 && check_height(obj, cyl, ray, t[1]))
+			return (fminf(intersect_tops(obj, cyl, ray, angle_diff), t[1]));
 	}
 	if (angle_diff == 0.0f)
 		return (MISS);
-	return (intersect_tops(cyl, ray, angle_diff));
+	return (intersect_tops(obj, cyl, ray, angle_diff));
 }

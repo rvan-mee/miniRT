@@ -36,7 +36,7 @@ bool	parse_object(char *line, t_object *object)
 	const char		*start_line = line;
 	t_obj_type		type;
 	t_parse_error	err;
-	size_t			id_len;
+	size_t			id_len = 0;
 
 	type = UNINITIALIZED;
 	while (++type != END)

@@ -106,8 +106,8 @@ t_rtnode	*new_node(
 	ax = 3;
 	while (ax--)
 	{
-		node->min[ax] = get_point(b, ax, min)->pos[ax];
-		node->max[ax] = get_point(b, ax, max)->pos[ax];
+		node->bounds.min[ax] = get_point(b, ax, min)->pos[ax];
+		node->bounds.max[ax] = get_point(b, ax, max)->pos[ax];
 	}
 	node->is_leaf = node->size <= LEAF_SIZE;
 	if (node->is_leaf)

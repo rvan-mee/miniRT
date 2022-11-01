@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   parse_ambient.c                                    :+:    :+:            */
+/*   aabb_sa.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/14 17:18:21 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/14 17:18:21 by lsinke        ########   odam.nl         */
+/*   Created: 2022/11/01 15:00:16 by lsinke        #+#    #+#                 */
+/*   Updated: 2022/11/01 15:00:16 by lsinke        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <parse.h>
-#include <libft.h>
+#include <ft_math.h>
 
-t_parse_error	parse_ambient(char **linep, t_object *object)
+float	aabb_sa(t_aabb a, t_aabb b)
 {
-	char	*line;
+	const t_aabb	combined = aabb_combine(a, b);
+	const t_fvec	size = combined.max - combined.min;
 
-	line = *linep;
-	if (!parse_float(&line, &object->ambient.ratio, 0.0f, 1.0f)
-		|| !ft_isspace(*line))
-		return (LRATIO);
-	if (!parse_rgb(&line, &object->colour))
-		return (COLOUR);
-	*linep = line;
-	return (SUCCESS);
+	return (dot_product(size, size));
 }

@@ -14,11 +14,11 @@
 
 void	normalize_coords(t_scene *scene)
 {
-	const t_fvec	camera_coords = scene->camera.camera.coords;
+	const t_fvec	camera_coords = scene->camera.coords;
 	t_object		*cur;
 	size_t			i;
 
-	scene->camera.camera.coords -= camera_coords;
+	scene->camera.coords -= camera_coords;
 	i = 0;
 	while (i < scene->lights_len)
 		scene->lights[i++].coords -= camera_coords;
@@ -27,10 +27,10 @@ void	normalize_coords(t_scene *scene)
 	{
 		cur = scene->objects + i++;
 		if (cur->type == SPHERE)
-			cur->sphere.coords -= camera_coords;
+			cur->coords -= camera_coords;
 		else if (cur->type == PLANE)
-			cur->plane.coords -= camera_coords;
+			cur->coords -= camera_coords;
 		else if (cur->type == CYLINDER)
-			cur->cylinder.coords -= camera_coords;
+			cur->coords -= camera_coords;
 	}
 }

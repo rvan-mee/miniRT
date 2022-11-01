@@ -110,7 +110,7 @@ bool	parse_scene(int32_t fd, t_scene *dst)
 	t_dynarr	objects;
 
 	ft_bzero(dst, sizeof(t_scene));
-	if (!dynarr_create(&lights, 4, sizeof(t_light)) || \
+	if (!dynarr_create(&lights, 4, sizeof(t_object)) || \
 		!dynarr_create(&objects, 16, sizeof(t_object)))
 		return (cleanup(NULL, &lights, &objects));
 	if (!read_objects(fd, dst, &lights, &objects))

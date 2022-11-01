@@ -3,10 +3,7 @@
 
 static void	sphere_normal(t_hit *hit)
 {
-	t_sphere	*s;
-
-	s = &hit->object->sphere;
-	hit->normal = normalize_vector(hit->hit - s->coords);
+	hit->normal = normalize_vector(hit->hit - hit->object->coords);
 }
 
 static void	plane_normal(t_hit *hit)
@@ -22,7 +19,7 @@ static void	cylinder_normal(t_hit *hit)
 	float		hit_height;
 
 	cyl = &hit->object->cylinder;
-	bot_rel_hit = hit->hit - cyl->coords;
+	bot_rel_hit = hit->hit - hit->object->coords;
 	if (dot_product(bot_rel_hit, bot_rel_hit) < cyl->radius_sq)
 	{
 		hit->normal = -cyl->orientation;

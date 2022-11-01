@@ -19,7 +19,7 @@
 # include <stddef.h>
 # include <stdint.h>
 
-# define LEAF_SIZE	3
+# define LEAF_SIZE	8
 
 typedef struct s_point {
 	t_fvec	pos;
@@ -33,23 +33,17 @@ struct s_rtnode {
 			t_rtnode	*l;
 			t_rtnode	*r;
 		};
-		struct {
+		union {
 			t_point		**points;
+			t_object	**objects;
 		};
 	};
-	t_fvec		min;
-	t_fvec		max;
+	t_aabb		bounds;
 	uint32_t	size;
 	uint8_t		axis;
 	bool		is_leaf;
+	bool		is_bvh;
 };
-
-typedef struct s_treedat {
-	t_point		**objs;
-	uint32_t	**sorted;
-	uint32_t	len;
-	uint8_t		dim;
-}	t_rtdat;
 
 typedef struct s_rttree {
 	t_rtnode	*root_node;
@@ -57,6 +51,18 @@ typedef struct s_rttree {
 	t_point		**leafs;
 	uint32_t	length;
 }	t_rttree;
+
+typedef struct s_bounds {
+	t_object	**infinite_objects;
+	t_rttree	*tree;
+}	t_bounds;
+
+typedef struct s_treedat {
+	t_point		**objs;
+	uint32_t	**sorted;
+	uint32_t	len;
+	uint8_t		dim;
+}	t_rtdat;
 
 typedef struct s_treebuilder {
 	t_point			**objs;

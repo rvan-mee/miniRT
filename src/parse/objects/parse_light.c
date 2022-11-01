@@ -18,13 +18,13 @@ t_parse_error	parse_light(char **linep, t_object *object)
 	char	*line;
 
 	line = *linep;
-	if (!parse_vector(&line, &object->light.coords, false)
+	if (!parse_vector(&line, &object->coords, false)
 		|| !ft_isspace(*line))
 		return (COORD);
 	if (!parse_float(&line, &object->light.brightness, 0.0f, 1.0f)
 		|| !ft_isspace(*line))
 		return (BRIGHT);
-	if (!parse_rgb(&line, &object->light.colour))
+	if (!parse_rgb(&line, &object->colour))
 		return (COLOUR);
 	*linep = line;
 	return (SUCCESS);

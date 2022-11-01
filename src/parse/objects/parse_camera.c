@@ -39,7 +39,7 @@ t_parse_error	parse_camera(char **linep, t_object *object)
 	char	*line;
 
 	line = *linep;
-	if (!parse_vector(&line, &object->camera.coords, false)
+	if (!parse_vector(&line, &object->coords, false)
 		|| !ft_isspace(*line))
 		return (COORD);
 	if (!parse_vector(&line, &object->camera.orientation, true)

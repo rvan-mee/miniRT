@@ -25,13 +25,13 @@ t_parse_error	parse_sphere(char **linep, t_object *object)
 	char	*line;
 
 	line = *linep;
-	if (!parse_vector(&line, &object->sphere.coords, false)
+	if (!parse_vector(&line, &object->coords, false)
 		|| !ft_isspace(*line))
 		return (COORD);
 	if (!parse_float(&line, &object->sphere.diameter, 0, 0)
 		|| !ft_isspace(*line))
 		return (DIAMETER);
-	if (!parse_rgb(&line, &object->sphere.colour))
+	if (!parse_rgb(&line, &object->colour))
 		return (COLOUR);
 	pre_calc(&object->sphere);
 	*linep = line;

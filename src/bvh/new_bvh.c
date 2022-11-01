@@ -15,6 +15,7 @@
 #include "libft.h"
 #include "ft_math.h"
 #include <bvh.h>
+#include <stdio.h>
 
 static inline uint32_t	get_alloc_req(uint32_t n)
 {

@@ -117,18 +117,15 @@ uint32_t	cluster_td(
 		return (0);
 	if ((hi - lo + 1) <= DELTA)
 		return (create_leafs(b, start, lo, hi));
-	if (b->keys[lo].key & bit)
-		lo = (lims[0] + lims[1]) >> 2;
-	else
+	while (hi != lo + 1)
 	{
-		while (hi != lo + 1)
-		{
-			if (b->keys[(lo + hi) >> 1].key & bit)
-				hi = (lo + hi) >> 1;
-			else
-				lo = (lo + hi) >> 1;
-		}
+		if (b->keys[(lo + hi) >> 1].key & bit)
+			hi = (lo + hi) >> 1;
+		else
+			lo = (lo + hi) >> 1;
 	}
+	if (lo == lims[0] || hi == lims[1])
+		lo = (lims[0] + lims[1]) >> 1;
 	len[0] = cluster_td(b, start, lims[0], lo);
 	len[1] = cluster_td(b, start + len[0], lo + 1, lims[1]);
 	len[2] = len[0] + len[1];

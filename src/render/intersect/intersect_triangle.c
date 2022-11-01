@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/30 17:24:31 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/12 13:44:02 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 20:56:04 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <float.h>
 
 // wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
-float	intersect_triangle(const t_object *obj, const t_ray *ray)
+float	intersect_triangle(const t_object *obj, const t_ray *ray, t_hit *hit)
 {
 	const t_triangle	*tr = &obj->triangle;
 	const t_fvec		pvec = cross_product(ray->direction, tr->v0v2);
@@ -34,5 +34,7 @@ float	intersect_triangle(const t_object *obj, const t_ray *ray)
 	if (isect.v < 0.0f || isect.u + isect.v > 1.0f)
 		return (MISS);
 	isect.t = dot_product(tr->v0v2, isect.qvec) * isect.inv_det;
+	hit->u = isect.u;
+	hit->v = isect.v;
 	return (isect.t);
 }

@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/28 15:40:35 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/29 17:04:55 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/01 14:36:45 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@
 #include <ft_math.h>
 
 #define PI 3.141592653589793238
-#define U 0
-#define V 1
-#define RGB 3
 
 t_rgba	get_texture_colour_sphere(t_hit *hit, t_texture *texture)
 {

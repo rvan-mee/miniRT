@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/24 12:56:11 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/26 21:35:26 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/31 20:12:01 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ static t_ray	get_ray(t_minirt *data, t_render *block, size_t x, size_t y)
 		[PIXELS_WIDTH] = tanf(block->camera.camera.fov / 2), \
 		[PIXELS_HEIGHT] = params[PIXELS_WIDTH] / params[ASPECT_RATIO]
 	};
-	t_ray		ray;
-	t_fvec		coords;
+	t_ray	ray;
+	t_fvec	coords;
 
 	ray.origin = block->camera.coords;
 	// use offset from camera direction

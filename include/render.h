@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 18:30:32 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/26 21:32:47 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 20:59:40 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ bool	trace(
 bool	cast_primary_rays(t_minirt *data, t_dynarr *hits, size_t y);
 
 bool	intersect_bvh(const t_bvh *bvh, const t_ray *ray, t_hit *hit);
-float	aabb_intersect(const t_aabb bounds, const t_ray *ray);
-float	intersect(const t_object *object, const t_ray *ray);
-float	intersect_plane(const t_object *object, const t_ray *ray);
-float	intersect_cylinder(const t_object *object, const t_ray *ray);
-float	intersect_sphere(const t_object *object, const t_ray *ray);
-float	intersect_triangle(const t_object *object, const t_ray *ray);
+float	aabb_intersect(const t_aabb bounds, const t_ray *ray, t_hit *hit);
+float	intersect(const t_object *object, const t_ray *ray, t_hit *hit);
+float	intersect_plane(const t_object *object, const t_ray *ray, t_hit *hit);
+float	intersect_cylinder(const t_object *object, const t_ray *ray, t_hit *hit);
+float	intersect_sphere(const t_object *object, const t_ray *ray, t_hit *hit);
+float	intersect_triangle(const t_object *object, const t_ray *ray, t_hit *hit);
 
 void	calculate_normal(t_hit *hit);
 

@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 02:00:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/16 14:35:56 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 20:58:53 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,24 +31,27 @@ static const char	*g_type_strs[] = {\
 	[CYLINDER] = "cylinder",			\
 	[TRIANGLE] = "triangle",			\
 	[COMMENT] = "comment",				\
+	[VERTEX] = "vertex",				\
+	[VT_TEXTURE] = "vertex texture",	\
 	[END] = "end",
 };
 
-static bool	cleanup(char *line, t_dynarr *lights, t_dynarr *objects)
+static bool	cleanup(char *line, t_parse_data *data)
 {
 	free(line);
-	dynarr_delete(lights);
-	dynarr_delete(objects);
+	dynarr_delete(&data->lights);
+	dynarr_delete(&data->objects);
+	dynarr_delete(&data->vertices);
 	return (false);
 }
 
-static bool	check_error(t_scene *dst, t_dynarr *lights, t_dynarr *objects)
+static bool	check_error(t_scene *dst, t_parse_data *data)
 {
 	if (errno != 0)
 		perror("Error during parsing");
-	else if (lights->length == 0)
+	else if (data->lights.length == 0)
 		dprintf(STDERR_FILENO, NOT_ENOUGH_ERROR, "lights");
-	else if (objects->length == 0)
+	else if (data->objects.length == 0)
 		dprintf(STDERR_FILENO, NOT_ENOUGH_ERROR, "objects");
 	else if (dst->ambient.type != AMBIENT)
 		dprintf(STDERR_FILENO, NOT_ENOUGH_ERROR, "ambient");
@@ -60,7 +63,7 @@ static bool	check_error(t_scene *dst, t_dynarr *lights, t_dynarr *objects)
 }
 
 static bool \
-	store_object(t_object *obj, t_scene *dst, t_dynarr *lights, t_dynarr *objs)
+	store_object(t_object *obj, t_scene *dst, t_parse_data *data)
 {
 	t_object	*store;
 
@@ -68,18 +71,19 @@ static bool \
 	if (obj->type == COMMENT)
 		return (true);
 	if (obj->type == LIGHT)
-		return (dynarr_addone(lights, &obj->light));
+		return (dynarr_addone(&data->lights, &obj->light));
+	if (obj->type == VERTEX)
+		return (dynarr_addone(&data->vertices, &obj->vertex));
+	if (obj->type == VT_TEXTURE)
+		return (dynarr_addone(&data->vertex_textures, &obj->vertex));
 	if (obj->type == CAMERA)
 		store = &dst->camera;
 	else if (obj->type == AMBIENT)
 		store = &dst->ambient;
 	else if (obj->type != UNINITIALIZED && obj->type != END)
-		return (dynarr_addone(objs, obj));
+		return (dynarr_addone(&data->objects, obj));
 	if (store != NULL && store->type != obj->type)
-	{
-		*store = *obj;
-		return (true);
-	}
+		return (*store = *obj, true);
 	if (store != NULL)
 		dprintf(STDERR_FILENO, DUPLICATE_ERROR, g_type_strs[obj->type]);
 	else
@@ -88,7 +92,7 @@ static bool \
 }
 
 static bool \
-	read_objects(int32_t fd, t_scene *dst, t_dynarr *lights, t_dynarr *objects)
+	read_objects(int32_t fd, t_scene *dst, t_parse_data *data)
 {
 	char		*line;
 	t_object	object;
@@ -101,27 +105,29 @@ static bool \
 			break ;
 		if (*line != '\n' && *line != '\0')
 			if (!parse_object(line, &object) || \
-				!store_object(&object, dst, lights, objects))
-				return (cleanup(line, lights, objects));
+				!store_object(&object, dst, data))
+				return (cleanup(line, data));
 		free(line);
 	}
-	return (check_error(dst, lights, objects));
+	return (check_error(dst, data));
 }
 
 bool	parse_scene(int32_t fd, t_scene *dst)
 {
-	t_dynarr	lights;
-	t_dynarr	objects;
+	t_parse_data	parse_data;
 
 	ft_bzero(dst, sizeof(t_scene));
-	if (!dynarr_create(&lights, 4, sizeof(t_object)) || \
-		!dynarr_create(&objects, 16, sizeof(t_object)))
-		return (cleanup(NULL, &lights, &objects));
-	if (!read_objects(fd, dst, &lights, &objects))
+	ft_bzero(&parse_data, sizeof(t_parse_data));
+	if (!dynarr_create(&parse_data.lights, 4, sizeof(t_light)) || \
+		!dynarr_create(&parse_data.objects, 16, sizeof(t_object)) || \
+		!dynarr_create(&parse_data.vertices, 256, sizeof(t_vertex)) || \
+		!dynarr_create(&parse_data.vertex_textures, 256, sizeof(t_vertex_texture)))
+		return (cleanup(NULL, &parse_data));
+	if (!read_objects(fd, dst, &parse_data))
 		return (false);
-	dst->lights = lights.arr;
-	dst->lights_len = lights.length;
-	dst->objects = objects.arr;
-	dst->objects_len = objects.length;
+	dst->lights = parse_data.lights.arr;
+	dst->lights_len = parse_data.lights.length;
+	dst->objects = parse_data.objects.arr;
+	dst->objects_len = parse_data.objects.length;
 	return (true);
 }

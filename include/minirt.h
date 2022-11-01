@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/29 22:15:20 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 21:00:11 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ typedef enum e_object_type {
 	CYLINDER,
 	TRIANGLE,
 	COMMENT,
+	VERTEX,
+	VT_TEXTURE,
 	END
 }	t_obj_type;
 
@@ -58,6 +60,18 @@ typedef union u_rgba {
 		uint8_t	r;
 	};
 }	t_rgba;
+
+typedef struct s_vertex
+{
+	t_fvec	point;
+}	t_vertex;
+
+typedef struct s_vertex_texture
+{
+	float	u;
+	float	v;
+}	t_vertex_texture;
+
 
 typedef struct s_ambient {
 	float	ratio;
@@ -113,6 +127,8 @@ typedef struct s_object {
 		t_plane		plane;
 		t_cylinder	cylinder;
 		t_triangle	triangle;
+		t_vertex	vertex;
+		t_vertex	vertex_texture;
 	};
 	t_obj_type	type;
 }	t_object;
@@ -126,13 +142,15 @@ typedef struct s_bvh {
 }	t_bvh;
 
 typedef struct s_scene {
-	t_object	camera;
-	t_object	ambient;
-	t_object	*lights;
-	size_t		lights_len;
-	t_object	*objects;
-	size_t		objects_len;
-	t_bvh		bvh;
+	t_object			camera;
+	t_object			ambient;
+	t_object			*lights;
+	size_t				lights_len;
+	t_object			*objects;
+	size_t				objects_len;
+	t_bvh				bvh;
+	t_vertex			*vertices;
+	t_vertex_texture	*textures;
 }	t_scene;
 
 typedef struct s_ray {

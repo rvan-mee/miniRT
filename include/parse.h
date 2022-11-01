@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:54:09 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/28 20:51:07 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/01 20:05:38 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,15 @@ typedef enum e_parse_error {
 	DIAMETER,
 	OBJ_HEIGHT
 }	t_parse_error;
+
+typedef struct s_parse_data
+{
+	t_dynarr	lights;
+	t_dynarr	objects;
+	t_dynarr	vertices;
+	t_dynarr	vertex_textures;
+}	t_parse_data;
+
 
 bool			parse_config_file(int32_t argc, char *argv[], t_scene *scene);
 bool			parse_scene(int32_t fd, t_scene *dst);

@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:31:51 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/07 20:49:54 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 20:53:52 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,7 @@ int	main(int argc, char *argv[])
 		join_threads(&data);
 	}
 	mlx_terminate(data.mlx);
+	free(data.texture.bmp->data);
+	free(data.texture.bmp->name);
 	return (EXIT_SUCCESS);
 }

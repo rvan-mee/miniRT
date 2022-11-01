@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/22 14:35:26 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/28 15:52:37 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 20:58:18 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,13 @@ static float	intersect_tops(
  *
  * t^2 * |P1|^2 + 2tP0.P1 + |P0|^2 - r^2|D|^2 = 0
  */
-float	intersect_cylinder(const t_object *obj, const t_ray *ray)
+float	intersect_cylinder(const t_object *obj, const t_ray *ray, t_hit *hit)
 {
 	const t_cylinder	*cyl = &obj->cylinder;
 	float				angle_diff;
 	float				t[2];
 
+	(void) hit;
 	angle_diff = dot_product(cyl->orientation, ray->direction);
 	if (angle_diff == 1.0f)
 		return (intersect_tops(obj, cyl, ray, angle_diff));

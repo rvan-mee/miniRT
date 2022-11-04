@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:54:09 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/01 20:05:38 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/04 16:28:32 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,28 +31,29 @@ typedef enum e_parse_error {
 	OBJ_HEIGHT
 }	t_parse_error;
 
-typedef struct s_parse_data
+typedef struct s_conf_data
 {
 	t_dynarr	lights;
 	t_dynarr	objects;
 	t_dynarr	vertices;
 	t_dynarr	vertex_textures;
-}	t_parse_data;
-
+	t_dynarr	vertex_normals;
+}	t_conf_data;
 
 bool			parse_config_file(int32_t argc, char *argv[], t_scene *scene);
 bool			parse_scene(int32_t fd, t_scene *dst);
-bool			parse_object(char *line, t_object *object);
-t_parse_error	parse_ambient(char **linep, t_object *object);
-t_parse_error	parse_camera(char **linep, t_object *object);
-t_parse_error	parse_light(char **linep, t_object *object);
-t_parse_error	parse_sphere(char **linep, t_object *object);
-t_parse_error	parse_plane(char **linep, t_object *object);
-t_parse_error	parse_cylinder(char **linep, t_object *object);
-t_parse_error	parse_triangle(char **linep, t_object *object);
+bool			parse_object(char *line, t_object *object, t_conf_data *data);
+t_parse_error	parse_ambient(char **linep, t_object *object, t_conf_data *data);
+t_parse_error	parse_camera(char **linep, t_object *object, t_conf_data *data);
+t_parse_error	parse_light(char **linep, t_object *object, t_conf_data *data);
+t_parse_error	parse_sphere(char **linep, t_object *object, t_conf_data *data);
+t_parse_error	parse_plane(char **linep, t_object *object, t_conf_data *data);
+t_parse_error	parse_cylinder(char **linep, t_object *object, t_conf_data *data);
+t_parse_error	parse_triangle(char **linep, t_object *object, t_conf_data *data);
 bool			parse_rgb(char **linep, t_rgba *colour);
 bool			parse_line_error(const char *line, t_parse_error err);
 void			skip_spaces(char **linep);
+void			skip_digits(char **linep);
 bool			parse_vector(char **linep, t_fvec *vector, bool normalized);
 bool			parse_float(char **linep, float *dst, float min, float max);
 void			normalize(t_scene *scene);

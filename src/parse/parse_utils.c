@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 11:28:47 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/29 16:40:46 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/04 16:28:23 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,15 @@ void	skip_spaces(char **linep)
 	const char	*line = *linep;
 
 	while (ft_isspace(*line))
+		line++;
+	*linep = (char *) line;
+}
+
+void	skip_digits(char **linep)
+{
+	const char	*line = *linep;
+
+	while (ft_isdigit(*line))
 		line++;
 	*linep = (char *) line;
 }

@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/07 21:00:11 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 21:02:22 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef enum e_object_type {
 	COMMENT,
 	VERTEX,
 	VT_TEXTURE,
+	FACE,
 	END
 }	t_obj_type;
 
@@ -66,12 +67,10 @@ typedef struct s_vertex
 	t_fvec	point;
 }	t_vertex;
 
-typedef struct s_vertex_texture
-{
+typedef struct s_uv {
 	float	u;
 	float	v;
-}	t_vertex_texture;
-
+}	t_uv;
 
 typedef struct s_ambient {
 	float	ratio;
@@ -96,6 +95,16 @@ typedef struct s_triangle {
 	t_fvec	v0v1;
 	t_fvec	v0v2;
 }	t_triangle;
+
+typedef struct s_face {
+	t_fvec		vert[3];
+	t_rgba		colour;
+	bool		has_normal;
+	t_fvec		normals[3];
+	bool		has_texture;
+	t_uv		uv[3];
+	t_texture	texture;
+}	t_face;
 
 /**
  * A infinitely big plane (not aero)
@@ -129,6 +138,7 @@ typedef struct s_object {
 		t_triangle	triangle;
 		t_vertex	vertex;
 		t_vertex	vertex_texture;
+		t_face		face;
 	};
 	t_obj_type	type;
 }	t_object;
@@ -150,7 +160,9 @@ typedef struct s_scene {
 	size_t				objects_len;
 	t_bvh				bvh;
 	t_vertex			*vertices;
-	t_vertex_texture	*textures;
+	size_t				vertices_len;
+	t_vertex_texture	*vertex_textures;
+	size_t				vertex_textures_len;
 }	t_scene;
 
 typedef struct s_ray {

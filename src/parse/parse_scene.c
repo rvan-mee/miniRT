@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 02:00:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/07 20:58:53 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 21:01:04 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,17 @@ static const char	*g_type_strs[] = {\
 	[END] = "end",
 };
 
-static bool	cleanup(char *line, t_parse_data *data)
+static bool	cleanup(char *line, t_conf_data *data)
 {
 	free(line);
 	dynarr_delete(&data->lights);
 	dynarr_delete(&data->objects);
 	dynarr_delete(&data->vertices);
+	dynarr_delete(&data->vertex_textures);
 	return (false);
 }
 
-static bool	check_error(t_scene *dst, t_parse_data *data)
+static bool	check_error(t_scene *dst, t_conf_data *data)
 {
 	if (errno != 0)
 		perror("Error during parsing");
@@ -63,7 +64,7 @@ static bool	check_error(t_scene *dst, t_parse_data *data)
 }
 
 static bool \
-	store_object(t_object *obj, t_scene *dst, t_parse_data *data)
+	store_object(t_object *obj, t_scene *dst, t_conf_data *data)
 {
 	t_object	*store;
 
@@ -92,7 +93,7 @@ static bool \
 }
 
 static bool \
-	read_objects(int32_t fd, t_scene *dst, t_parse_data *data)
+	read_objects(int32_t fd, t_scene *dst, t_conf_data *data)
 {
 	char		*line;
 	t_object	object;
@@ -104,7 +105,7 @@ static bool \
 		if (line == NULL)
 			break ;
 		if (*line != '\n' && *line != '\0')
-			if (!parse_object(line, &object) || \
+			if (!parse_object(line, &object, data) || \
 				!store_object(&object, dst, data))
 				return (cleanup(line, data));
 		free(line);
@@ -114,10 +115,10 @@ static bool \
 
 bool	parse_scene(int32_t fd, t_scene *dst)
 {
-	t_parse_data	parse_data;
+	t_conf_data	parse_data;
 
 	ft_bzero(dst, sizeof(t_scene));
-	ft_bzero(&parse_data, sizeof(t_parse_data));
+	ft_bzero(&parse_data, sizeof(t_conf_data));
 	if (!dynarr_create(&parse_data.lights, 4, sizeof(t_light)) || \
 		!dynarr_create(&parse_data.objects, 16, sizeof(t_object)) || \
 		!dynarr_create(&parse_data.vertices, 256, sizeof(t_vertex)) || \
@@ -129,5 +130,11 @@ bool	parse_scene(int32_t fd, t_scene *dst)
 	dst->lights_len = parse_data.lights.length;
 	dst->objects = parse_data.objects.arr;
 	dst->objects_len = parse_data.objects.length;
+	dst->vertices = parse_data.vertices.arr;
+	dst->vertices_len = parse_data.vertices.length;
+	dst->vertex_textures = parse_data.vertex_textures.arr;
+	dst->vertex_textures_len = parse_data.vertex_textures.length;
+	// dynarr_delete(&parse_data.vertex_textures);
+	// dynarr_delete(&parse_data.vertices);
 	return (true);
 }

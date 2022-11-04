@@ -6,59 +6,37 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/13 16:44:15 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/13 17:05:08 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/04 16:15:53 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parse.h>
 #include <libft.h>
+#include <dynarr.h>
 
-static bool	parse_num(char **linep, int32_t *coord)
+t_object	parse_vertex(char **linep, t_object *object, t_conf_data *data)
 {
-	char	*line;
-	size_t	i;
+	t_vertex	vt;
+	char		*line;
 
 	line = *linep;
-	i = 0;
-	while (line[i] && ft_isdigit(line[i]))
-		i++;
-	if (i == 0)
-		return (false);
-	*coord = ft_atoi(line);
-	*linep = &line[i];
-	return (true);
-}
-
-t_object	parse_vertex(char **linep, t_object *object)
-{
-	static unsigned long	vt_index;
-	t_vertex				*vt;
-	char					*line;
-
-	vt = &object->vertex;
-	vt->index = vt_index;
-	vt_index++;
-	line = *linep;
-	if (!parse_num(&line, &vt->point[X]) || *line++ != ',')
-		return (COORD);
-	if (!parse_num(&line, &vt->point[Y]) || *line++ != ',')
-		return (COORD);
-	if (!parse_num(&line, &vt->point[Z]))
-		return (COORD);
 	skip_spaces(&line);
-	if (!*line)
-	{
-		*linep = line;
-		vt->has_uv = false;
-		return (SUCCESS);
-	}
-	vt->has_uv = true;
-	if (!parse_float(&line, &vt->u, 0, 1)
-		|| !ft_isspace(*line))
-		return (UV);
-	if (!parse_float(&line, &vt->v, 0, 1))
-		return (UV);
-	*linep= line;
+	if (!ft_isdigit(!*line))
+		return (VERTEX);
+	object->vertex.point[X] = ft_strtof(line, &line);
+	if (*line != ' ')
+		return (VERTEX);
+	skip_spaces(&line);
+	if (!ft_isdigit(!*line))
+		return (VERTEX);
+	object->vertex.point[Y] = ft_strtof(line, &line);
+	if (*line != ' ')
+		return (VERTEX);
+	skip_spaces(&line);
+	if (!ft_isdigit(!*line))
+		return (VERTEX);
+	object->vertex.point[Z] = ft_strtof(line, &line);
+	*linep = line;
 	return (SUCCESS);
 }
 

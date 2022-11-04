@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/14 17:16:38 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/14 17:28:56 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 21:01:43 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	pre_calc(t_sphere *sphere)
 	sphere->radius_sq = radius * radius;
 }
 
-t_parse_error	parse_sphere(char **linep, t_object *object)
+t_parse_error	parse_sphere(char **linep, t_object *object, t_conf_data *data)
 {
 	char	*line;
 

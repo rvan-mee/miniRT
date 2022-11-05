@@ -12,7 +12,6 @@
 
 #include <bvh.h>
 #include <math.h>
-#include <stdio.h>
 
 static void	update_area(
 		const t_bvhbuilder *b,
@@ -51,13 +50,13 @@ static void	calc_area_after_merge(
 	i = start;
 	while (i < node)
 	{
-		b->area[node][i] = aabb_sa(new_bounds, b->clusters[b->nodes[i]].aabb);
+		b->area[node][i] = combo_sa(new_bounds, b->clusters[b->nodes[i]].aabb);
 		++i;
 	}
 	i = node + 1;
 	while (i < start + len)
 	{
-		b->area[i][node] = aabb_sa(new_bounds, b->clusters[b->nodes[i]].aabb);
+		b->area[i][node] = combo_sa(new_bounds, b->clusters[b->nodes[i]].aabb);
 		++i;
 	}
 }
@@ -129,7 +128,7 @@ uint32_t	merge_nodes(
 		c[0] = b->clusters + b->nodes[comb[0]];
 		c[1] = b->clusters + b->nodes[comb[1]];
 		b->clusters[b->node_idx] = (t_cluster){
-			b->nodes[comb[0]], b->nodes[comb[1]],
+			{{b->nodes[comb[0]], b->nodes[comb[1]]}},
 			aabb_combine(c[0]->aabb, c[1]->aabb),
 			c[0]->len + c[1]->len,
 			false

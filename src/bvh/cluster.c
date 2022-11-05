@@ -39,7 +39,7 @@ static void	calc_leaf_areas(
 		while (j < i)
 		{
 			cj = b->clusters + b->nodes[j];
-			b->area[i][j] = aabb_sa(ci->aabb, cj->aabb);
+			b->area[i][j] = combo_sa(ci->aabb, cj->aabb);
 			if (b->area[i][j] < b->min_info[i].min_area)
 				b->min_info[i] = (t_minfo){b->area[i][j], j, b->nodes[j]};
 			if (b->area[i][j] < b->min_info[j].min_area)
@@ -92,7 +92,7 @@ static void	merge_clusters(
 		while (j < start + len[0] + len[1])
 		{
 			cj = b->clusters + b->nodes[j];
-			b->area[j][i] = aabb_sa(ci->aabb, cj->aabb);
+			b->area[j][i] = combo_sa(ci->aabb, cj->aabb);
 			if (b->area[j][i] < b->min_info[i].min_area)
 				b->min_info[i] = (t_minfo){b->area[j][i], j, b->nodes[j]};
 			if (b->area[j][i] < b->min_info[j].min_area)

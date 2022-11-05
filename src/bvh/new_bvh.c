@@ -47,7 +47,7 @@ static bool	alloc_builder(t_bvhbuilder *b, uint32_t n)
 	b->min_info = ft_calloc(req, sizeof(t_minfo));
 	b->nodes = ft_calloc(2 * n, sizeof(uint32_t));
 	b->clusters = ft_calloc(2 * n, sizeof(t_cluster));
-	b->cost = ft_calloc(2 * n, sizeof(uint32_t));
+	b->cost = ft_calloc(2 * n, sizeof(float));
 	b->surface_area = ft_calloc(2 * n, sizeof(float));
 	if (!b->keys || !b->nodes || !b->area || !b->min_info || !b->clusters
 		|| !b->cost || !b->surface_area)

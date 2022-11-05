@@ -1,12 +1,11 @@
 #include <bvh.h>
 #include <libft.h>
 #include <render.h>
-#include <stdio.h>
 
 static void	link_nodes(t_prio *nodes, t_prio nodebuf[64])
 {
 	uint16_t	i;
-	t_prio	*cur;
+	t_prio		*cur;
 
 	i = 0;
 	cur = nodes;
@@ -57,26 +56,26 @@ static void	insert(uint32_t idx, float distance, t_prio *queue, t_prio *nodes, c
 
 static void	intersect_node(t_bvh *bvh, uint32_t idx, t_ray *ray, t_prio *queue, t_prio *nodes)
 {
-	float		distance;
-	static uint64_t	intersects[2];
+	const t_cluster	*c = bvh->clusters + idx;
+	const bool		is_prim = idx < bvh->prim_size;
+	float			distance;
 
-	if (idx == UINT32_MAX)
-		return (void) dprintf(1, "%llu prim intersections, %llu aabb intersections\n", intersects[0], intersects[1]);
-	const bool	is_prim = idx < bvh->prim_size;
 	if (is_prim)
 		distance = intersect(bvh->prims + idx, ray);
-	else if (!bvh->clusters[idx].leaf)
-		distance = aabb_intersect(bvh->clusters[idx].aabb, ray);
 	else
-	{
-		intersect_node(bvh, bvh->clusters[idx].l, ray, queue, nodes);
-		intersect_node(bvh, bvh->clusters[idx].r, ray, queue, nodes);
-		return;
-	}
-	++intersects[is_prim];
+		distance = aabb_intersect(c->aabb, ray);
 	if (distance == MISS || distance < 0)
 		return ;
-	insert(idx, distance, queue, nodes, is_prim);
+	return (insert(idx, distance, queue, nodes, is_prim));
+}
+
+static void	intersect_prims(t_bvh *bvh, t_cluster *leaf, t_ray *ray, t_prio *queue, t_prio *nodes)
+{
+	uint32_t	i;
+
+	i = 0;
+	while (i < leaf->len)
+		intersect_node(bvh, leaf->prims[i++], ray, queue, nodes);
 }
 
 bool	intersect_bvh(t_bvh *bvh, t_ray *ray, t_hit *hit)
@@ -95,17 +94,17 @@ bool	intersect_bvh(t_bvh *bvh, t_ray *ray, t_hit *hit)
 		queue.next = cur->next;
 		cur->next = nodes.next;
 		nodes.next = cur;
-		intersect_node(bvh, bvh->clusters[cur->cluster].l, ray, &queue, &nodes);
-		intersect_node(bvh, bvh->clusters[cur->cluster].r, ray, &queue, &nodes);
+		if (bvh->clusters[cur->cluster].leaf)
+			intersect_prims(bvh, bvh->clusters + cur->cluster, ray, &queue, &nodes);
+		else
+		{
+			intersect_node(bvh, bvh->clusters[cur->cluster].l, ray, &queue, &nodes);
+			intersect_node(bvh, bvh->clusters[cur->cluster].r, ray, &queue, &nodes);
+		}
 	}
 	if (queue.next == NULL)
 		return (false);
 	hit->distance = queue.next->dist;
 	hit->object = bvh->prims + queue.next->cluster;
 	return (true);
-}
-
-void	print_shits(void)
-{
-	intersect_node(NULL, UINT32_MAX, NULL, NULL, NULL);
 }

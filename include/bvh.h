@@ -36,8 +36,13 @@ typedef struct s_morton {
 
 // A node in the hierarchy
 typedef struct s_cluster {
-	t_nodeidx	l;
-	t_nodeidx	r;
+	union {
+		struct {
+			t_nodeidx	l;
+			t_nodeidx	r;
+		};
+		t_objidx	*prims;
+	};
 	t_aabb		aabb;
 	uint32_t	len;
 	bool		leaf;
@@ -60,7 +65,7 @@ typedef struct s_bvh_b {
 	t_morton	*keys;
 	t_nodeidx	*nodes;
 	float		**area;
-	uint32_t	*cost;
+	float		*cost;
 	float		*surface_area;
 	t_minfo		*min_info;
 	t_nodeidx	node_idx;

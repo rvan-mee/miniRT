@@ -161,9 +161,15 @@ t_aabb	calc_bounds(t_object *obj);
  */
 t_aabb	aabb_combine(t_aabb a, t_aabb b);
 
+
+/**
+ * Calculate surface area of a bounding box
+ */
+float	sa(t_aabb aabb);
+
 /**
  * Calculate surface area of two combined bounding boxes
  */
-float	aabb_sa(t_aabb a, t_aabb b);
+float	combo_sa(t_aabb a, t_aabb b);
 
 #endif

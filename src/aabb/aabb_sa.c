@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   aabb_sa.c                                          :+:    :+:            */
+/*   combo_sa.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
@@ -12,7 +12,14 @@
 
 #include <ft_math.h>
 
-float	aabb_sa(t_aabb a, t_aabb b)
+float	sa(t_aabb aabb)
+{
+	const t_fvec	size = aabb.max - aabb.min;
+
+	return (dot_product(size, size));
+}
+
+float	combo_sa(t_aabb a, t_aabb b)
 {
 	const t_aabb	combined = aabb_combine(a, b);
 	const t_fvec	size = combined.max - combined.min;

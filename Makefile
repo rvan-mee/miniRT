@@ -15,7 +15,7 @@ NAME := miniRT
 CC := gcc
 
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -march=native -g
+CFLAGS += -march=native -O3
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES

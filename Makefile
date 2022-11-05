@@ -15,7 +15,7 @@ NAME := miniRT
 CC := gcc
 
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -march=native -O3
+CFLAGS += -march=native -g
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES
@@ -62,9 +62,11 @@ SRCS := main.c										\
 		bvh/morton.c								\
 		bvh/cluster.c								\
 		bvh/aac_merge.c								\
+		bvh/intersect_bvh.c							\
 		\
 		aabb/aabb_combine.c							\
 		aabb/aabb_sa.c								\
+		aabb/aabb_intersect.c						\
 		\
 		tree/new_tree.c								\
 		tree/new_node.c								\

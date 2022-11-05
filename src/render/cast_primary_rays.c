@@ -15,6 +15,11 @@
 #include <render.h>
 #include <math.h>
 #include <float.h>
+#include <bvh.h>
+
+#ifndef USE_BVH
+# define USE_BVH		1
+#endif
 
 #define ASPECT_RATIO	0
 #define PIXELS_WIDTH	1
@@ -49,17 +54,25 @@ static bool	trace(
 	float		hit_distance;
 
 	hit = (t_hit){*ray, FLT_MAX, {}, NULL, {}, screen[X], screen[Y]};
-	i = scene->objects_len;
-	while (i--)
+	if (USE_BVH)
 	{
-		hit_distance = intersect(scene->objects + i, ray);
-		if (hit_distance < 0 || hit_distance >= hit.distance)
-			continue ;
-		hit.distance = hit_distance;
-		hit.object = scene->objects + i;
+		if (!intersect_bvh(&scene->bvh, ray, &hit))
+			return (true);
 	}
-	if (hit.distance == FLT_MAX)
-		return (true);
+	else
+	{
+		i = scene->objects_len;
+		while (i--)
+		{
+			hit_distance = intersect(scene->objects + i, ray);
+			if (hit_distance < 0 || hit_distance >= hit.distance)
+				continue;
+			hit.distance = hit_distance;
+			hit.object = scene->objects + i;
+		}
+		if (hit.distance == FLT_MAX)
+			return (true);
+	}
 	hit.hit = hit.ray.origin + hit.ray.direction * (hit.distance * (1 - 128 * FLT_EPSILON));
 	calculate_normal(&hit);
 	return (dynarr_addone(hits, &hit));

@@ -79,10 +79,10 @@ static float	intersect_tops(
 
 /*
  * To find if we intersect the side of the actual cylinder we can use the
- * line-point distance formula (|| (P - a) x D ||) / || D ||
+ * line-point dist formula (|| (P - a) x D ||) / || D ||
  * We can substitute the P with the ray formula (O + tV), and use the axis of
- * the cylinder as the line we're calculating the distance to. When this
- * distance is equal to the radius of the cylinder we are at an intersection
+ * the cylinder as the line we're calculating the dist to. When this
+ * dist is equal to the radius of the cylinder we are at an intersection
  * with the (infinitely high) cylinder.
  *
  * P0 = (Dx(O-a))

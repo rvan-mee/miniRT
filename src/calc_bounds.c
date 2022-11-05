@@ -12,8 +12,8 @@ t_aabb	calc_bounds(t_object *obj)
 			});
 		case PLANE:
 			return ((t_aabb){
-				{-INFINITY, -INFINITY, -INFINITY},
-				{INFINITY, INFINITY, INFINITY}
+				{-10000, -10000, -10000},
+				{10000, 10000, 10000}
 			});
 		default:
 			exit(2); // todo, i mean cyl n shit

@@ -14,6 +14,10 @@
 #include <render.h>
 #include <ft_math.h>
 
+#ifndef USE_BVH
+# define USE_BVH	1
+#endif
+
 static t_rgba	get_obj_rgba(t_object *object)
 {
 	t_rgba	rgb;
@@ -67,15 +71,29 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 			i++;
 			continue ;
 		}
-		while (j < scene->objects_len)
+		if (USE_BVH)
 		{
-			distance = intersect(&scene->objects[j], &ray);
-			if ((distance != MISS && distance * distance < distance_to_light) && distance > 0)
+			t_hit	shade_hit;
+
+			if (intersect_bvh(&scene->bvh, &ray, &shade_hit) && shade_hit.distance < distance_to_light)
 			{
-				light_hits = true;
-				break ;
+				++i;
+				continue;
 			}
-			j++;
+			break ;
+		}
+		else
+		{
+			while (j < scene->objects_len)
+			{
+				distance = intersect(&scene->objects[j], &ray);
+				if ((distance != MISS && distance * distance < distance_to_light) && distance > 0)
+				{
+					light_hits = true;
+					break;
+				}
+				j++;
+			}
 		}
 		i++;
 	}

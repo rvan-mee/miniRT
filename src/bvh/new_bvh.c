@@ -12,8 +12,7 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include "libft.h"
-#include "ft_math.h"
+#include <libft.h>
 #include <bvh.h>
 #include <stdio.h>
 
@@ -60,7 +59,26 @@ static bool	alloc_builder(t_bvhbuilder *b, uint32_t n)
 	return (true);
 }
 
-bool	new_bvh(t_object *objects[], uint32_t length, t_bvh *dst)
+uint16_t	print_nodes(t_bvh *b, uint16_t depth, uint32_t node)
+{
+	static uint16_t	maxdepth = 0;
+
+	maxdepth = depth > maxdepth ? depth : maxdepth;
+	dprintf(1, "node %u (len=%u)\n", node, b->clusters[node].len);
+	if (b->clusters[node].len == 1)
+		return (maxdepth);
+	for (uint16_t n = depth + 1; n > 0; n--)
+		dprintf(1, " ");
+	dprintf(1, "l: ");
+	print_nodes(b, depth + 1, b->clusters[node].l);
+	for (uint16_t n = depth + 1; n > 0; n--)
+		dprintf(1, " ");
+	dprintf(1, "r: ");
+	print_nodes(b, depth + 1, b->clusters[node].r);
+	return (maxdepth);
+}
+
+bool	new_bvh(t_object objects[], uint32_t length, t_bvh *dst)
 {
 	t_bvhbuilder	builder;
 	uint32_t		final_len;
@@ -80,5 +98,6 @@ bool	new_bvh(t_object *objects[], uint32_t length, t_bvh *dst)
 		*dst = (t_bvh){objects, builder.clusters, builder.node_idx - 1, length};
 	}
 	free_builder(&builder, success);
+	//dprintf(1, "maxdepth = %u\n", print_nodes(dst, 0, dst->root));
 	return (success);
 }

@@ -51,7 +51,7 @@ typedef struct s_min_info {
 
 // Data struct used while building a new bounding volume hierarchy
 typedef struct s_bvh_b {
-	t_object	**prims;
+	t_object	*prims;
 	t_cluster	*clusters;
 	t_morton	*keys;
 	t_objidx	*nodes;
@@ -61,12 +61,12 @@ typedef struct s_bvh_b {
 	uint32_t	length;
 }	t_bvhbuilder;
 
-typedef struct s_bvh {
-	t_object	**prims;
-	t_cluster	*clusters;
-	uint32_t	root;
-	uint32_t	prim_size;
-}	t_bvh;
+typedef struct s_priority_queue	t_prio;
+struct s_priority_queue {
+	uint32_t	cluster;
+	float		dist;
+	t_prio		*next;
+};
 
 /**
  * Create a new bounding volume hierarchy using approximate agglomerative
@@ -81,7 +81,7 @@ typedef struct s_bvh {
  *
  * If true has been returned, the caller should free dst->clusters!
  */
-bool		new_bvh(t_object *objects[], uint32_t length, t_bvh *dst);
+bool		new_bvh(t_object objects[], uint32_t length, t_bvh *dst);
 
 /**
  * Generate morton codes for all primitives in the prims array of the builder.

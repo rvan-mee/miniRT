@@ -64,7 +64,7 @@ static uint32_t	create_leafs(
 	{
 		b->nodes[start + i] = b->keys[lo + i].idx;
 		b->clusters[b->nodes[start + i]] = (t_cluster){
-			.aabb = calc_bounds(b->prims[b->nodes[start + i]]),
+			.aabb = calc_bounds(b->prims + b->nodes[start + i]),
 			.len = 1
 		};
 		b->min_info[start + i].min_area = INFINITY;

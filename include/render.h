@@ -30,6 +30,8 @@ bool	shade(
 			t_dynarr *hits,
 			uint32_t *pixels);
 
+bool	intersect_bvh(t_bvh *bvh, t_ray *ray, t_hit *hit);
+float	aabb_intersect(t_aabb bounds, t_ray *ray);
 float	intersect(t_object *object, t_ray *ray);
 float	intersect_plane(t_object *object, t_ray *ray);
 float	intersect_cylinder(t_object *object, t_ray *ray);

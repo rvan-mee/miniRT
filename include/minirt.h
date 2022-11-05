@@ -107,6 +107,14 @@ typedef struct s_object {
 	t_obj_type	type;
 }	t_object;
 
+typedef struct s_cluster	t_cluster;
+typedef struct s_bvh {
+	t_object	*prims;
+	t_cluster	*clusters;
+	uint32_t	root;
+	uint32_t	prim_size;
+}	t_bvh;
+
 typedef struct s_scene {
 	t_object	camera;
 	t_object	ambient;
@@ -114,6 +122,7 @@ typedef struct s_scene {
 	size_t		lights_len;
 	t_object	*objects;
 	size_t		objects_len;
+	t_bvh		bvh;
 }	t_scene;
 
 typedef struct s_ray {

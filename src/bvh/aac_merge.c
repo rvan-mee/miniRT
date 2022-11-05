@@ -12,6 +12,7 @@
 
 #include <bvh.h>
 #include <math.h>
+#include <stdio.h>
 
 static void	update_area(
 		const t_bvhbuilder *b,
@@ -83,6 +84,7 @@ static void	move_area_after_merge(
 	}
 }
 
+// Assignment to comb is to stop gcc from complaining
 static void	find_best_merge(
 		const t_bvhbuilder *b,
 		const uint32_t start,
@@ -92,6 +94,8 @@ static void	find_best_merge(
 	float		min_area;
 	uint32_t	i;
 
+	comb[0] = 0;
+	comb[1] = 1;
 	min_area = INFINITY;
 	i = start;
 	while (i < start + len)
@@ -125,7 +129,7 @@ uint32_t	merge_nodes(
 		c[0] = b->clusters + b->nodes[comb[0]];
 		c[1] = b->clusters + b->nodes[comb[1]];
 		b->clusters[b->node_idx] = (t_cluster){
-			comb[0], comb[1],
+			b->nodes[comb[0]], b->nodes[comb[1]],
 			aabb_combine(c[0]->aabb, c[1]->aabb),
 			c[0]->len + c[1]->len
 		};

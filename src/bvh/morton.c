@@ -24,7 +24,7 @@ static inline void	create_key(
 		const t_aabb lims)
 {
 	const t_fvec	size = lims.max - lims.min;
-	const t_fvec	pos = (b->prims[i]->coords - lims.min) / size;
+	const t_fvec	pos = (b->prims[i].coords - lims.min) / size;
 	const uint16_t	xyz[3] = {
 		(uint16_t)(pos[X] * 0b1111111111),
 		(uint16_t)(pos[Y] * 0b1111111111),
@@ -52,8 +52,8 @@ void	generate_codes(const t_bvhbuilder *b)
 		j = 0;
 		while (j < 3)
 		{
-			bounds.max[j] = fmaxf(bounds.max[j], b->prims[i]->coords[j]);
-			bounds.min[j] = fminf(bounds.min[j], b->prims[i]->coords[j]);
+			bounds.max[j] = fmaxf(bounds.max[j], b->prims[i].coords[j]);
+			bounds.min[j] = fminf(bounds.min[j], b->prims[i].coords[j]);
 			++j;
 		}
 		++i;

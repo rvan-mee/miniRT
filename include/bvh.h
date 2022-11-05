@@ -22,10 +22,10 @@
 #  define DELTA	4
 # endif
 
-// A index into either t_bvh.clusters or t_bvh_b.clusters
-typedef uint32_t	t_nodeidx;
-
-typedef uint32_t	t_objidx;
+// An index into either t_bvh.clusters or t_bvh_b.clusters
+typedef uint32_t				t_nodeidx;
+// An index in the prim array
+typedef uint32_t				t_objidx;
 
 // A morton code, saving the objects original index and the morton
 // representation of its coordinates
@@ -44,10 +44,13 @@ typedef struct s_cluster {
 }	t_cluster;
 
 // Temporary info for all clusters, storing the closest node
+// min_area is the combined surface area of this node, and the min node
+// min_pos is the index of the node in builder->nodes (and area, and min_info)
+// min_node is the index of the node in builder->clusters
 typedef struct s_min_info {
 	float		min_area;
-	t_nodeidx	min_pos;
-	t_objidx	min_node;
+	uint32_t	min_pos;
+	t_nodeidx	min_node;
 }	t_minfo;
 
 // Data struct used while building a new bounding volume hierarchy
@@ -55,7 +58,7 @@ typedef struct s_bvh_b {
 	t_object	*prims;
 	t_cluster	*clusters;
 	t_morton	*keys;
-	t_objidx	*nodes;
+	t_nodeidx	*nodes;
 	float		**area;
 	uint32_t	*cost;
 	float		*surface_area;
@@ -66,7 +69,7 @@ typedef struct s_bvh_b {
 
 typedef struct s_priority_queue	t_prio;
 struct s_priority_queue {
-	uint32_t	cluster;
+	t_nodeidx	cluster;
 	float		dist;
 	t_prio		*next;
 };

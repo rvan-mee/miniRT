@@ -40,6 +40,7 @@ typedef struct s_cluster {
 	t_nodeidx	r;
 	t_aabb		aabb;
 	uint32_t	len;
+	bool		leaf;
 }	t_cluster;
 
 // Temporary info for all clusters, storing the closest node
@@ -56,6 +57,8 @@ typedef struct s_bvh_b {
 	t_morton	*keys;
 	t_objidx	*nodes;
 	float		**area;
+	uint32_t	*cost;
+	float		*surface_area;
 	t_minfo		*min_info;
 	t_nodeidx	node_idx;
 	uint32_t	length;
@@ -120,5 +123,7 @@ uint32_t	merge_nodes(
 				uint32_t start,
 				uint32_t len,
 				uint32_t new_len);
+
+bool		flatten_bvh(t_bvhbuilder *b);
 
 #endif

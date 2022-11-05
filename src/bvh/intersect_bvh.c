@@ -65,8 +65,14 @@ static void	intersect_node(t_bvh *bvh, uint32_t idx, t_ray *ray, t_prio *queue, 
 	const bool	is_prim = idx < bvh->prim_size;
 	if (is_prim)
 		distance = intersect(bvh->prims + idx, ray);
-	else
+	else if (!bvh->clusters[idx].leaf)
 		distance = aabb_intersect(bvh->clusters[idx].aabb, ray);
+	else
+	{
+		intersect_node(bvh, bvh->clusters[idx].l, ray, queue, nodes);
+		intersect_node(bvh, bvh->clusters[idx].r, ray, queue, nodes);
+		return;
+	}
 	++intersects[is_prim];
 	if (distance == MISS || distance < 0)
 		return ;

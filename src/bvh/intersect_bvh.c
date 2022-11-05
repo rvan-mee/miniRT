@@ -57,13 +57,17 @@ static void	insert(uint32_t idx, float distance, t_prio *queue, t_prio *nodes, c
 
 static void	intersect_node(t_bvh *bvh, uint32_t idx, t_ray *ray, t_prio *queue, t_prio *nodes)
 {
-	const bool	is_prim = idx < bvh->prim_size;
 	float		distance;
+	static uint64_t	intersects[2];
 
+	if (idx == UINT32_MAX)
+		return (void) dprintf(1, "%llu prim intersections, %llu aabb intersections\n", intersects[0], intersects[1]);
+	const bool	is_prim = idx < bvh->prim_size;
 	if (is_prim)
 		distance = intersect(bvh->prims + idx, ray);
 	else
 		distance = aabb_intersect(bvh->clusters[idx].aabb, ray);
+	++intersects[is_prim];
 	if (distance == MISS || distance < 0)
 		return ;
 	insert(idx, distance, queue, nodes, is_prim);
@@ -83,6 +87,8 @@ bool	intersect_bvh(t_bvh *bvh, t_ray *ray, t_hit *hit)
 	{
 		cur = queue.next;
 		queue.next = cur->next;
+		cur->next = nodes.next;
+		nodes.next = cur;
 		intersect_node(bvh, bvh->clusters[cur->cluster].l, ray, &queue, &nodes);
 		intersect_node(bvh, bvh->clusters[cur->cluster].r, ray, &queue, &nodes);
 	}
@@ -91,4 +97,9 @@ bool	intersect_bvh(t_bvh *bvh, t_ray *ray, t_hit *hit)
 	hit->distance = queue.next->dist;
 	hit->object = bvh->prims + queue.next->cluster;
 	return (true);
+}
+
+void	print_shits(void)
+{
+	intersect_node(NULL, UINT32_MAX, NULL, NULL, NULL);
 }

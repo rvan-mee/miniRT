@@ -85,7 +85,7 @@ void	stopwatch(uint8_t i, uint8_t options, const char *arg)
 		return;
 //	long double cur = clk();
 	total_t = 0;
-	if (times[i][rounds[i]][1] == -1)
+	if (rounds[i] == 0)
 		total_t = (clock()) - times[i][rounds[i]][0];
 	else
 		for (uint8_t j = 0; j < rounds[i]; j++)
@@ -102,7 +102,7 @@ void	stopwatch(uint8_t i, uint8_t options, const char *arg)
 
 	}
 }
-
+void	print_shits(void);
 bool	render(t_mlx_data *mlx, t_scene *scene, size_t width, size_t height)
 {
 	uint32_t	*pixels;
@@ -114,12 +114,14 @@ bool	render(t_mlx_data *mlx, t_scene *scene, size_t width, size_t height)
 	if (!cast_primary_rays(scene, width, height, &hits))
 		return (false); // TODO: dynarr_delete(&hits);
 	stopwatch(1, ROUND | SUMMARY, "Primary rays");
+	print_shits();
 	pixels = (uint32_t *) mlx->img->pixels;
 	if (!pixels)
 		return (false);
 	if (!shade(scene, &hits, pixels))
 		return (false);
 	stopwatch(1, ROUND | SUMMARY, "Shade rays");
+	print_shits();
 	//ft_memcpy(, pixels, width * height * sizeof(uint32_t));
 	usleep(1000);
 	stopwatch(1, STOP | SUMMARY, "Render done");

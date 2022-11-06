@@ -8,8 +8,8 @@ static void	get_prim_costs(t_bvhbuilder *b, const uint32_t costs[])
 	i = 0;
 	while (i < b->length)
 	{
-		b->cost[i] = (float) costs[b->prims[i].type];
 		b->surface_area[i] = sa(b->clusters[i].aabb);
+		b->cost[i] = (float) costs[b->prims[i].type];
 		++i;
 	}
 }

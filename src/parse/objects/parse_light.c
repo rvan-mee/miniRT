@@ -6,14 +6,14 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/14 17:18:23 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/07 21:01:53 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 21:03:51 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parse.h>
 #include <libft.h>
 
-t_parse_error	parse_light(char **linep, t_object *object, t_conf_data *data)
+t_parse_error	parse_light(char **linep, t_object *object, t_conf_data *conf)
 {
 	char	*line;
 
@@ -26,6 +26,8 @@ t_parse_error	parse_light(char **linep, t_object *object, t_conf_data *data)
 		return (BRIGHT);
 	if (!parse_rgb(&line, &object->colour))
 		return (COLOUR);
+	if (!dynarr_addone(&conf->lights, &object->light))
+		return (DYNARR);
 	*linep = line;
 	return (SUCCESS);
 }

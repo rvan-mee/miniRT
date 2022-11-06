@@ -66,3 +66,6 @@ miniRT
 # test exes
 *.test
 *_portrait.bmp
+
+#old build
+old_buildRT

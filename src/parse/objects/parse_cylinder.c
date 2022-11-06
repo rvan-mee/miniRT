@@ -6,7 +6,11 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/14 17:10:11 by rvan-mee      #+#    #+#                 */
+<<<<<<< HEAD
 /*   Updated: 2022/11/07 21:01:56 by rvan-mee      ########   odam.nl         */
+=======
+/*   Updated: 2022/11/06 15:34:13 by rvan-mee      ########   odam.nl         */
+>>>>>>> v, vt and vn parsing done, face rendering too. check for norm and if everything works properly next up.
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +26,7 @@ static void	pre_calc(t_cylinder *cyl)
 	cyl->top = top;
 }
 
-t_parse_error	parse_cylinder(char **linep, t_object *object, t_conf_data *data)
+t_parse_error	parse_cylinder(char **linep, t_object *object, t_conf_data *conf)
 {
 	char	*line;
 

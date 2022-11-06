@@ -6,7 +6,11 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 18:30:32 by lsinke        #+#    #+#                 */
+<<<<<<< HEAD
 /*   Updated: 2022/11/07 20:59:40 by rvan-mee      ########   odam.nl         */
+=======
+/*   Updated: 2022/11/06 18:57:36 by rvan-mee      ########   odam.nl         */
+>>>>>>> v, vt and vn parsing done, face rendering too. check for norm and if everything works properly next up.
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +50,7 @@ float	intersect_plane(const t_object *object, const t_ray *ray, t_hit *hit);
 float	intersect_cylinder(const t_object *object, const t_ray *ray, t_hit *hit);
 float	intersect_sphere(const t_object *object, const t_ray *ray, t_hit *hit);
 float	intersect_triangle(const t_object *object, const t_ray *ray, t_hit *hit);
+float	intersect_face(const t_object *obj, const t_ray *ray, t_hit *hit);
 
 void	calculate_normal(t_hit *hit);
 

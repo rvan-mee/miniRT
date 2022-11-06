@@ -6,11 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 15:46:41 by lsinke        #+#    #+#                 */
-<<<<<<< HEAD
-/*   Updated: 2022/11/07 20:51:54 by rvan-mee      ########   odam.nl         */
-=======
-/*   Updated: 2022/10/30 12:42:00 by rvan-mee      ########   odam.nl         */
->>>>>>> start to add faces, vertices and vertex textures into the parser
+/*   Updated: 2022/11/07 21:05:13 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

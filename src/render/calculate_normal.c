@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/12 13:54:27 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/12 13:55:04 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/06 20:08:45 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,21 @@ static void	cylinder_normal(t_hit *hit)
 	hit->normal = normalize_vector(bot_rel_hit - cyl->orientation * hit_height);
 }
 
-static void	triangle_normal(t_hit *hit)
+static void	tr_f_normal(t_hit *hit)
 {
-	const t_triangle	*tr = &hit->object->triangle;
+	t_face		*face;
+	t_triangle	*tr;
 
-	hit->normal = -normalize_vector(cross_product(tr->v0v1, tr->v0v2));
+	if (hit->object->type == TRIANGLE)
+	{
+		tr = &hit->object->triangle;
+		hit->normal = -normalize_vector(cross_product(tr->v0v1, tr->v0v2));
+	}
+	else
+	{
+		face = &hit->object->face;
+		hit->normal = -normalize_vector(cross_product(face->v0v1, face->v0v2));
+	}
 }
 
 void	calculate_normal(t_hit *hit)
@@ -60,7 +70,8 @@ void	calculate_normal(t_hit *hit)
 	[SPHERE] = sphere_normal,
 	[PLANE] = plane_normal,
 	[CYLINDER] = cylinder_normal,
-	[TRIANGLE] = triangle_normal,
+	[TRIANGLE] = tr_f_normal,
+	[FACE] = tr_f_normal,
 	};
 
 	lut[hit->object->type](hit);

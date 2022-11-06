@@ -6,16 +6,16 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/04 15:44:05 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/04 18:04:25 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/06 19:52:47 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <parse.h>
 
-#define	X 0
-#define	Y 1
-#define	Z 2
+#define	A 0
+#define	B 1
+#define	C 2
 
 typedef struct s_face_indices {
 	int32_t	vert_index;
@@ -25,9 +25,10 @@ typedef struct s_face_indices {
 	int32_t	vert_texture_index;
 }	t_face_indices;
 
-static bool	parse_normal(char **linep, t_face_indices *index)
+static bool	parse_normal(char **linep, t_face_indices *index, t_conf_data *conf)
 {
 	char	*line;
+	int32_t	new_index;
 
 	line = *linep;
 	if (*line != '/')
@@ -36,111 +37,112 @@ static bool	parse_normal(char **linep, t_face_indices *index)
 	if (!ft_isdigit(*line))
 		return (false);
 	index->has_normal = true;
-	index->normal_index = ft_atoi(line);
+	new_index = ft_atoi(line) - 1;
+	if (new_index < 0 || (size_t)new_index > conf->vertex_normals.length)
+		return (false);
 	skip_digits(&line);
+	index->normal_index = new_index;
 	*linep = line;
 	return(true);
 }
 
-static bool	parse_vertex_texture(char **linep, t_face_indices *index)
+static bool	parse_vertex_texture(char **linep, t_face_indices *index, t_conf_data *conf)
 {
 	char	*line;
+	int32_t	new_index;
 
 	line = *linep;
-	if (*line != '/')
+	new_index = ft_atoi(line) - 1;
+	if (new_index < 0 || (size_t)new_index > conf->vertex_textures.length)
 		return (false);
-	line++;
-	if (*line == '/')
-	{
-		*linep = line;
-		return (true);
-	}
-	if (!ft_isdigit(*line))
-		return (false);
-	index->has_texture = true;
-	index->vert_texture_index = ft_atoi(line);
+	index->vert_texture_index = new_index;
 	skip_digits(&line);
+	if (*line  == '/')
+		index->has_normal = true;
 	*linep = line;
 	return (true);
 }
 
-static bool	parse_vert_index(char **linep, t_face_indices *index)
+static bool	parse_vert_index(char **linep, t_face_indices *index, t_conf_data *conf)
 {
 	char	*line;
+	int32_t	new_index;
 
 	line = *linep;
 	skip_spaces(&line);
 	if (!ft_isdigit(*line))
 		return (false);
-	index->normal_index = ft_atoi(line);
+	new_index = ft_atoi(line) - 1;
+	if (new_index < 0 || (size_t)new_index > conf->vertices.length)
+		return (false);
+	index->vert_index = new_index;
 	skip_digits(&line);
+	if (*line == '/')
+		line++;
+	if (ft_isdigit(*line))
+		index->has_texture = true;
+	else if (*line == '/')
+		index->has_normal = true;
 	*linep = line;
 	return (true);
 }
 
-static bool	parse_indices(char **linep, t_face_indices *index)
+static t_parse_error	parse_indices(char **linep, t_face_indices *index, t_conf_data *conf)
 {
 	char	*line;
 
 	line = *linep;
 	index->has_texture = false;
 	index->has_normal = false;
-	if (!parse_vert_index(&line, index))
+	if (!parse_vert_index(&line, index, conf))
 		return (INDEX);
-	if (!parse_vertex_texture(&line, index))
+	if (index->has_texture && !parse_vertex_texture(&line, index, conf))
 		return (VERT_TEXTURE);
-	if (!parse_normal(&line, index))
+	if (index->has_normal && !parse_normal(&line, index, conf))
 		return (NORMAL);
 	*linep = line;
 	return (SUCCESS);
 }
 
-bool	set_indices(t_object *object, t_conf_data *data, t_face_indices *index, int32_t axis)
+static void	set_indices(t_object *object, t_conf_data *conf, t_face_indices *index, int32_t axis)
 {
-	const t_normals	*normals = data->vertex_normals.arr;
-	const t_vertex	*vertices = data->vertices.arr;
-	const t_uv		*uv = data->uv.arr;
+	const t_normals			*normals = conf->vertex_normals.arr;
+	const t_vertex			*vertices = conf->vertices.arr;
+	const t_vertex_texture	*texture = conf->vertex_textures.arr;
 
-	if (index->vert_index > data->vertices.length)
-		return (false);
-	object->face.vert[axis] = vertices[index->vert_index];
+	object->face.vert[axis] = vertices[index->vert_index].point;
 	if (index->has_normal)
-	{
-		if (index->normal_index > data->vertex_normals.length)
-			return (false);
-		object->face.normals[axis] = normals[index->normal_index];
-	}
+		object->face.normals[axis] = normals[index->normal_index].normal;
 	if (index->has_texture)
-	{
-		if (index->vert_texture_index > data->vertex_textures.length)
-			return (false);
-		object->face.uv[axis] = texture index->normal_index];
-	}
-	return (true);
+		object->face.uv[axis] = texture[index->normal_index].uv;
 }
 
-t_object	parse_face(char **linep, t_object *object, t_conf_data *data)
+static void	pre_calc(t_face *face)
+{
+	face->v0v1 = face->vert[B] - face->vert[A];
+	face->v0v2 = face->vert[C] - face->vert[A];
+}
+
+// TODO: fix that all indices have to contain the same variables (so no v1/vt1/vn1 and v2//vn2 in the same line)
+t_parse_error	parse_face(char **linep, t_object *object, t_conf_data *conf)
 {
 	t_face_indices	indices;
 	t_parse_error	err;			
 	char			*line;
+	int32_t			axis;
 
 	line = *linep;
-	err = parse_indices(&line, &indices);
-	if (err != SUCCESS)
-		return (err);
-	if (!set_indices(object, data, &indices))
-		return (INDICES);
-	err = parse_indices(&line, &indices);
-	if (err != SUCCESS)
-		return (err);
-	if (!set_indices(object, data, &indices))
-		return (INDICES);
-	err = parse_indices(&line, &indices);
-	if (err != SUCCESS)
-		return (err);
-	if (!set_indices(object, data, &indices))
-		return (INDICES);
+	axis = A;
+	while (axis <= C)
+	{
+		err = parse_indices(&line, &indices, conf);
+		if (err != SUCCESS)
+			return (err);
+		set_indices(object, conf, &indices, axis);
+		axis++;
+	}
+	pre_calc(&object->face);
+	printf("face contains: %f %f %f   %f %f %f  %f %f %f\n", object->face.vert[A][X], object->face.vert[A][Y], object->face.vert[A][Z], object->face.vert[B][X], object->face.vert[B][Y], object->face.vert[B][Z], object->face.vert[C][X], object->face.vert[C][Y], object->face.vert[C][Z]);
 	*linep = line;
 	return (SUCCESS);
 }

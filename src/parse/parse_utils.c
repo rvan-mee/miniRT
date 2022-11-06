@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 11:28:47 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/04 16:28:23 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/06 19:27:08 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@
 #define BRIGHT_ERROR	"does not contain a valid brightness\n"
 #define DIA_ERROR		"does not contain a valid diameter\n"
 #define HEIGHT_ERROR	"does not contain a valid height\n"
+#define INDEX_ERROR		"does not contain a valid index\n"
+#define VERT_ERROR		"does not contain a valid vertex\n"
+#define V_TX_ERROR		"does not contain a valid vertex texture\n"
+#define VN_ERROR		"does not contain a valid vertex normal\n"
+#define DYNARR_ERROR	"failed to add to the dynamic array\n"
 #define ERR_EXTENSION	"Error\nWrong file extension: `%s'\n"
 #define ERR_OPEN		"Error\nFile failed to open: %s: %s\n"
 
@@ -44,7 +49,12 @@ bool	parse_line_error(const char *line, t_parse_error err)
 	[FOV] = FOV_ERROR,
 	[BRIGHT] = BRIGHT_ERROR,
 	[DIAMETER] = DIA_ERROR,
-	[OBJ_HEIGHT] = HEIGHT_ERROR
+	[OBJ_HEIGHT] = HEIGHT_ERROR,
+	[INDEX] = INDEX_ERROR,
+	[VERT] = VERT_ERROR,
+	[VERT_TEXTURE] = V_TX_ERROR,
+	[NORMAL] = VN_ERROR,
+	[DYNARR] = DYNARR_ERROR,
 	};
 	char		*newline;
 

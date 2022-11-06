@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 02:00:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/07 21:01:04 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 21:04:12 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static bool	cleanup(char *line, t_conf_data *data)
 	dynarr_delete(&data->objects);
 	dynarr_delete(&data->vertices);
 	dynarr_delete(&data->vertex_textures);
+	dynarr_delete(&data->vertex_normals);
 	return (false);
 }
 
@@ -64,25 +65,24 @@ static bool	check_error(t_scene *dst, t_conf_data *data)
 }
 
 static bool \
-	store_object(t_object *obj, t_scene *dst, t_conf_data *data)
+	store_object(t_object *obj, t_scene *dst, t_conf_data *conf)
 {
 	t_object	*store;
 
 	store = NULL;
-	if (obj->type == COMMENT)
+	if (obj->type == COMMENT || obj->type == LIGHT || obj->type == VERTEX \
+		|| obj->type == VT_TEXTURE || obj->type == VT_NORMAL)
 		return (true);
-	if (obj->type == LIGHT)
-		return (dynarr_addone(&data->lights, &obj->light));
-	if (obj->type == VERTEX)
-		return (dynarr_addone(&data->vertices, &obj->vertex));
 	if (obj->type == VT_TEXTURE)
-		return (dynarr_addone(&data->vertex_textures, &obj->vertex));
+		return (dynarr_addone(&conf->vertex_textures, &obj->vertex_texture));
+	if (obj->type == VT_NORMAL)
+		return (dynarr_addone(&conf->vertex_normals, &obj->vertex_normal));
 	if (obj->type == CAMERA)
 		store = &dst->camera;
 	else if (obj->type == AMBIENT)
 		store = &dst->ambient;
 	else if (obj->type != UNINITIALIZED && obj->type != END)
-		return (dynarr_addone(&data->objects, obj));
+		return (dynarr_addone(&conf->objects, obj));
 	if (store != NULL && store->type != obj->type)
 		return (*store = *obj, true);
 	if (store != NULL)
@@ -93,7 +93,7 @@ static bool \
 }
 
 static bool \
-	read_objects(int32_t fd, t_scene *dst, t_conf_data *data)
+	read_objects(int32_t fd, t_scene *dst, t_conf_data *conf)
 {
 	char		*line;
 	t_object	object;
@@ -105,12 +105,12 @@ static bool \
 		if (line == NULL)
 			break ;
 		if (*line != '\n' && *line != '\0')
-			if (!parse_object(line, &object, data) || \
-				!store_object(&object, dst, data))
-				return (cleanup(line, data));
+			if (!parse_object(line, &object, conf) || \
+				!store_object(&object, dst, conf))
+				return (cleanup(line, conf));
 		free(line);
 	}
-	return (check_error(dst, data));
+	return (check_error(dst, conf));
 }
 
 bool	parse_scene(int32_t fd, t_scene *dst)
@@ -122,19 +122,17 @@ bool	parse_scene(int32_t fd, t_scene *dst)
 	if (!dynarr_create(&parse_data.lights, 4, sizeof(t_light)) || \
 		!dynarr_create(&parse_data.objects, 16, sizeof(t_object)) || \
 		!dynarr_create(&parse_data.vertices, 256, sizeof(t_vertex)) || \
+		!dynarr_create(&parse_data.vertex_normals, 256, sizeof(t_normals)) || \
 		!dynarr_create(&parse_data.vertex_textures, 256, sizeof(t_vertex_texture)))
 		return (cleanup(NULL, &parse_data));
 	if (!read_objects(fd, dst, &parse_data))
-		return (false);
+		return (false); 
 	dst->lights = parse_data.lights.arr;
 	dst->lights_len = parse_data.lights.length;
 	dst->objects = parse_data.objects.arr;
 	dst->objects_len = parse_data.objects.length;
-	dst->vertices = parse_data.vertices.arr;
-	dst->vertices_len = parse_data.vertices.length;
-	dst->vertex_textures = parse_data.vertex_textures.arr;
-	dst->vertex_textures_len = parse_data.vertex_textures.length;
-	// dynarr_delete(&parse_data.vertex_textures);
-	// dynarr_delete(&parse_data.vertices);
+	dynarr_delete(&parse_data.vertex_textures);
+	dynarr_delete(&parse_data.vertex_normals);
+	dynarr_delete(&parse_data.vertices);
 	return (true);
 }

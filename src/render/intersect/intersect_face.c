@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   intersect_triangle.c                               :+:    :+:            */
+/*   intersect_face.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/30 17:24:31 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/07 21:04:25 by rvan-mee      ########   odam.nl         */
+/*   Created: 2022/11/06 18:55:43 by rvan-mee      #+#    #+#                 */
+/*   Updated: 2022/11/06 20:01:00 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 #include <float.h>
 
 // wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
-float	intersect_triangle(const t_object *obj, const t_ray *ray, t_hit *hit)
+float	intersect_face(t_object *obj, t_ray *ray, t_hit *hit)
 {
-	const t_triangle	*tr = &obj->triangle;
-	const t_fvec		pvec = cross_product(ray->direction, tr->v0v2);
-	const float			det = dot_product(tr->v0v1, pvec);
-	t_tri_intersect		isect;
+	const t_face	*tr = &obj->face;
+	const t_fvec	pvec = cross_product(ray->direction, tr->v0v2);
+	const float		det = dot_product(tr->v0v1, pvec);
+	t_tri_intersect	isect;
 
 	if (fabsf(det) < FLT_EPSILON * 128)
 		return (MISS);

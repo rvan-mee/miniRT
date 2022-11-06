@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/11/07 20:50:15 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/11/07 21:05:47 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,10 @@ SRCS := main.c										\
 		parse/objects/parse_sphere.c				\
 		parse/objects/parse_light.c					\
 		parse/objects/parse_triangle.c				\
+		parse/objects/parse_vertex.c				\
+		parse/objects/parse_vt.c					\
+		parse/objects/parse_vn.c					\
+		parse/objects/parse_face.c					\
 		parse/attributes/parse_float.c				\
 		parse/attributes/parse_rgb.c				\
 		parse/attributes/parse_vector.c				\
@@ -58,6 +62,7 @@ SRCS := main.c										\
 		render/intersect/intersect_plane.c			\
 		render/intersect/intersect_cylinder.c		\
 		render/intersect/intersect_triangle.c		\
+		render/intersect/intersect_face.c			\
 		render/calculate_normal.c					\
 		render/shading/shading.c					\
 		render/texture/get_uv_colour.c				\

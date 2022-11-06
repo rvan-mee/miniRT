@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   intersect_bvh.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/11/06 16:27:02 by lsinke        #+#    #+#                 */
+/*   Updated: 2022/11/06 16:27:02 by lsinke        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <bvh.h>
 #include <libft.h>
 #include <render.h>
@@ -92,8 +104,6 @@ bool	intersect_bvh(t_bvh *bvh, t_ray *ray, t_hit *hit)
 	{
 		cur = queue.next;
 		queue.next = cur->next;
-		cur->next = nodes.next;
-		nodes.next = cur;
 		if (bvh->clusters[cur->cluster].leaf)
 			intersect_prims(bvh, bvh->clusters + cur->cluster, ray, &queue, &nodes);
 		else
@@ -101,6 +111,8 @@ bool	intersect_bvh(t_bvh *bvh, t_ray *ray, t_hit *hit)
 			intersect_node(bvh, bvh->clusters[cur->cluster].l, ray, &queue, &nodes);
 			intersect_node(bvh, bvh->clusters[cur->cluster].r, ray, &queue, &nodes);
 		}
+		cur->next = nodes.next;
+		nodes.next = cur;
 	}
 	if (queue.next == NULL)
 		return (false);

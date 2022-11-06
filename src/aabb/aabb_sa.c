@@ -16,7 +16,7 @@ float	sa(t_aabb aabb)
 {
 	const t_fvec	size = aabb.max - aabb.min;
 
-	return (dot_product(size, size));
+	return (size[X] * size[Y] + size[X] * size[Z] + size[Y] * size[Z]);
 }
 
 float	combo_sa(t_aabb a, t_aabb b)
@@ -24,5 +24,5 @@ float	combo_sa(t_aabb a, t_aabb b)
 	const t_aabb	combined = aabb_combine(a, b);
 	const t_fvec	size = combined.max - combined.min;
 
-	return (dot_product(size, size));
+	return (size[X] * size[Y] + size[X] * size[Z] + size[Y] * size[Z]);
 }

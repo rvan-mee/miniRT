@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 02:00:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/13 14:37:32 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/16 14:35:56 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 #define DUPLICATE_ERROR		"Error\nThere can only be one %s!\n"
 #define UNKNOWN_ERROR		"Error\nUnknown type %s\n"
-#define NOT_ENOUGH_ERROR	"Error\nThere can't be zero %s!\n"
+#define NOT_ENOUGH_ERROR	"Error\nThere can't be zero %ss!\n"
 
 static const char	*g_type_strs[] = {\
 	[UNINITIALIZED] = "uninitialized",	\
@@ -29,6 +29,8 @@ static const char	*g_type_strs[] = {\
 	[SPHERE] = "sphere",				\
 	[PLANE] = "plane",					\
 	[CYLINDER] = "cylinder",			\
+	[TRIANGLE] = "triangle",			\
+	[COMMENT] = "comment",				\
 	[END] = "end",
 };
 
@@ -63,6 +65,8 @@ static bool \
 	t_object	*store;
 
 	store = NULL;
+	if (obj->type == COMMENT)
+		return (true);
 	if (obj->type == LIGHT)
 		return (dynarr_addone(lights, &obj->light));
 	if (obj->type == CAMERA)
@@ -110,7 +114,7 @@ bool	parse_scene(int32_t fd, t_scene *dst)
 	t_dynarr	objects;
 
 	ft_bzero(dst, sizeof(t_scene));
-	if (!dynarr_create(&lights, 4, sizeof(t_light)) || \
+	if (!dynarr_create(&lights, 4, sizeof(t_object)) || \
 		!dynarr_create(&objects, 16, sizeof(t_object)))
 		return (cleanup(NULL, &lights, &objects));
 	if (!read_objects(fd, dst, &lights, &objects))

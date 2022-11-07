@@ -18,13 +18,13 @@ t_parse_error	parse_plane(char **linep, t_object *object)
 	char	*line;
 
 	line = *linep;
-	if (!parse_vector(&line, &object->plane.coords, false) \
+	if (!parse_vector(&line, &object->coords, false) \
 		|| !ft_isspace(*line))
 		return (COORD);
 	if (!parse_vector(&line, &object->plane.orientation, true) \
 		|| !ft_isspace(*line))
 		return (VECTOR);
-	if (!parse_rgb(&line, &object->plane.colour))
+	if (!parse_rgb(&line, &object->colour))
 		return (COLOUR);
 	*linep = line;
 	return (SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/14 17:18:22 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/14 17:18:22 by lsinke        ########   odam.nl         */
+/*   Updated: 2022/09/22 19:10:08 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@
 
 static bool	parse_fov(char **linep, float *dst)
 {
-	static const float	deg_per_rad = (float) (180.0 / M_PI);
-	char	*line;
-	int32_t	num;
+	static const float	deg_per_rad = (float)(180.0 / M_PI);
+	char				*line;
+	int32_t				num;
 
 	line = *linep;
 	num = ft_atoi(line);
-	if (num < 0 || num > 180)
+	if (num <= 0 || num >= 180)
 		return (false);
 	*dst = (float) num / deg_per_rad;
 	skip_spaces(&line);
@@ -39,7 +39,7 @@ t_parse_error	parse_camera(char **linep, t_object *object)
 	char	*line;
 
 	line = *linep;
-	if (!parse_vector(&line, &object->camera.coords, false)
+	if (!parse_vector(&line, &object->coords, false)
 		|| !ft_isspace(*line))
 		return (COORD);
 	if (!parse_vector(&line, &object->camera.orientation, true)

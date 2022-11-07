@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/09/14 17:27:08 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/10/26 21:45:18 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME := miniRT
 CC := gcc
 
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -g
+CFLAGS += -march=native -O3
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES
@@ -36,6 +36,7 @@ SRCS := main.c										\
 		parse/objects/parse_plane.c					\
 		parse/objects/parse_sphere.c				\
 		parse/objects/parse_light.c					\
+		parse/objects/parse_triangle.c				\
 		parse/attributes/parse_float.c				\
 		parse/attributes/parse_rgb.c				\
 		parse/attributes/parse_vector.c				\
@@ -44,7 +45,45 @@ SRCS := main.c										\
 		parse/normalize/normalize_orientation.c		\
 		\
 		math/product.c								\
-		math/matrix.c
+		math/matrix.c								\
+		math/quadratic.c							\
+		math/normalize_vector.c						\
+		math/vector_utils.c							\
+		\
+		render/render.c								\
+		render/cast_primary_rays.c					\
+		render/intersect/intersect.c				\
+		render/intersect/intersect_sphere.c			\
+		render/intersect/intersect_plane.c			\
+		render/intersect/intersect_cylinder.c		\
+		render/intersect/intersect_triangle.c		\
+		render/calculate_normal.c					\
+		render/shading/shading.c					\
+		\
+		bvh/new_bvh.c								\
+		bvh/morton.c								\
+		bvh/cluster.c								\
+		bvh/aac_merge.c								\
+		bvh/intersect_bvh.c							\
+		bvh/flatten_bvh.c							\
+		\
+		aabb/aabb_combine.c							\
+		aabb/aabb_sa.c								\
+		aabb/aabb_intersect.c						\
+		\
+		tree/new_tree.c								\
+		tree/new_node.c								\
+		tree/sort_points.c							\
+		\
+		calc_bounds.c								\
+		\
+		threading/threads.c							\
+		threading/work.c							\
+		threading/work_utils.c						\
+		threading/add_job_node.c					\
+		threading/reset_work.c						\
+		threading/create_rays.c						\
+		threading/create_render_queue.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
 
@@ -59,7 +98,10 @@ INCS := minirt.h									\
 		parse.h										\
 		mlx.h										\
 		bmp.h										\
-		ft_math.h
+		ft_math.h									\
+		render.h									\
+		bvh.h										\
+		thread.h
 INCP := $(addprefix $(INCD), $(INCS))
 
 HEADERS += $(INCP)

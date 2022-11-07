@@ -13,12 +13,21 @@
 #include <parse.h>
 #include <libft.h>
 
+static void	pre_calc(t_cylinder *cyl)
+{
+	const float		radius = cyl->diameter / 2;
+	const t_fvec	top = cyl->height * cyl->orientation;
+
+	cyl->radius_sq = radius * radius;
+	cyl->top = top;
+}
+
 t_parse_error	parse_cylinder(char **linep, t_object *object)
 {
 	char	*line;
 
 	line = *linep;
-	if (!parse_vector(&line, &object->cylinder.coords, false) \
+	if (!parse_vector(&line, &object->coords, false) \
 		|| !ft_isspace(*line))
 		return (COORD);
 	if (!parse_vector(&line, &object->cylinder.orientation, true) \
@@ -30,9 +39,10 @@ t_parse_error	parse_cylinder(char **linep, t_object *object)
 	if (!parse_float(&line, &object->cylinder.height, 0, 0)
 		|| !ft_isspace(*line))
 		return (OBJ_HEIGHT);
-	if (!parse_rgb(&line, &object->cylinder.colour) || \
+	if (!parse_rgb(&line, &object->colour) || \
 		!(ft_isspace(*line) || *line == '\0'))
 		return (COLOUR);
+	pre_calc(&object->cylinder);
 	*linep = line;
 	return (SUCCESS);
 }

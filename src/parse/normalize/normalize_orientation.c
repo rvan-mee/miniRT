@@ -6,12 +6,13 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/15 20:41:36 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/15 20:41:36 by lsinke        ########   odam.nl         */
+/*   Updated: 2022/10/12 14:08:04 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_math.h>
 #include <math.h>
+#include <float.h>
 
 static void	axis_angle_to_matrix(t_fmat dst, t_fvec a, float angle)
 {
@@ -30,19 +31,26 @@ static void	axis_angle_to_matrix(t_fmat dst, t_fvec a, float angle)
 	dst[2][2] = c + a[Z] * a[Z] * t;
 }
 
+// isnan = temp fix for weird cam movement
+// config:	(C		0,-100,0 	0.70710678118,0.70710678118,0		120)
 static void	build_rotation_matrix(t_fmat dst, t_fvec cam_orientation)
 {
 	static const t_fvec	z_unit = {0, 0, 1};
 	float				angle;
 	t_fvec				axis;
-	float				axis_len;
 
 	angle = acosf(dot_product(cam_orientation, z_unit));
-	if (angle == 0.0)
+	if (angle == 0.0 || isnan(angle))
 		return (identity_matrix(dst));
+	if (fabs(angle - M_PI) < FLT_EPSILON * 128)
+	{
+		dst[0] = (t_fvec){-1.f, 0.0f, 0.0f};
+		dst[1] = (t_fvec){0.0f, 1.f, 0.0f};
+		dst[2] = (t_fvec){0.0f, 0.0f, -1.0f};
+		return ;
+	}
 	axis = cross_product(cam_orientation, z_unit);
-	axis_len = sqrtf(axis[X] * axis[X] + axis[Y] * axis[Y] + axis[Z] * axis[Z]);
-	axis /= axis_len;
+	axis = normalize_vector(axis);
 	axis_angle_to_matrix(dst, axis, angle);
 }
 
@@ -55,16 +63,25 @@ static void	rotate_object(t_object *object, t_fmat matrix)
 {
 	if (object->type == PLANE)
 	{
-		rotate_vector(&object->plane.coords, matrix);
+		rotate_vector(&object->coords, matrix);
 		rotate_vector(&object->plane.orientation, matrix);
 	}
 	else if (object->type == CYLINDER)
 	{
-		rotate_vector(&object->cylinder.coords, matrix);
+		rotate_vector(&object->coords, matrix);
 		rotate_vector(&object->cylinder.orientation, matrix);
+		rotate_vector(&object->cylinder.top, matrix);
 	}
 	else if (object->type == SPHERE)
-		rotate_vector(&object->sphere.coords, matrix);
+		rotate_vector(&object->coords, matrix);
+	else if (object->type == TRIANGLE)
+	{
+		rotate_vector(&object->triangle.vert[0], matrix);
+		rotate_vector(&object->triangle.vert[1], matrix);
+		rotate_vector(&object->triangle.vert[2], matrix);
+		rotate_vector(&object->triangle.v0v1, matrix);
+		rotate_vector(&object->triangle.v0v2, matrix);
+	}
 }
 
 void	normalize_orientation(t_scene *scene)

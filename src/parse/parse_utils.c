@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 11:28:47 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/14 17:21:28 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/14 18:10:39 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include <libft.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <fcntl.h>
 
 #define PARSE_ERROR		"Error\nLine `%s' %s"
 #define OBJECT_ERROR	"does not contain a valid object\n"
@@ -26,6 +29,8 @@
 #define BRIGHT_ERROR	"does not contain a valid brightness\n"
 #define DIA_ERROR		"does not contain a valid diameter\n"
 #define HEIGHT_ERROR	"does not contain a valid height\n"
+#define ERR_EXTENSION	"Error\nWrong file extension: `%s'\n"
+#define ERR_OPEN		"Error\nFile failed to open: %s: %s\n"
 
 bool	parse_line_error(const char *line, t_parse_error err)
 {
@@ -47,6 +52,25 @@ bool	parse_line_error(const char *line, t_parse_error err)
 	if (newline != NULL)
 		*newline = '\0';
 	dprintf(STDERR_FILENO, PARSE_ERROR, line, message[err]);
+	return (false);
+}
+
+bool	check_extension(const char *path, char *ext)
+{
+	const size_t	len = ft_strlen(path);
+
+	if (ft_strncmp(&path[len - 3], ext, ft_strlen(ext)) == 0)
+		return (true);
+	dprintf(STDERR_FILENO, ERR_EXTENSION, path);
+	return (false);
+}
+
+bool	open_file(const char *path, int32_t *fd)
+{
+	*fd = open(path, O_RDONLY);
+	if (*fd != -1)
+		return (true);
+	dprintf(STDERR_FILENO, ERR_OPEN, path, strerror(errno));
 	return (false);
 }
 

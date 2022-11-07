@@ -21,7 +21,7 @@ t_parse_error	parse_ambient(char **linep, t_object *object)
 	if (!parse_float(&line, &object->ambient.ratio, 0.0f, 1.0f)
 		|| !ft_isspace(*line))
 		return (LRATIO);
-	if (!parse_rgb(&line, &object->ambient.colour))
+	if (!parse_rgb(&line, &object->colour))
 		return (COLOUR);
 	*linep = line;
 	return (SUCCESS);

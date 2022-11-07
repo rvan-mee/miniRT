@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 19:20:49 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/14 17:25:02 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/16 14:39:26 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static t_parse_error	(*g_parsefun[])(char **, t_object *) = {\
 	[LIGHT] = parse_light,										\
 	[SPHERE] = parse_sphere,									\
 	[PLANE] = parse_plane,										\
-	[CYLINDER] = parse_cylinder,
+	[CYLINDER] = parse_cylinder,								\
+	[TRIANGLE] = parse_triangle,								\
 };
 
 static const char		*g_ids[] = {\
@@ -28,7 +29,9 @@ static const char		*g_ids[] = {\
 	[LIGHT] = "L",					\
 	[SPHERE] = "sp",				\
 	[PLANE] = "pl",					\
-	[CYLINDER] = "cy",
+	[CYLINDER] = "cy",				\
+	[TRIANGLE] = "tr",				\
+	[COMMENT] = "#",				\
 };
 
 bool	parse_object(char *line, t_object *object)
@@ -36,12 +39,14 @@ bool	parse_object(char *line, t_object *object)
 	const char		*start_line = line;
 	t_obj_type		type;
 	t_parse_error	err;
-	size_t			id_len;
+	size_t			id_len = 0;
 
 	type = UNINITIALIZED;
 	while (++type != END)
 	{
 		id_len = ft_strlen(g_ids[type]);
+		if (ft_strncmp(g_ids[type], line, id_len) == 0 && type == COMMENT)
+			return (object->type = COMMENT, true);
 		if (ft_strncmp(g_ids[type], line, id_len) == 0)
 			break ;
 	}

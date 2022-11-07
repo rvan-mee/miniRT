@@ -32,7 +32,7 @@ static bool	lst_add(t_jobs **head, t_jobs *new)
 	return (true);
 }
 
-bool	add_new_job_node(t_minirt *data, void (*func)(t_minirt *, void *), void *job_param)
+bool	add_new_job_node(t_minirt *data, t_job func, void *job_param)
 {
 	t_jobs		*new_node;
 

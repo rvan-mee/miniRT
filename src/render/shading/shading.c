@@ -71,6 +71,7 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 		facing_ratio = fmaxf(dot_product(ray.direction, hit->normal), 0.0f);
 		if (facing_ratio < 0 || facing_ratio > 1)
 		{
+			light_hits = true;
 			i++;
 			continue ;
 		}
@@ -78,8 +79,10 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit)
 		{
 			t_hit	shade_hit;
 
-			if (intersect_bvh(&scene->bvh, &ray, &shade_hit) && shade_hit.distance < distance_to_light)
+			shade_hit.ray = ray;
+			if (intersect_bvh(&scene->bvh, &ray, &shade_hit) && shade_hit.distance * shade_hit.distance < distance_to_light)
 			{
+				light_hits = true;
 				++i;
 				continue;
 			}

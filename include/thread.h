@@ -15,8 +15,10 @@
 
 # include <minirt.h>
 
+typedef void	(*t_job)(t_minirt *, void *);
+
 // add_job_node.c
-bool	add_new_job_node(t_minirt *data, void (*func)(t_minirt *, void *), void *job_param);
+bool	add_new_job_node(t_minirt *data, t_job job, void *job_param);
 
 //	create_render_lst.c
 bool	create_render_queue(t_minirt *data);

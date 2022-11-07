@@ -25,14 +25,22 @@ static inline uint32_t	get_alloc_req(uint32_t n)
 
 static void	free_builder(t_bvhbuilder *b, bool success)
 {
+	t_nodeidx	i;
+
 	free(b->min_info);
 	free(b->nodes);
 	free(b->keys);
 	free(b->area);
 	free(b->surface_area);
-	free(b->cost);
-	if (!success)
-		free(b->clusters);
+	free(b->cost[0]);
+	free(b->cost[1]);
+	if (success)
+		return ;
+	i = b->length;
+	while (i < b->node_idx)
+		if (b->clusters[i].leaf)
+			free(b->clusters[i].prims);
+	free(b->clusters);
 }
 
 static bool	alloc_builder(t_bvhbuilder *b, uint32_t n)
@@ -47,10 +55,11 @@ static bool	alloc_builder(t_bvhbuilder *b, uint32_t n)
 	b->min_info = ft_calloc(req, sizeof(t_minfo));
 	b->nodes = ft_calloc(2 * n, sizeof(uint32_t));
 	b->clusters = ft_calloc(2 * n, sizeof(t_cluster));
-	b->cost = ft_calloc(2 * n, sizeof(float));
+	b->cost[0] = ft_calloc(2 * n, sizeof(float));
+	b->cost[1] = ft_calloc(2 * n, sizeof(float));
 	b->surface_area = ft_calloc(2 * n, sizeof(float));
 	if (!b->keys || !b->nodes || !b->area || !b->min_info || !b->clusters
-		|| !b->cost || !b->surface_area)
+		|| !b->cost[0] || !b->cost[1] || !b->surface_area)
 	{
 		free_builder(b, false);
 		return (false);
@@ -114,7 +123,7 @@ bool	new_bvh(t_object objects[], uint32_t length, t_bvh *dst)
 		merge_nodes(&builder, 0, final_len, 1);
 		*dst = (t_bvh){objects, builder.clusters, builder.node_idx - 1, length};
 	}
-//	flatten_bvh(&builder);
+	flatten_bvh(&builder);
 	free_builder(&builder, success);
 	//dprintf(1, "maxdepth = %u\n", print_nodes(dst, 0, dst->root));
 	return (success);

@@ -65,7 +65,7 @@ typedef struct s_bvh_b {
 	t_morton	*keys;
 	t_nodeidx	*nodes;
 	float		**area;
-	float		*cost;
+	float		*cost[2];
 	float		*surface_area;
 	t_minfo		*min_info;
 	t_nodeidx	node_idx;
@@ -132,6 +132,30 @@ uint32_t	merge_nodes(
 				uint32_t len,
 				uint32_t new_len);
 
-bool		flatten_bvh(t_bvhbuilder *b);
+void		flatten_bvh(t_bvhbuilder *b);
+
+static inline
+bool	is_prim(t_bvh *bvh, t_nodeidx idx)
+{
+	return (idx < bvh->prim_size);
+}
+
+static inline
+t_cluster	*get_clust(t_bvh *bvh, t_nodeidx idx)
+{
+	return (bvh->clusters + idx);
+}
+
+static inline
+t_nodeidx	get_l(t_bvh *bvh, t_nodeidx idx)
+{
+	return (get_clust(bvh, idx)->l);
+}
+
+static inline
+t_nodeidx	get_r(t_bvh *bvh, t_nodeidx idx)
+{
+	return (get_clust(bvh, idx)->r);
+}
 
 #endif

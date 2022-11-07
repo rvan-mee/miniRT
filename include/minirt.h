@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/28 12:45:06 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/26 21:43:26 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,19 @@
 # include <stddef.h>
 # include <stdint.h>
 # include <stdbool.h>
+# include <dynarr.h>
 # include <MLX42/MLX42.h>
+# include <pthread.h>
 
 # define WIDTH 1920
 # define HEIGHT 1080
 
+# define THREAD_C	12 // amount of threads
+# define BLOCK_C	25 // don't set higher than 50
+
 typedef float	t_fvec __attribute__ ((vector_size (4 * sizeof(float))));
 typedef t_fvec	t_fmat[4];
-
+typedef struct s_minirt	t_minirt;
 typedef enum e_object_type {
 	UNINITIALIZED = 0,
 	AMBIENT,
@@ -32,6 +37,8 @@ typedef enum e_object_type {
 	SPHERE,
 	PLANE,
 	CYLINDER,
+	TRIANGLE,
+	COMMENT,
 	END
 }	t_obj_type;
 
@@ -44,17 +51,12 @@ enum e_axis {
 typedef union u_rgba {
 	uint32_t	rgba;
 	struct {
-		uint8_t	r;
-		uint8_t	g;
-		uint8_t	b;
 		uint8_t	a;
+		uint8_t	b;
+		uint8_t	g;
+		uint8_t	r;
 	};
 }	t_rgba;
-
-typedef struct s_mlx_content {
-	mlx_t		*mlx;
-	mlx_image_t	*img;
-}	t_mlx_data;
 
 typedef struct s_ambient {
 	float	ratio;
@@ -73,6 +75,12 @@ typedef struct s_sphere {
 	float	diameter;
 	float	radius_sq;
 }	t_sphere;
+
+typedef struct s_triangle {
+	t_fvec	vert[3];
+	t_fvec	v0v1;
+	t_fvec	v0v2;
+}	t_triangle;
 
 /**
  * A infinitely big plane (not aero)
@@ -103,6 +111,7 @@ typedef struct s_object {
 		t_sphere	sphere;
 		t_plane		plane;
 		t_cylinder	cylinder;
+		t_triangle	triangle;
 	};
 	t_obj_type	type;
 }	t_object;
@@ -140,11 +149,40 @@ typedef struct s_hit {
 	size_t		screen_y;
 }	t_hit;
 
+typedef struct s_render_block
+{
+	size_t			start_pixels[2];
+	size_t			end_pixels[2];
+	size_t			size[2];
+	t_object		camera;
+	t_ray			**rays;
+}	t_render;
+
+typedef struct s_jobs {
+	void			(*job)(t_minirt *, void *);
+	void			*job_param;
+	struct s_jobs	*next_job;
+}	t_jobs;
+
+typedef struct s_threading
+{
+	bool			quit;
+	pthread_mutex_t	quit_lock;
+	pthread_t		threads[THREAD_C];
+	size_t			created_threads;
+	t_jobs			*job_lst;
+	pthread_mutex_t	job_lock;
+}	t_threading;
+
 typedef struct s_minirt {
-	t_mlx_data	mlx_data;
+	mlx_t		*mlx;
+	mlx_image_t	*img;
 	t_scene		scene;
 	char		**argv;
 	int			argc;
+	size_t		width;
+	size_t		height;
+	t_threading	thread;
 }	t_minirt;
 
 typedef struct s_aabb {
@@ -152,7 +190,7 @@ typedef struct s_aabb {
 	t_fvec	max;
 }	t_aabb;
 
-bool	render(t_mlx_data *mlx, t_scene *scene, size_t width, size_t height);
+void	start_render(t_minirt *data, void *func_data);
 
 t_aabb	calc_bounds(t_object *obj);
 

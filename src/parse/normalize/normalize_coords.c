@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/15 19:12:39 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/15 19:12:39 by lsinke        ########   odam.nl         */
+/*   Updated: 2022/10/11 18:03:54 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,13 @@ void	normalize_coords(t_scene *scene)
 	while (i < scene->objects_len)
 	{
 		cur = scene->objects + i++;
-		if (cur->type == SPHERE)
+		if (cur->type == SPHERE || cur->type == PLANE ||cur->type == CYLINDER)
 			cur->coords -= camera_coords;
-		else if (cur->type == PLANE)
-			cur->coords -= camera_coords;
-		else if (cur->type == CYLINDER)
-			cur->coords -= camera_coords;
+		else if (cur->type == TRIANGLE)
+		{
+			cur->triangle.vert[0] -= camera_coords;
+			cur->triangle.vert[1] -= camera_coords;
+			cur->triangle.vert[2] -= camera_coords;
+		}
 	}
 }

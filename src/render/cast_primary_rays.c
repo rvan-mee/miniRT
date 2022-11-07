@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 15:46:41 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/09/22 19:09:26 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/20 16:17:43 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,17 @@ static t_fvec	get_direction(
 	coords[Z] = 1;
 	return (normalize_vector(coords));
 }
-
-static bool	trace(
+#include <stdio.h>
+bool	trace(
 		t_scene *scene,
 		t_ray *ray,
 		const size_t screen[2],
 		t_dynarr *hits)
 {
-	size_t		i;
-	t_hit		hit;
+	const float	d_offset = (1 - 128 * FLT_EPSILON);
 	float		hit_distance;
+	t_hit		hit;
+	size_t		i;
 
 	hit = (t_hit){*ray, FLT_MAX, {}, NULL, {}, screen[X], screen[Y]};
 	if (USE_BVH)
@@ -70,44 +71,36 @@ static bool	trace(
 			hit.distance = hit_distance;
 			hit.object = scene->objects + i;
 		}
-		if (hit.distance == FLT_MAX)
-			return (true);
 	}
-	hit.hit = hit.ray.origin + hit.ray.direction * (hit.distance * (1 - 128 * FLT_EPSILON));
+	if (hit.distance == FLT_MAX)
+		return (true);
+	hit.hit = hit.ray.origin + hit.ray.direction * (hit.distance * d_offset);
 	calculate_normal(&hit);
 	return (dynarr_addone(hits, &hit));
 }
 
 //TODO: Move canvas width/height to scene struct
-bool	cast_primary_rays(
-		t_scene *scene,
-		size_t width,
-		size_t height,
-		t_dynarr *hits)
+bool	cast_primary_rays(t_minirt *data, t_dynarr *hits, size_t y)
 {
 	const float	params[] = {\
-		[ASPECT_RATIO] = (float) width / (float) height, \
-		[PIXELS_WIDTH] = tanf(scene->camera.camera.fov / 2), \
+		[ASPECT_RATIO] = (float) data->width / (float) data->height, \
+		[PIXELS_WIDTH] = tanf(data->scene.camera.camera.fov / 2), \
 		[PIXELS_HEIGHT] = params[PIXELS_WIDTH] / params[ASPECT_RATIO]
 	};
 	t_ray		ray;
 	size_t		screen[2];
 
 	screen[X] = 0;
-	while (screen[X] < width)
+	screen[Y] = y;
+	while (screen[X] < data->width)
 	{
-		screen[Y] = 0;
-		while (screen[Y] < height)
-		{
-			//todo: everything below this should probably be a function
-			// so we're actually able to reuse it when casting from other point
-			// or trace should be a separate function? (not static)
-			ray.origin = (t_fvec){0, 0, 0, 0};
-			ray.direction = get_direction(screen, width, height, params);
-			if (!trace(scene, &ray, screen, hits))
-				return (false);
-			++screen[Y];
-		}
+		//todo: everything below this should probably be a function
+		// so we're actually able to reuse it when casting from other point
+		// or trace should be a separate function? (not static)
+		ray.origin = data->scene.camera.coords;
+		ray.direction = get_direction(screen, data->width, data->height, params);
+		if (!trace(&data->scene, &ray, screen, hits))
+			return (false);
 		++screen[X];
 	}
 	return (true);

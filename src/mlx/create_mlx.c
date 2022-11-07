@@ -6,25 +6,27 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:32:16 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/09/12 17:20:46 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/10/20 18:28:14 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <mlx.h>
 #include <minirt.h>
 #include <stdlib.h>
+#include <libft.h>
 
-void	create_mlx(t_mlx_data *mlx_data)
+void	create_mlx(t_minirt	*data)
 {
-	mlx_data->mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
-	if (!mlx_data->mlx)
+	data->mlx = mlx_init(data->width, data->height, "miniRT", false);
+	if (!data->mlx)
 		exit(EXIT_FAILURE);
-	mlx_data->img = mlx_new_image(mlx_data->mlx, WIDTH, HEIGHT);
-	if (!mlx_data->img \
-		|| mlx_image_to_window(mlx_data->mlx, mlx_data->img, 0, 0) == -1)
+	mlx_set_window_pos(data->mlx, 0, 0);
+	data->img = mlx_new_image(data->mlx, data->width, data->height);
+	if (!data->img \
+		|| mlx_image_to_window(data->mlx, data->img, 0, 0) == -1)
 	{
-		mlx_terminate(mlx_data->mlx);
+		mlx_terminate(data->mlx);
 		exit(EXIT_FAILURE);
 	}
-	mlx_key_hook(mlx_data->mlx, (mlx_keyfunc)keyhook, mlx_data);
+	mlx_key_hook(data->mlx, (mlx_keyfunc)keyhook, data);
 }

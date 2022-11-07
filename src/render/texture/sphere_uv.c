@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/28 15:40:35 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/01 14:36:45 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 21:11:07 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ t_rgba	get_texture_colour_sphere(t_hit *hit, t_texture *texture)
 	float	u;
 	float	v;
 
-	d[X] = hit->object->sphere.coords[X] - hit->hit[X];
-	d[Y] = hit->object->sphere.coords[Y] - hit->hit[Y];
-	d[Z] = hit->object->sphere.coords[Z] - hit->hit[Z];
+	d[X] = hit->object->coords[X] - hit->hit[X];
+	d[Y] = hit->object->coords[Y] - hit->hit[Y];
+	d[Z] = hit->object->coords[Z] - hit->hit[Z];
 	d = normalize_vector(d);
 	u = 0.5 + atan2(d[X], d[Z]) / (2 * PI) * -1;
 	v = 0.5 + asin(d[Y]) / PI;

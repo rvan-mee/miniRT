@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/14 17:12:53 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/07 21:03:59 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 21:08:10 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ t_parse_error	parse_plane(char **linep, t_object *object, t_conf_data *conf)
 {
 	char	*line;
 
+	(void) conf;
 	line = *linep;
 	if (!parse_vector(&line, &object->coords, false) \
 		|| !ft_isspace(*line))

@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/26 14:45:10 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/07 20:55:01 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 21:10:48 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ uint32_t	get_hit_colour(t_minirt *data, t_scene *scene, t_object *object, t_hit 
 		{
 			while (j < scene->objects_len)
 			{
-				distance = intersect(&scene->objects[j], &ray, &hit);
+				distance = intersect(&scene->objects[j], &ray, hit);
 				if ((distance != MISS && distance * distance < distance_to_light) && distance > 0)
 				{
 					light_hits = true;

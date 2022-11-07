@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/06 16:27:02 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/06 16:27:02 by lsinke        ########   odam.nl         */
+/*   Updated: 2022/11/07 21:14:08 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,10 @@ static void	intersect_node(
 	const t_cluster	*c = get_node(bvh, idx);
 	const bool		is_p = is_prim(bvh, idx);
 	float			distance;
+	t_hit			hit;
 
 	if (is_p)
-		distance = intersect(bvh->prims + idx, ray);
+		distance = intersect(bvh->prims + idx, ray, &hit);
 	else
 		distance = aabb_intersect(c->aabb, ray);
 	if (distance == MISS || distance < 0)

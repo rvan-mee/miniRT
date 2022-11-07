@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/06 18:55:43 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/06 20:01:00 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 21:09:53 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <float.h>
 
 // wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
-float	intersect_face(t_object *obj, t_ray *ray, t_hit *hit)
+float	intersect_face(const t_object *obj, const t_ray *ray, t_hit *hit)
 {
 	const t_face	*tr = &obj->face;
 	const t_fvec	pvec = cross_product(ray->direction, tr->v0v2);

@@ -14,14 +14,15 @@
 #include <render.h>
 #include <math.h>
 
-static bool	contains(t_aabb bounds, t_fvec point)
+static inline
+bool	contains(const t_aabb bounds, const t_fvec point)
 {
 	return (bounds.min[X] <= point[X] && bounds.max[X] >= point[X] && \
 			bounds.min[Y] <= point[Y] && bounds.max[Y] >= point[Y] && \
 			bounds.min[Z] <= point[Z] && bounds.max[Z] >= point[Z]);
 }
 
-float	aabb_intersect(t_aabb bounds, t_ray *ray)
+float	aabb_intersect(const t_aabb bounds, const t_ray *ray)
 {
 	t_aabb	minmax;
 	t_fvec	t[2];

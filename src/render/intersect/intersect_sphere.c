@@ -13,15 +13,13 @@
 #include <render.h>
 #include <ft_math.h>
 
-float	intersect_sphere(t_object *obj, t_ray *ray)
+float	intersect_sphere(const t_object *object, const t_ray *ray)
 {
-	t_sphere	*sphere;
-	t_quadratic	quadratic;
-	t_fvec		cam_to_sphere;
-	float		t[2];
+	const t_sphere	*sphere = &object->sphere;
+	const t_fvec	cam_to_sphere = ray->origin - object->coords;
+	t_quadratic		quadratic;
+	float			t[2];
 
-	sphere = &obj->sphere;
-	cam_to_sphere = ray->origin - obj->coords;
 	quadratic.a = dot_product(ray->direction, ray->direction);
 	quadratic.b = dot_product(cam_to_sphere, ray->direction) * 2;
 	quadratic.c = dot_product(cam_to_sphere, cam_to_sphere) - sphere->radius_sq;

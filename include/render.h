@@ -19,6 +19,8 @@
 
 # define MISS INFINITY
 
+typedef	float	(*t_intersectfun)(const t_object *object, const t_ray *ray);
+
 bool	cast_primary_rays(
 			t_scene *scene,
 			size_t width,
@@ -30,12 +32,12 @@ bool	shade(
 			t_dynarr *hits,
 			uint32_t *pixels);
 
-bool	intersect_bvh(t_bvh *bvh, t_ray *ray, t_hit *hit);
-float	aabb_intersect(t_aabb bounds, t_ray *ray);
-float	intersect(t_object *object, t_ray *ray);
-float	intersect_plane(t_object *object, t_ray *ray);
-float	intersect_cylinder(t_object *object, t_ray *ray);
-float	intersect_sphere(t_object *object, t_ray *ray);
+bool	intersect_bvh(const t_bvh *bvh, const t_ray *ray, t_hit *hit);
+float	aabb_intersect(const t_aabb bounds, const t_ray *ray);
+float	intersect(const t_object *object, const t_ray *ray);
+float	intersect_plane(const t_object *object, const t_ray *ray);
+float	intersect_cylinder(const t_object *object, const t_ray *ray);
+float	intersect_sphere(const t_object *object, const t_ray *ray);
 
 void	calculate_normal(t_hit *hit);
 

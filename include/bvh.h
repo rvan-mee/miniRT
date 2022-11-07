@@ -66,7 +66,7 @@ typedef struct s_bvh_b {
 	t_nodeidx	*nodes;
 	float		**area;
 	float		*cost[2];
-	float		*surface_area;
+	float		*aabb_sa;
 	t_minfo		*min_info;
 	t_nodeidx	node_idx;
 	uint32_t	length;
@@ -74,7 +74,7 @@ typedef struct s_bvh_b {
 
 typedef struct s_priority_queue	t_prio;
 struct s_priority_queue {
-	t_nodeidx	cluster;
+	t_nodeidx	node;
 	float		dist;
 	t_prio		*next;
 };
@@ -135,27 +135,27 @@ uint32_t	merge_nodes(
 void		flatten_bvh(t_bvhbuilder *b);
 
 static inline
-bool	is_prim(t_bvh *bvh, t_nodeidx idx)
+bool	is_prim(const t_bvh *bvh, const t_nodeidx idx)
 {
 	return (idx < bvh->prim_size);
 }
 
 static inline
-t_cluster	*get_clust(t_bvh *bvh, t_nodeidx idx)
+t_cluster	*get_node(const t_bvh *bvh, const t_nodeidx idx)
 {
 	return (bvh->clusters + idx);
 }
 
 static inline
-t_nodeidx	get_l(t_bvh *bvh, t_nodeidx idx)
+t_nodeidx	get_l(const t_bvh *bvh, const t_nodeidx idx)
 {
-	return (get_clust(bvh, idx)->l);
+	return (get_node(bvh, idx)->l);
 }
 
 static inline
-t_nodeidx	get_r(t_bvh *bvh, t_nodeidx idx)
+t_nodeidx	get_r(const t_bvh *bvh, const t_nodeidx idx)
 {
-	return (get_clust(bvh, idx)->r);
+	return (get_node(bvh, idx)->r);
 }
 
 #endif

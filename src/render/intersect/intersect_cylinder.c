@@ -90,13 +90,13 @@ static float	intersect_tops(
  *
  * t^2 * |P1|^2 + 2tP0.P1 + |P0|^2 - r^2|D|^2 = 0
  */
-float	intersect_cylinder(t_object *obj, t_ray *ray)
+float	intersect_cylinder(const t_object *obj, const t_ray *ray)
 {
-	// TODO: Norminette, optimization(?), names
 	const t_cylinder	*cyl = &obj->cylinder;
-	const float			angle_diff = dot_product(cyl->orientation, ray->direction);
+	float				angle_diff;
 	float				t[2];
 
+	angle_diff = dot_product(cyl->orientation, ray->direction);
 	if (angle_diff == 1.0f)
 		return (intersect_tops(obj, cyl, ray, angle_diff));
 	else if (intersect_inf_cyl(obj, cyl, ray, t))

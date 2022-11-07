@@ -12,11 +12,11 @@
 
 #include <render.h>
 
-float	intersect(t_object *object, t_ray *ray)
+float	intersect(const t_object *object, const t_ray *ray)
 {
-	static float	(*intersect_functions[])(t_object *, t_ray *) = {
-		[PLANE] = intersect_plane,
-		[CYLINDER] = intersect_cylinder,
+	static t_intersectfun	intersect_functions[] = {\
+		[PLANE] = intersect_plane, \
+		[CYLINDER] = intersect_cylinder, \
 		[SPHERE] = intersect_sphere
 	};
 

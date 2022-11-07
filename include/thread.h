@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/16 14:40:15 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/26 21:46:31 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 15:11:28 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@
 # include <minirt.h>
 
 // add_job_node.c
-bool	add_new_job_node(t_minirt *data, void (*func)(t_minirt *, void *), void *job_param);
+bool	add_new_job_node(\
+	t_minirt *data, \
+	void (*func)(t_minirt *, void *), \
+	void *job_param);
 
 //	create_render_lst.c
 bool	create_render_queue(t_minirt *data);

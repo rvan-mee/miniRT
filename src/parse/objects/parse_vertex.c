@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/13 16:44:15 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/06 19:37:15 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 14:03:59 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,3 @@ t_parse_error	parse_vertex(char **linep, t_object *object, t_conf_data *conf)
 	*linep = line;
 	return (SUCCESS);
 }
-

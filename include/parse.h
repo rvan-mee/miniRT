@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:54:09 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/06 18:45:25 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 11:57:53 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ typedef enum e_parse_error {
 	VERT,
 	VERT_TEXTURE,
 	NORMAL,
-	DYNARR
+	DYNARR,
+	MATCH
 }	t_parse_error;
 
 typedef struct s_conf_data

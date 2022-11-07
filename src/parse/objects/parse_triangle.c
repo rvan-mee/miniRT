@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/30 17:10:24 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/06 15:33:20 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 14:08:47 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static void	pre_calc(t_triangle *tr)
 	tr->v0v2 = tr->vert[2] - tr->vert[0];
 }
 
-t_parse_error	parse_triangle(char **linep, t_object *object, t_conf_data *conf)
+t_parse_error	parse_triangle(char **linep, \
+								t_object *object, t_conf_data *conf)
 {
 	char	*line;
 

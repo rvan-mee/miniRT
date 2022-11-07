@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 02:00:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/07 21:04:12 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 21:20:39 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ static bool \
 
 bool	parse_scene(int32_t fd, t_scene *dst)
 {
-	t_conf_data	parse_data;
+	t_conf_data		parse_data;
+	const size_t	vt_size = sizeof(t_vertex_texture);
 
 	ft_bzero(dst, sizeof(t_scene));
 	ft_bzero(&parse_data, sizeof(t_conf_data));
@@ -123,10 +124,10 @@ bool	parse_scene(int32_t fd, t_scene *dst)
 		!dynarr_create(&parse_data.objects, 16, sizeof(t_object)) || \
 		!dynarr_create(&parse_data.vertices, 256, sizeof(t_vertex)) || \
 		!dynarr_create(&parse_data.vertex_normals, 256, sizeof(t_normals)) || \
-		!dynarr_create(&parse_data.vertex_textures, 256, sizeof(t_vertex_texture)))
+		!dynarr_create(&parse_data.vertex_textures, 256, vt_size))
 		return (cleanup(NULL, &parse_data));
 	if (!read_objects(fd, dst, &parse_data))
-		return (false); 
+		return (false);
 	dst->lights = parse_data.lights.arr;
 	dst->lights_len = parse_data.lights.length;
 	dst->objects = parse_data.objects.arr;

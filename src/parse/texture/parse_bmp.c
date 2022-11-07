@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/14 13:00:20 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/29 17:29:00 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 14:03:46 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <bmp.h>
 
 #define HEADER_SIZE 54
-#include <stdio.h>
+
 static bool	read_bmp(int32_t fd, t_bmp *bmp)
 {
 	t_bmp_file_header	bmp_head;
@@ -36,8 +36,8 @@ static bool	read_bmp(int32_t fd, t_bmp *bmp)
 		return (false);
 	read_ret = read(fd, bmp->data, arr_len);
 	if (read_ret == -1 || read_ret != arr_len)
-		return (free(bmp->data), false);	
-    return (true);
+		return (free(bmp->data), false);
+	return (true);
 }
 
 t_bmp	*parse_bmp(char *path)

@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 19:20:49 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/06 19:25:56 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/07 21:21:48 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,22 +42,37 @@ static const char		*g_ids[] = {\
 	[COMMENT] = "#",				\
 };
 
+static t_obj_type	get_obj_type(char *line, t_object *object, size_t *id_len)
+{
+	t_obj_type		type;
+
+	type = UNINITIALIZED;
+	while (++type != END)
+	{
+		*id_len = ft_strlen(g_ids[type]);
+		if (ft_strncmp(g_ids[type], line, *id_len) == 0)
+		{
+			if (type == COMMENT)
+			{
+				object->type = COMMENT;
+				return (COMMENT);
+			}
+			break ;
+		}
+	}
+	return (type);
+}
+
 bool	parse_object(char *line, t_object *object, t_conf_data *conf)
 {
 	const char		*start_line = line;
 	t_obj_type		type;
 	t_parse_error	err;
-	size_t			id_len = 0;
+	size_t			id_len;
 
-	type = UNINITIALIZED;
-	while (++type != END)
-	{
-		id_len = ft_strlen(g_ids[type]);
-		if (ft_strncmp(g_ids[type], line, id_len) == 0 && type == COMMENT)
-			return (object->type = COMMENT, true);
-		if (ft_strncmp(g_ids[type], line, id_len) == 0)
-			break ;
-	}
+	type = get_obj_type(line, object, &id_len);
+	if (type == COMMENT)
+		return (true);
 	line += id_len;
 	if (type == END || !ft_isspace(*line))
 		return (parse_line_error(start_line, OBJECT));

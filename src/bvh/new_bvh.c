@@ -73,15 +73,6 @@ uint16_t	print_nodes(t_bvh *b, uint16_t depth, uint32_t node)
 			node, b->clusters[node].len, b->clusters[node].leaf ? "(leaf)" : "",
 			b->clusters[node].aabb.min[X], b->clusters[node].aabb.min[Y], b->clusters[node].aabb.min[Z],
 			b->clusters[node].aabb.max[X], b->clusters[node].aabb.max[Y], b->clusters[node].aabb.max[Z]);
-	if (b->clusters[node].leaf)
-	{
-		for (uint16_t n = depth + 1; n > 0; n--)
-			dprintf(1, "  ");
-		for (uint32_t i = 0; i < b->clusters[node].len; i++)
-			dprintf(1, "%u ", b->clusters[node].prims[i]);
-		dprintf(1, "\n");
-		return (maxdepth);
-	}
 	if (b->clusters[node].len == 1)
 		return (maxdepth);
 	for (uint16_t n = depth + 1; n > 0; n--)

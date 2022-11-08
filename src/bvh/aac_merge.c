@@ -128,7 +128,7 @@ uint32_t	merge_nodes(
 		c[0] = b->clusters + b->nodes[comb[0]];
 		c[1] = b->clusters + b->nodes[comb[1]];
 		b->clusters[b->node_idx] = (t_cluster){\
-			{{b->nodes[comb[0]], b->nodes[comb[1]]}},
+			{b->nodes[comb[0]], b->nodes[comb[1]]},
 			aabb_combine(c[0]->aabb, c[1]->aabb),
 			c[0]->len + c[1]->len,
 			false

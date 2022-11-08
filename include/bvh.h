@@ -36,12 +36,9 @@ typedef struct s_morton {
 
 // A node in the hierarchy
 typedef struct s_cluster {
-	union {
-		struct {
-			t_nodeidx	l;
-			t_nodeidx	r;
-		};
-		t_objidx	*prims;
+	struct {
+		t_nodeidx	l;
+		t_nodeidx	r;
 	};
 	t_aabb		aabb;
 	uint32_t	len;

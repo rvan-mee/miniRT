@@ -17,11 +17,27 @@
 #include <stdio.h>
 #include <thread.h>
 
+#define NO_THREADS	0
+
 void	f(void)
 {
 	system("leaks -q miniRT");
 }
 void	stopwatch(uint8_t i, uint8_t options, const char *arg);
+
+static bool	render_single(t_minirt *data)
+{
+	t_render	*b = malloc(sizeof(t_render));
+	*b = (t_render){
+			{0, 0},
+			{1920, 1080},
+			{1920, 1080},
+			data->scene.camera,
+			NULL
+	};
+	start_render(data, b);
+	return (true);
+}
 
 int	main(int argc, char *argv[])
 {
@@ -37,11 +53,10 @@ int	main(int argc, char *argv[])
 		!new_bvh(data.scene.objects, data.scene.objects_len, &data.scene.bvh))
 		return (EXIT_FAILURE);
 	create_mlx(&data);
-	if (init_work_threads(&data))
-	{
+	if ((NO_THREADS && render_single(&data)) || init_work_threads(&data))
 		mlx_loop(data.mlx);
+	if (!NO_THREADS)
 		join_threads(&data);
-	}
 	mlx_terminate(data.mlx);
 	return (EXIT_SUCCESS);
 }

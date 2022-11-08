@@ -68,7 +68,7 @@ static bool \
 	if (obj->type == COMMENT)
 		return (true);
 	if (obj->type == LIGHT)
-		return (dynarr_addone(lights, &obj->light));
+		return (dynarr_addone(lights, obj));
 	if (obj->type == CAMERA)
 		store = &dst->camera;
 	else if (obj->type == AMBIENT)

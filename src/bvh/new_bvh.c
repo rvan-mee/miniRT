@@ -25,8 +25,6 @@ static inline uint32_t	get_alloc_req(uint32_t n)
 
 static void	free_builder(t_bvhbuilder *b, bool success)
 {
-	t_nodeidx	i;
-
 	free(b->min_info);
 	free(b->nodes);
 	free(b->keys);
@@ -36,10 +34,6 @@ static void	free_builder(t_bvhbuilder *b, bool success)
 	free(b->cost[1]);
 	if (success)
 		return ;
-	i = b->length;
-	while (i < b->node_idx)
-		if (b->clusters[i].leaf)
-			free(b->clusters[i].prims);
 	free(b->clusters);
 }
 

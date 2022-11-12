@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 12:12:27 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/26 21:33:44 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/09 20:00:12 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,11 @@ void	keyhook(mlx_key_data_t keydata, t_minirt *data)
 {
 	pthread_mutex_lock(&data->thread.job_lock);
 	if (keydata.action == MLX_PRESS && g_hook_func[keydata.key])
+	{
+		clear_job_lst(data);
+		wait_till_done(data);
 		g_hook_func[keydata.key](data, keydata.key);
+	}
 	else if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{
 		quit_working(data);

@@ -43,6 +43,9 @@ t_aabb	calc_bounds(t_object *obj)
 		case CYLINDER:
 			return (cyl_bounds(obj));
 		default:
+		{
+			printf("exit in calc_bounds\n");
 			exit(2); // todo, i mean cyl n shit
+		}
 	}
 }

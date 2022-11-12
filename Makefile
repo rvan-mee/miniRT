@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/11/07 21:05:47 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/11/12 21:34:55 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,12 +42,24 @@ SRCS := main.c										\
 		parse/objects/parse_vn.c					\
 		parse/objects/parse_face.c					\
 		parse/attributes/parse_float.c				\
+		parse/attributes/parse_float_rgb.c			\
 		parse/attributes/parse_rgb.c				\
 		parse/attributes/parse_vector.c				\
 		parse/normalize/normalize.c					\
 		parse/normalize/normalize_coords.c			\
 		parse/normalize/normalize_orientation.c		\
-		parse/texture/parse_bmp.c					\
+		parse/mtl/parse_bmp.c						\
+		parse/mtl/parse_mtl_d.c						\
+		parse/mtl/parse_mtl_illum.c					\
+		parse/mtl/parse_mtl_ka.c					\
+		parse/mtl/parse_mtl_kd.c					\
+		parse/mtl/parse_mtl_ke.c					\
+		parse/mtl/parse_mtl_ks.c					\
+		parse/mtl/parse_mtl_ni.c					\
+		parse/mtl/parse_mtl_ns.c					\
+		parse/mtl/parse_mtl_tf.c					\
+		parse/mtl/parse_mtl_tr.c					\
+		parse/mtl/parse_mtl_newmtl.c				\
 		\
 		math/product.c								\
 		math/matrix.c								\
@@ -56,7 +68,7 @@ SRCS := main.c										\
 		math/vector_utils.c							\
 		\
 		render/render.c								\
-		render/cast_primary_rays.c					\
+		render/trace.c					\
 		render/intersect/intersect.c				\
 		render/intersect/intersect_sphere.c			\
 		render/intersect/intersect_plane.c			\

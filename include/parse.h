@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:54:09 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/07 11:57:53 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/12 21:35:32 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #define V 1
 
 typedef struct s_bmp t_bmp;
-
+typedef float t_float_rgb[3];
 typedef enum e_parse_error {
 	SUCCESS,
 	OBJECT,
@@ -37,8 +37,41 @@ typedef enum e_parse_error {
 	VERT_TEXTURE,
 	NORMAL,
 	DYNARR,
-	MATCH
+	MTL_ERR,
+	NAME,
+	DUP,
+	ALLOC,
+	KA,
+	KD,
+	KS,
+	KE,
+	ILLUM,
+	NS,
+	D,
+	TR,
+	NI,
+	TF,
+	DUPLICATE,
+	CONTINUE
 }	t_parse_error;
+
+typedef enum e_parse_mtl {
+	MTL_UNINIT,
+	MTL_AMBIENT,
+	MTL_DIFFUSE,
+	MTL_SPECULAR,
+	MTL_EMISSIVE,
+	MTL_ILLUMINATION,
+	MTL_REFLECTION,
+	MTL_TRANSPARENCY1,
+	MTL_TRANSPARENCY2,
+	MTL_DENSITY,
+	MTL_TRFILTER,
+	MTL_MAP_KD,
+	MTL_MAP_KA,
+	MTL_MAP_KS,
+	MTL_END
+}	t_parse_mtl;
 
 typedef struct s_conf_data
 {
@@ -47,6 +80,8 @@ typedef struct s_conf_data
 	t_dynarr	vertices;
 	t_dynarr	vertex_textures;
 	t_dynarr	vertex_normals;
+	t_dynarr	materials;
+	int32_t		fd;
 }	t_conf_data;
 
 bool			parse_config_file(int32_t argc, char *argv[], t_scene *scene);
@@ -69,6 +104,7 @@ void			skip_spaces(char **linep);
 void			skip_digits(char **linep);
 bool			parse_vector(char **linep, t_fvec *vector, bool normalized);
 bool			parse_float(char **linep, float *dst, float min, float max);
+bool			parse_float_rgb(char **linep, t_float_rgb *rgb);
 void			normalize(t_scene *scene);
 void			normalize_coords(t_scene *scene);
 void			normalize_orientation(t_scene *scene);

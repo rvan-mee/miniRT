@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/10 18:32:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/12/10 18:32:19 by lsinke        ########   odam.nl         */
+/*   Updated: 2022/11/12 20:24:47 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 #include <libft.h>
 #include <bvh.h>
 #include <stdio.h>
+
+#ifndef USE_BVH
+# define USE_BVH		1
+#endif
 
 static inline uint32_t	get_alloc_req(uint32_t n)
 {
@@ -107,6 +111,8 @@ bool	new_bvh(t_object objects[], uint32_t length, t_bvh *dst)
 	uint32_t		final_len;
 	bool			success;
 
+	if (!USE_BVH)
+		return (true);
 	builder.prims = objects;
 	builder.length = length;
 	builder.node_idx = length;

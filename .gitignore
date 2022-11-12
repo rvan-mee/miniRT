@@ -69,3 +69,8 @@ miniRT
 
 #old build
 old_buildRT
+
+#scenes files
+*.mtl
+*.jpg
+*.mtl

@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/16 17:47:20 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/01 19:33:39 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/09 19:50:31 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,13 @@ void	*work(void *param)
 			wait_for_new_job(data);
 		else
 		{
+			pthread_mutex_lock(&data->thread.ref_lock);
+			data->thread.ref_count++;
+			pthread_mutex_unlock(&data->thread.ref_lock);
 			current_job->job(data, current_job->job_param);
+			pthread_mutex_lock(&data->thread.ref_lock);
+			data->thread.ref_count--;
+			pthread_mutex_unlock(&data->thread.ref_lock);
 			free(current_job);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 02:00:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/07 21:20:39 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/12 21:00:07 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static const char	*g_type_strs[] = {\
 	[COMMENT] = "comment",				\
 	[VERTEX] = "vertex",				\
 	[VT_TEXTURE] = "vertex texture",	\
+	[MTL] = "material"					\
 	[END] = "end",
 };
 
@@ -44,6 +45,7 @@ static bool	cleanup(char *line, t_conf_data *data)
 	dynarr_delete(&data->vertices);
 	dynarr_delete(&data->vertex_textures);
 	dynarr_delete(&data->vertex_normals);
+	dynarr_delete(&data->materials);
 	return (false);
 }
 
@@ -71,7 +73,7 @@ static bool \
 
 	store = NULL;
 	if (obj->type == COMMENT || obj->type == LIGHT || obj->type == VERTEX \
-		|| obj->type == VT_TEXTURE || obj->type == VT_NORMAL)
+		|| obj->type == VT_TEXTURE || obj->type == VT_NORMAL || obj->type == MTL)
 		return (true);
 	if (obj->type == VT_TEXTURE)
 		return (dynarr_addone(&conf->vertex_textures, &obj->vertex_texture));
@@ -120,8 +122,10 @@ bool	parse_scene(int32_t fd, t_scene *dst)
 
 	ft_bzero(dst, sizeof(t_scene));
 	ft_bzero(&parse_data, sizeof(t_conf_data));
+	parse_data.fd = fd;
 	if (!dynarr_create(&parse_data.lights, 4, sizeof(t_light)) || \
 		!dynarr_create(&parse_data.objects, 16, sizeof(t_object)) || \
+		!dynarr_create(&parse_data.materials, 16, sizeof(t_object)) || \
 		!dynarr_create(&parse_data.vertices, 256, sizeof(t_vertex)) || \
 		!dynarr_create(&parse_data.vertex_normals, 256, sizeof(t_normals)) || \
 		!dynarr_create(&parse_data.vertex_textures, 256, vt_size))
@@ -132,6 +136,8 @@ bool	parse_scene(int32_t fd, t_scene *dst)
 	dst->lights_len = parse_data.lights.length;
 	dst->objects = parse_data.objects.arr;
 	dst->objects_len = parse_data.objects.length;
+	dst->materials = parse_data.materials.arr;
+	dst->materials_len = parse_data.materials.length;
 	dynarr_delete(&parse_data.vertex_textures);
 	dynarr_delete(&parse_data.vertex_normals);
 	dynarr_delete(&parse_data.vertices);

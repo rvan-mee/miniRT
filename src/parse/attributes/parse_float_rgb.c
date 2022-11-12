@@ -1,37 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   parse.c                                            :+:    :+:            */
+/*   parse_float_rgb.c                                  :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/09/12 17:55:13 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/11 15:02:55 by rvan-mee      ########   odam.nl         */
+/*   Created: 2022/11/12 17:28:45 by rvan-mee      #+#    #+#                 */
+/*   Updated: 2022/11/12 17:46:47 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parse.h>
-#include <unistd.h>
-#include <stdio.h>
 
-#define ERR_USAGE		"Error\nPlease use ./miniRT [config file]\n"
-
-bool	parse_config_file(int32_t argc, char *argv[], t_scene *scene)
+bool	parse_float_rgb(char **linep, t_float_rgb *rgb)
 {
-	int32_t	fd;
-	bool	success;
+	t_float_rgb	vals;
+	char		*line;
 
-	if (argc != 2)
-	{
-		dprintf(STDERR_FILENO, ERR_USAGE);
+	line = *linep;
+	skip_spaces(&line);
+	if (!parse_float(&line, &vals[0], 0, 1))
 		return (false);
-	}
-	if (!check_extension(argv[1], ".rt") || !open_file(argv[1], &fd))
+	skip_spaces(&line);
+	if (!parse_float(&line, &vals[1], 0, 1))
 		return (false);
-	success = parse_scene(fd, scene);
-	close(fd);
-	if (!success)
+	skip_spaces(&line);
+	if (!parse_float(&line, &vals[2], 0, 1))
 		return (false);
-	normalize(scene);
+	skip_spaces(&line);
+	if (*line)
+		return (false);
+	*rgb = vals;
+	*linep = line;
 	return (true);
 }
+x

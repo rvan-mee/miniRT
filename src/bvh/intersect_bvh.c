@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/06 16:27:02 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/07 21:14:08 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/11 15:03:43 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ static void	insert(
 	t_prio	*next;
 
 	if (nodes[P].next == NULL)
+	{
+		printf("exit in insert\n");
 		exit(-1);
+	}
 	insert_after = nodes + Q;
 	while (insert_after->next != NULL && insert_after->next->dist < distance)
 		insert_after = insert_after->next;

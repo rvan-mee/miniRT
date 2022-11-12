@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/07 21:02:59 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/12 21:01:00 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ typedef enum e_object_type {
 	VT_NORMAL,
 	VERTEX,
 	FACE,
+	MATCH,
+	MTL,
 	END
 }	t_obj_type;
 
@@ -67,6 +69,7 @@ typedef struct s_normals
 {
 	t_fvec	normal;
 }	t_normals;
+
 typedef struct s_uv {
 	float	u;
 	float	v;
@@ -84,8 +87,46 @@ typedef struct s_vertex
 
 typedef struct s_texture
 {
+	bool		is_bmp;
 	t_bmp		*bmp;
+	bool		is_png;
+	mlx_image_t	*png;
 }	t_texture;
+
+typedef struct s_mtl_enabled {
+	bool	ambient;
+	bool	diffuse;
+	bool	specular;
+	bool	emmis_col;
+	bool	illum;
+	bool	reflec;
+	bool	transp_d;
+	bool	transp_tr;
+	bool	opt_dens;
+	bool	tra_filter;
+	bool	map_Kd;
+	bool	map_Ka;
+	bool	map_Ks;
+}	t_mtl_enabled;
+
+// http://paulbourke.net/dataformats/mtl/
+typedef struct s_mtl {
+	char 			*name;
+	t_rgba			ambient; 		// Ka - ambient colour of material
+	t_rgba			diffuse; 		// Kd - diffuse colour 
+	t_rgba			specular;		// Ks - specular colour
+	t_rgba			emmis_col; 		// Ke - emissive colour
+	int32_t			illum;   		// illum - lind of illumination
+	float			reflec;  		// Ns - specular shininess
+	float			transp_d;  		// d - dissolve | tr is the inverse of d ( 1.0 - tr)
+	float			transp_tr;  	// Tr - transparency | tr is the inverse of d ( 1.0 - tr)
+	float			opt_dens; 		// Ni - optical density
+	t_rgba			tra_filter; 	// Tf - Transmission filter
+	t_bmp			*map_Kd;
+	t_bmp			*map_Ka;
+	t_bmp			*map_Ks;
+	t_mtl_enabled	is_enabled;
+}	t_mtl;
 
 typedef struct s_ambient {
 	float	ratio;
@@ -112,6 +153,7 @@ typedef struct s_triangle {
 }	t_triangle;
 
 typedef struct s_face {
+	bool		is_triangle;
 	t_fvec		vert[3];
 	t_rgba		colour;
 	bool		has_normal;
@@ -157,8 +199,11 @@ typedef struct s_object {
 		t_vertex_texture	vertex_texture;
 		t_normals			vertex_normal;
 		t_face				face;
+		t_mtl				material;
 	};
 	t_obj_type	type;
+	t_mtl		*mat;
+	bool		has_mat;
 }	t_object;
 
 typedef struct s_cluster	t_cluster;
@@ -181,6 +226,8 @@ typedef struct s_scene {
 	size_t				vertices_len;
 	t_vertex_texture	*vertex_textures;
 	size_t				vertex_textures_len;
+	t_mtl				*materials;
+	size_t				materials_len;
 }	t_scene;
 
 typedef struct s_ray {
@@ -223,6 +270,8 @@ typedef struct s_threading
 	size_t			created_threads;
 	t_jobs			*job_lst;
 	pthread_mutex_t	job_lock;
+	size_t			ref_count;
+	pthread_mutex_t	ref_lock;
 }	t_threading;
 
 typedef struct s_minirt {

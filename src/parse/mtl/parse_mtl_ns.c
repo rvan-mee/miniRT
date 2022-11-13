@@ -18,6 +18,7 @@ t_parse_error	parse_mtl_ns(char *line, t_object *object, t_conf_data *conf)
 	char	*end;
 	float	reflec;
 
+	(void) conf;
 	if (object->material.is_enabled.reflec)
 		return (DUPLICATE);
 	skip_spaces(&line);

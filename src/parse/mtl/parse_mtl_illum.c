@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <parse.h>
+#include <libft.h>
 
 static bool	parse_num(char **linep, int32_t *num)
 {
@@ -34,6 +35,7 @@ t_parse_error	parse_mtl_illum(char *line, t_object *object, t_conf_data *conf)
 {
 	int32_t	illum;
 
+	(void) conf;
 	if (object->material.is_enabled.illum)
 		return (DUPLICATE);
 	skip_spaces(&line);

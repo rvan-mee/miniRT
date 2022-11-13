@@ -18,10 +18,10 @@
 #include <thread.h>
 #include <texture.h>
 
-void	f(void)
-{
-	system("leaks -q miniRT");
-}
+// void	f(void)
+// {
+// 	system("leaks -q miniRT");
+// }
 void	stopwatch(uint8_t i, uint8_t options, const char *arg);
 
 #include <unistd.h>
@@ -35,7 +35,7 @@ int	main(int argc, char *argv[])
 	data.height = HEIGHT;
 	data.thread.job_lst = NULL;
 	data.texture.bmp = parse_bmp("texture.bmp");
-	atexit(f);
+	// atexit(f);
 	if (!parse_config_file(argc, argv, &data.scene) || \
 		!new_bvh(data.scene.objects, data.scene.objects_len, &data.scene.bvh))
 		return (EXIT_FAILURE);

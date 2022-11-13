@@ -44,7 +44,6 @@ typedef enum e_object_type {
 	VT_NORMAL,
 	VERTEX,
 	FACE,
-	MATCH,
 	MTL,
 	END
 }	t_obj_type;

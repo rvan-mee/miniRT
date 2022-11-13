@@ -11,12 +11,14 @@
 /* ************************************************************************** */
 
 #include <parse.h>
+#include <libft.h>
 
 t_parse_error	parse_mtl_ni(char *line, t_object *object, t_conf_data *conf)
 {
 	float	density;
 	char	*end;
 
+	(void) conf;
 	if (object->material.is_enabled.opt_dens)
 		return (DUPLICATE);
 	skip_spaces(&line);

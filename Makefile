@@ -15,7 +15,7 @@ NAME := miniRT
 CC := gcc
 
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -march=native -O3
+CFLAGS += -march=native -O3 -mbmi2 -pthread
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES
@@ -59,7 +59,7 @@ SRCS := main.c										\
 		parse/mtl/parse_mtl_ns.c					\
 		parse/mtl/parse_mtl_tf.c					\
 		parse/mtl/parse_mtl_tr.c					\
-		parse/mtl/parse_mtl_newmtl.c				\
+		parse/mtl/parse_newmtl.c				\
 		\
 		math/product.c								\
 		math/matrix.c								\

@@ -13,12 +13,13 @@
 #include <parse.h>
 #include <libft.h>
 
-t_parse_error	parse_mtl_d(char *line, t_object *object, t_conf_data *conf)
+t_parse_error	parse_mtl_tr(char *line, t_object *object, t_conf_data *conf)
 {
 	float	transparency;
 	char	*end;
 	bool	d;
 
+	(void) conf;
 	d = object->material.is_enabled.transp_d;
 	if (object->material.is_enabled.transp_tr)
 		return (DUPLICATE);

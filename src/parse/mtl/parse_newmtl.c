@@ -27,10 +27,10 @@ static t_parse_error	(*g_parse_mtl[])(char *, t_object *, t_conf_data *) = {\
 	[MTL_TRANSPARENCY2] = parse_mtl_tr,							\
 	[MTL_DENSITY] = parse_mtl_ni,								\
 	[MTL_TRFILTER] = parse_mtl_tf,								\
-	[MTL_MAP_KD] = parse_mtl_map_kd,							\
-	[MTL_MAP_KA] = parse_mtl_map_ka,							\
-	[MTL_MAP_KS] = parse_mtl_map_ks,							\
 };
+	// [MTL_MAP_KD] = parse_mtl_map_kd,							
+	// [MTL_MAP_KS] = parse_mtl_map_ks,							
+	// [MTL_MAP_KA] = parse_mtl_map_ka,							
 
 static const char		*g_ids[] = {\
 	[MTL_AMBIENT] = "Ka",										\
@@ -55,6 +55,7 @@ static bool	parse_mtl_name(char *line, t_object *object, t_conf_data *conf)
 	size_t		i;
 
 	i = 0;
+	name_len = 0;
 	skip_spaces(&line);
 	if (!(ft_isalpha(*line) && !ft_isdigit(*line)) && *line != '_')
 		return (NAME);
@@ -73,10 +74,9 @@ static bool	parse_mtl_name(char *line, t_object *object, t_conf_data *conf)
 	return (SUCCESS);
 }
 
-static t_parse_error	mtl_parse_func(char *line, t_obj_type *object, t_conf_data *conf)
+static t_parse_error	mtl_parse_func(char *line, t_object *object, t_conf_data *conf)
 {
 	t_parse_mtl		type;
-	t_parse_error	err;
 	size_t			len;
 
 	if (line[0] == '\n')
@@ -97,12 +97,12 @@ static t_parse_error	mtl_parse_func(char *line, t_obj_type *object, t_conf_data 
 
 t_parse_error	parse_newmtl(char **linep, t_object *object, t_conf_data *conf)
 {
-	t_parse_mtl	err;
-	char		*line;
+	t_parse_error	err;
+	char			*line;
 
 	ft_bzero(&object->material.is_enabled, sizeof(t_mtl_enabled));
 	if (!parse_mtl_name(*linep, object, conf))
-		return (MTL);
+		return (MTL_ERR);
 	while (1)
 	{
 		line = get_next_line(conf->fd);

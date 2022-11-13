@@ -19,6 +19,7 @@ t_parse_error	parse_mtl_d(char *line, t_object *object, t_conf_data *conf)
 	char	*end;
 	bool	tr;
 
+	(void) conf;
 	tr = object->material.is_enabled.transp_tr;
 	if (object->material.is_enabled.transp_d)
 		return (DUPLICATE);

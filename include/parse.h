@@ -52,6 +52,7 @@ typedef enum e_parse_error {
 	NI,
 	TF,
 	DUPLICATE,
+	MATCH,
 	CONTINUE
 }	t_parse_error;
 
@@ -104,7 +105,7 @@ void			skip_spaces(char **linep);
 void			skip_digits(char **linep);
 bool			parse_vector(char **linep, t_fvec *vector, bool normalized);
 bool			parse_float(char **linep, float *dst, float min, float max);
-bool			parse_float_rgb(char **linep, t_float_rgb *rgb);
+bool			parse_float_rgb(char **linep, t_fvec *rgb);
 void			normalize(t_scene *scene);
 void			normalize_coords(t_scene *scene);
 void			normalize_orientation(t_scene *scene);

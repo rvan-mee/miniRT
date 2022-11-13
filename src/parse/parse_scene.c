@@ -33,7 +33,7 @@ static const char	*g_type_strs[] = {\
 	[COMMENT] = "comment",				\
 	[VERTEX] = "vertex",				\
 	[VT_TEXTURE] = "vertex texture",	\
-	[MTL] = "material"					\
+	[MTL] = "material",					\
 	[END] = "end",
 };
 

@@ -12,10 +12,10 @@
 
 #include <parse.h>
 
-bool	parse_float_rgb(char **linep, t_float_rgb *rgb)
+bool	parse_float_rgb(char **linep, t_fvec *rgb)
 {
-	t_float_rgb	vals;
-	char		*line;
+	t_fvec	vals;
+	char	*line;
 
 	line = *linep;
 	skip_spaces(&line);
@@ -34,4 +34,3 @@ bool	parse_float_rgb(char **linep, t_float_rgb *rgb)
 	*linep = line;
 	return (true);
 }
-x

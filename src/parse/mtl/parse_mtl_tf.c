@@ -14,8 +14,9 @@
 
 t_parse_error	parse_mtl_tf(char *line, t_object *object, t_conf_data *conf)
 {
-	t_float_rgb	rgb;
+	t_fvec	rgb;
 
+	(void) conf;
 	if (object->material.is_enabled.tra_filter)
 		return (DUPLICATE);
 	if (!parse_float_rgb(&line, &rgb))

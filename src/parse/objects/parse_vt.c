@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/06 15:27:15 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/06 19:36:31 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/18 20:55:28 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,26 @@ t_parse_error	parse_vt(char **linep, t_object *object, t_conf_data *conf)
 	char	*line;
 	float	u;
 	float	v;
+	float	w;
 
 	line = *linep;
-	skip_spaces(&line);
-	if (!ft_isdigit(*line))
-		return (COORD);
-	u = ft_strtof(line, &line);
-	if (u < 0.0f || u > 1.0f)
-		return (COORD);
-	skip_spaces(&line);
 	v = 0;
+	w = 0;
+	skip_spaces(&line);
+	if (!parse_float(&line, &u, 0.0f, 1.0f))
+		return (COORD);
+	skip_spaces(&line);
 	if (ft_isdigit(*line))
 	{
-		v = ft_strtof(line, &line);
-		if (v < 0.0f || v > 1.0f)
+		if (!parse_float(&line, &v, 0.0f, 1.0f))
+			return (COORD);
+		skip_spaces(&line);
+		if (ft_isdigit(*line) && !parse_float(&line, &w, 0.0f, 1.0f))
 			return (COORD);
 	}
-	object->vertex_texture.uv.u = u;
-	object->vertex_texture.uv.v = v;
+	object->vertex_texture.uvw.u = u;
+	object->vertex_texture.uvw.v = v;
+	object->vertex_texture.uvw.w = w;
 	if (!dynarr_addone(&conf->vertex_textures, &object->vertex_texture))
 		return (DYNARR);
 	*linep = line;

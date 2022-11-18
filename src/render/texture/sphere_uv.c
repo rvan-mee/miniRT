@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/28 15:40:35 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/07 21:11:07 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/16 17:14:18 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 #define PI 3.141592653589793238
 
-t_rgba	get_texture_colour_sphere(t_hit *hit, t_texture *texture)
+t_rgba	get_texture_colour_sphere(t_hit *hit, t_bmp *texture)
 {
 	t_fvec	d;
 	float	u;

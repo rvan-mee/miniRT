@@ -6,20 +6,19 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/12 18:59:27 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/12 20:11:52 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/18 16:47:59 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parse.h>
 #include <libft.h>
 
-t_parse_error	parse_mtl_tr(char *line, t_object *object, t_conf_data *conf)
+t_parse_error	parse_mtl_tr(char *line, t_object *object)
 {
 	float	transparency;
 	char	*end;
 	bool	d;
 
-	(void) conf;
 	d = object->material.is_enabled.transp_d;
 	if (object->material.is_enabled.transp_tr)
 		return (DUPLICATE);
@@ -36,5 +35,5 @@ t_parse_error	parse_mtl_tr(char *line, t_object *object, t_conf_data *conf)
 		return (TR);
 	object->material.transp_tr = transparency;
 	object->material.is_enabled.transp_tr = true;
-	return (SUCCESS);
+	return (CONTINUE);
 }

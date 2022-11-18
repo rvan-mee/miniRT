@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 17:54:09 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/12 21:35:32 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/18 13:32:53 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ typedef enum e_parse_error {
 	TF,
 	DUPLICATE,
 	MATCH,
+	EXTENTION,
+	BMP_ERR,
+	NON_EXIST,
 	CONTINUE
 }	t_parse_error;
 
@@ -82,6 +85,9 @@ typedef struct s_conf_data
 	t_dynarr	vertex_textures;
 	t_dynarr	vertex_normals;
 	t_dynarr	materials;
+	bool		has_mtl;
+	t_mtl		*curr_mtl;
+	size_t		curr_line;
 	int32_t		fd;
 }	t_conf_data;
 
@@ -99,8 +105,10 @@ t_parse_error	parse_vertex(char **linep, t_object *object, t_conf_data *conf);
 t_parse_error	parse_vt(char **linep, t_object *object, t_conf_data *conf);
 t_parse_error	parse_vn(char **linep, t_object *object, t_conf_data *conf);
 t_parse_error	parse_face(char **linep, t_object *object, t_conf_data *conf);
+t_parse_error	parse_usemtl(char **linep, t_object *object, t_conf_data *conf);
+t_parse_error	parse_newmtl(char **linep, t_object *object, t_conf_data *conf);
 bool			parse_rgb(char **linep, t_rgba *colour);
-bool			parse_line_error(const char *line, t_parse_error err);
+bool			parse_line_error(const char *line, t_parse_error err, size_t line_c);
 void			skip_spaces(char **linep);
 void			skip_digits(char **linep);
 bool			parse_vector(char **linep, t_fvec *vector, bool normalized);
@@ -111,6 +119,6 @@ void			normalize_coords(t_scene *scene);
 void			normalize_orientation(t_scene *scene);
 bool			check_extension(const char *config_file, char *ext);
 bool			open_file(const char *path, int32_t *fd);
-t_bmp			*parse_bmp(char *path);
+bool			parse_bmp(char *path, t_bmp *dst);
 
 #endif

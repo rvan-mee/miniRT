@@ -6,19 +6,18 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/12 18:03:39 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/12 18:58:50 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/18 16:47:17 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parse.h>
 #include <libft.h>
 
-t_parse_error	parse_mtl_ns(char *line, t_object *object, t_conf_data *conf)
+t_parse_error	parse_mtl_ns(char *line, t_object *object)
 {
 	char	*end;
 	float	reflec;
 
-	(void) conf;
 	if (object->material.is_enabled.reflec)
 		return (DUPLICATE);
 	skip_spaces(&line);
@@ -33,5 +32,5 @@ t_parse_error	parse_mtl_ns(char *line, t_object *object, t_conf_data *conf)
 		return (ILLUM);
 	object->material.is_enabled.reflec = true;
 	object->material.reflec = reflec;
-	return (SUCCESS);
+	return (CONTINUE);
 }

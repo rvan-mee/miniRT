@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/26 14:45:10 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/07 21:10:48 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/16 17:18:18 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ uint32_t	get_hit_colour(t_minirt *data, t_scene *scene, t_object *object, t_hit 
 	if (!light_hits)
 	{
 		if (object->type == SPHERE)
-			return (set_shade_colour(get_texture_colour_sphere(hit, &data->texture), facing_ratio));
+			return (set_shade_colour(get_texture_colour_sphere(hit, &data->temp_texture), facing_ratio));
 		else
 			return (set_shade_colour(get_obj_rgba(object), facing_ratio));
 	}

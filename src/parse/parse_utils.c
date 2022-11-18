@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 11:28:47 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/12 21:26:15 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/18 13:35:10 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <errno.h>
 #include <fcntl.h>
 
-#define PARSE_ERROR		"Error\nLine `%s' %s"
+#define PARSE_ERROR		"Error\nLine %zu: `%s' %s"
 #define OBJECT_ERROR	"does not contain a valid object\n"
 #define COORD_ERROR		"does not contain valid coordinates\n"
 #define VECTOR_ERROR	"does not contain a valid orientation vector\n"
@@ -42,58 +42,72 @@
 #define KD_ERROR		"\nthis material contains an invalid diffuse colour\n"
 #define KS_ERROR		"\nthis material contains an invalid specular colour\n"
 #define KE_ERROR		"\nthis material contains an invalid emissive colour\n"
-#define ILLUM_ERROR		"\nthis material contains an invalid illumination value\n"
 #define NS_ERROR		"\nthis material contains an invalid specular value\n"
 #define D_ERROR			"\nthis material contains an invalid dissolve value\n"
 #define TR_ERROR		"\nthis material contains an invalid transparency value\n"
-#define NI_ERROR		"\nthis material contains an invalid optical density value\n"
-#define TF_ERROR		"\nthis material contains an invalid transmission filter colour\n"
+#define EXTENSION_ERROR	"\nthis material contains an invalid texture extension\n"
+#define BMP_ERROR		"\nerror whilst processing bmp file\n"
 #define DUPLICATE_ERROR	"\nthis material contains duplicate elements\n"
 #define DYNARR_ERROR	"failed to add to the dynamic array\n"
+#define EXIST_ERROR		"\nthis material does not exist\n"
 #define ERR_EXTENSION	"Error\nWrong file extension: `%s'\n"
 #define ERR_OPEN		"Error\nFile failed to open: %s: %s\n"
+#define ILLUM_ERROR		"\nthis material contains an \
+invalid illumination value\n"
+#define NI_ERROR		"\nthis material contains an \
+invalid optical density value\n"
+#define TF_ERROR		"\nthis material contains an \
+invalid transmission filter colour\n"
 
-bool	parse_line_error(const char *line, t_parse_error err)
+static const char	*g_err_message[] = {\
+	[OBJECT] = OBJECT_ERROR,		\
+	[COORD] = COORD_ERROR,			\
+	[VECTOR] = VECTOR_ERROR,		\
+	[COLOUR] = COLOUR_ERROR,		\
+	[FORMAT] = FORMAT_ERROR,		\
+	[LRATIO] = LRATIO_ERROR,		\
+	[FOV] = FOV_ERROR,				\
+	[BRIGHT] = BRIGHT_ERROR,		\
+	[DIAMETER] = DIA_ERROR,			\
+	[OBJ_HEIGHT] = HEIGHT_ERROR,	\
+	[INDEX] = INDEX_ERROR,			\
+	[VERT] = VERT_ERROR,			\
+	[VERT_TEXTURE] = V_TX_ERROR,	\
+	[NORMAL] = VN_ERROR,			\
+	[DYNARR] = DYNARR_ERROR,		\
+	[MATCH] = MATCH_ERROR,			\
+	[MTL_ERR] = MTL_ERROR,			\
+	[NAME] = NAME_ERROR,			\
+	[DUP] = DUP_ERROR,				\
+	[ALLOC] = ALLOC_ERROR,			\
+	[KA] = KA_ERROR,				\
+	[KD] = KD_ERROR,				\
+	[KS] = KS_ERROR,				\
+	[KE] = KE_ERROR,				\
+	[ILLUM] = ILLUM_ERROR,			\
+	[NS] = NS_ERROR,				\
+	[D] = D_ERROR,					\
+	[TR] = TF_ERROR,				\
+	[NI] = NI_ERROR,				\
+	[TF] = TF_ERROR,				\
+	[DUPLICATE] = DUPLICATE_ERROR,	\
+	[EXTENTION] = EXTENSION_ERROR,	\
+	[BMP_ERR] = BMP_ERROR,			\
+	[NON_EXIST] = EXIST_ERROR,
+};
+
+bool	parse_line_error(const char *line, t_parse_error err, size_t line_c)
 {
-	const char	*message[] = {
-	[OBJECT] = OBJECT_ERROR,
-	[COORD] = COORD_ERROR,
-	[VECTOR] = VECTOR_ERROR,
-	[COLOUR] = COLOUR_ERROR,
-	[FORMAT] = FORMAT_ERROR,
-	[LRATIO] = LRATIO_ERROR,
-	[FOV] = FOV_ERROR,
-	[BRIGHT] = BRIGHT_ERROR,
-	[DIAMETER] = DIA_ERROR,
-	[OBJ_HEIGHT] = HEIGHT_ERROR,
-	[INDEX] = INDEX_ERROR,
-	[VERT] = VERT_ERROR,
-	[VERT_TEXTURE] = V_TX_ERROR,
-	[NORMAL] = VN_ERROR,
-	[DYNARR] = DYNARR_ERROR,
-	[MATCH] = MATCH_ERROR,
-	[MTL_ERR] = MTL_ERROR,
-	[NAME] = NAME_ERROR,
-	[DUP] = DUP_ERROR,
-	[ALLOC] = ALLOC_ERROR,
-	[KA] = KA_ERROR,
-	[KD] = KD_ERROR,
-	[KS] = KS_ERROR,
-	[KE] = KE_ERROR,
-	[ILLUM] = ILLUM_ERROR,
-	[NS] = NS_ERROR,
-	[D] = D_ERROR,
-	[TR] = TF_ERROR,
-	[NI] = NI_ERROR,
-	[TF] = TF_ERROR,
-	[DUPLICATE] = DUPLICATE_ERROR,
-	};
-	char		*newline;
-
+	char	*newline;
+	
 	newline = ft_strchr(line, '\n');
 	if (newline != NULL)
 		*newline = '\0';
-	dprintf(STDERR_FILENO, PARSE_ERROR, line, message[err]);
+	// for (int i = 0; line[i]; i++)
+	// 	printf("char %d pos %d\n", line[i], i);
+		
+	// printf("parsing line: `%s'\n", line);
+	dprintf(STDERR_FILENO, PARSE_ERROR, line_c, line, g_err_message[err]);
 	return (false);
 }
 

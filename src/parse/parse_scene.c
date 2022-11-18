@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 02:00:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/12 21:00:07 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/18 20:46:44 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,22 @@ static const char	*g_type_strs[] = {\
 
 static bool	cleanup(char *line, t_conf_data *data)
 {
+	size_t	i;
+	t_mtl	*mtl;
+
+	i = 0;
+	mtl = data->materials.arr;
+	if (mtl)
+	{
+		while (i < data->materials.length)
+		{
+			free(mtl[i].map_Ka.data);
+			free(mtl[i].map_Kd.data);
+			free(mtl[i].map_Ks.data);
+			free(mtl[i].name);
+			i++;
+		}
+	}
 	free(line);
 	dynarr_delete(&data->lights);
 	dynarr_delete(&data->objects);
@@ -73,7 +89,8 @@ static bool \
 
 	store = NULL;
 	if (obj->type == COMMENT || obj->type == LIGHT || obj->type == VERTEX \
-		|| obj->type == VT_TEXTURE || obj->type == VT_NORMAL || obj->type == MTL)
+		|| obj->type == VT_TEXTURE || obj->type == VT_NORMAL \
+		|| obj->type == MTL || obj->type == USEMTL)
 		return (true);
 	if (obj->type == VT_TEXTURE)
 		return (dynarr_addone(&conf->vertex_textures, &obj->vertex_texture));
@@ -106,6 +123,7 @@ static bool \
 		line = get_next_line(fd);
 		if (line == NULL)
 			break ;
+		conf->curr_line++;
 		if (*line != '\n' && *line != '\0')
 			if (!parse_object(line, &object, conf) || \
 				!store_object(&object, dst, conf))
@@ -124,8 +142,8 @@ bool	parse_scene(int32_t fd, t_scene *dst)
 	ft_bzero(&parse_data, sizeof(t_conf_data));
 	parse_data.fd = fd;
 	if (!dynarr_create(&parse_data.lights, 4, sizeof(t_light)) || \
-		!dynarr_create(&parse_data.objects, 16, sizeof(t_object)) || \
-		!dynarr_create(&parse_data.materials, 16, sizeof(t_object)) || \
+		!dynarr_create(&parse_data.materials, 32, sizeof(t_mtl)) || \
+		!dynarr_create(&parse_data.objects, 256, sizeof(t_object)) || \
 		!dynarr_create(&parse_data.vertices, 256, sizeof(t_vertex)) || \
 		!dynarr_create(&parse_data.vertex_normals, 256, sizeof(t_normals)) || \
 		!dynarr_create(&parse_data.vertex_textures, 256, vt_size))

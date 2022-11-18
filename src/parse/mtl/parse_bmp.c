@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/14 13:00:20 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/07 14:03:46 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/18 18:22:31 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,17 @@ static bool	read_bmp(int32_t fd, t_bmp *bmp)
 	return (true);
 }
 
-t_bmp	*parse_bmp(char *path)
+bool	parse_bmp(char *path, t_bmp *dst)
 {
-	t_bmp	*bmp;
 	int32_t	fd;
 
+	dst->name = path;
 	if (!check_extension(path, ".bmp"))
-		return (NULL);
+		return (false);
 	if (!open_file(path, &fd))
-		return (NULL);
-	bmp = malloc(sizeof(t_bmp));
-	if (!bmp)
-		return (close(fd), NULL);
-	bmp->name = ft_strdup(path);
-	if (!bmp->name)
-		return (close(fd), free(bmp), NULL);
-	if (!read_bmp(fd, bmp))
-		return (close(fd), free(bmp->name), free(bmp), NULL);
+		return (false);
+	if (!read_bmp(fd, dst))
+		return (close(fd), false);
 	close(fd);
-	return (bmp);
+	return (true);
 }

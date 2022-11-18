@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/12 17:51:05 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/12 18:00:33 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/18 16:47:33 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,10 @@ static bool	parse_num(char **linep, int32_t *num)
 	return (true);
 }
 
-t_parse_error	parse_mtl_illum(char *line, t_object *object, t_conf_data *conf)
+t_parse_error	parse_mtl_illum(char *line, t_object *object)
 {
 	int32_t	illum;
 
-	(void) conf;
 	if (object->material.is_enabled.illum)
 		return (DUPLICATE);
 	skip_spaces(&line);
@@ -46,5 +45,5 @@ t_parse_error	parse_mtl_illum(char *line, t_object *object, t_conf_data *conf)
 		return (ILLUM);
 	object->material.is_enabled.illum = true;
 	object->material.illum = illum;
-	return (SUCCESS);
+	return (CONTINUE);
 }

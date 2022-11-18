@@ -6,19 +6,18 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/12 20:12:30 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/12 20:14:56 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/18 16:47:54 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parse.h>
 #include <libft.h>
 
-t_parse_error	parse_mtl_ni(char *line, t_object *object, t_conf_data *conf)
+t_parse_error	parse_mtl_ni(char *line, t_object *object)
 {
 	float	density;
 	char	*end;
 
-	(void) conf;
 	if (object->material.is_enabled.opt_dens)
 		return (DUPLICATE);
 	skip_spaces(&line);
@@ -33,6 +32,5 @@ t_parse_error	parse_mtl_ni(char *line, t_object *object, t_conf_data *conf)
 		return (D);
 	object->material.opt_dens = density;
 	object->material.is_enabled.opt_dens = true;
-	return (SUCCESS);
+	return (CONTINUE);
 }
-

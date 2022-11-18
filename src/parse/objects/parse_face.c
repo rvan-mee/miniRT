@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/04 15:44:05 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/07 15:30:40 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/18 14:09:36 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ static bool	parse_normal(char **linep, t_face_indices *index, t_conf_data *conf)
 		return (false);
 	index->has_normal = true;
 	new_index = ft_atoi(line) - 1;
+	if (new_index < 0)
+		new_index = conf->vertices.length - new_index;
 	if (new_index < 0 || (size_t)new_index > conf->vertex_normals.length)
 		return (false);
 	skip_digits(&line);
@@ -56,6 +58,8 @@ static bool	parse_vertex_texture(char **linep, \
 	if (!ft_isdigit(*line))
 		return (false);
 	new_index = ft_atoi(line) - 1;
+	if (new_index < 0)
+		new_index = conf->vertices.length - new_index;
 	if (new_index < 0 || (size_t)new_index > conf->vertex_textures.length)
 		return (false);
 	index->vert_texture_index = new_index;
@@ -77,6 +81,8 @@ static bool	parse_vert_index(char **linep, \
 	if (!ft_isdigit(*line))
 		return (false);
 	new_index = ft_atoi(line) - 1;
+	if (new_index < 0)
+		new_index = conf->vertices.length - new_index;
 	if (new_index < 0 || (size_t)new_index > conf->vertices.length)
 		return (false);
 	index->vert_index = new_index;
@@ -136,7 +142,7 @@ static void	set_indices(
 	if (index->has_normal)
 		object->face.normals[vert] = normals[index->normal_index].normal;
 	if (index->has_texture)
-		object->face.uv[vert] = texture[index->vert_texture_index].uv;
+		object->face.uvw[vert] = texture[index->vert_texture_index].uvw;
 }
 
 t_parse_error	parse_face(char **linep, t_object *object, t_conf_data *conf)

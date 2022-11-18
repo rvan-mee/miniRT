@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/12 21:01:00 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/18 14:09:27 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef enum e_object_type {
 	VERTEX,
 	FACE,
 	MTL,
+	USEMTL,
 	END
 }	t_obj_type;
 
@@ -69,28 +70,21 @@ typedef struct s_normals
 	t_fvec	normal;
 }	t_normals;
 
-typedef struct s_uv {
+typedef struct s_uvw {
 	float	u;
 	float	v;
-}	t_uv;
+	float	w;
+}	t_uvw;
 
 typedef struct s_vertex_texture
 {
-	t_uv	uv;
+	t_uvw	uvw;
 }	t_vertex_texture;
 
 typedef struct s_vertex
 {
 	t_fvec	point;
 }	t_vertex;
-
-typedef struct s_texture
-{
-	bool		is_bmp;
-	t_bmp		*bmp;
-	bool		is_png;
-	mlx_image_t	*png;
-}	t_texture;
 
 typedef struct s_mtl_enabled {
 	bool	ambient;
@@ -121,9 +115,9 @@ typedef struct s_mtl {
 	float			transp_tr;  	// Tr - transparency | tr is the inverse of d ( 1.0 - tr)
 	float			opt_dens; 		// Ni - optical density
 	t_rgba			tra_filter; 	// Tf - Transmission filter
-	t_bmp			*map_Kd;
-	t_bmp			*map_Ka;
-	t_bmp			*map_Ks;
+	t_bmp			map_Kd;
+	t_bmp			map_Ka;
+	t_bmp			map_Ks;
 	t_mtl_enabled	is_enabled;
 }	t_mtl;
 
@@ -158,8 +152,8 @@ typedef struct s_face {
 	bool		has_normal;
 	t_fvec		normals[3];
 	bool		has_texture;
-	t_uv		uv[3];
-	t_texture	texture;
+	t_uvw		uvw[3];
+	t_mtl		texture;
 	t_fvec		v0v1;
 	t_fvec		v0v2;
 }	t_face;
@@ -282,7 +276,7 @@ typedef struct s_minirt {
 	size_t		width;
 	size_t		height;
 	t_threading	thread;
-	t_texture	texture;
+	t_bmp		temp_texture;
 }	t_minirt;
 
 typedef struct s_aabb {

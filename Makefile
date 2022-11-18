@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/11/12 21:34:55 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/11/18 20:37:44 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME := miniRT
 CC := gcc
 
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -march=native -O3 -mbmi2 -pthread
+CFLAGS += -march=native -O3 -mbmi2 -pthread -g
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES
@@ -45,6 +45,7 @@ SRCS := main.c										\
 		parse/attributes/parse_float_rgb.c			\
 		parse/attributes/parse_rgb.c				\
 		parse/attributes/parse_vector.c				\
+		parse/attributes/parse_mtl_map.c			\
 		parse/normalize/normalize.c					\
 		parse/normalize/normalize_coords.c			\
 		parse/normalize/normalize_orientation.c		\
@@ -59,7 +60,11 @@ SRCS := main.c										\
 		parse/mtl/parse_mtl_ns.c					\
 		parse/mtl/parse_mtl_tf.c					\
 		parse/mtl/parse_mtl_tr.c					\
-		parse/mtl/parse_newmtl.c				\
+		parse/mtl/parse_mtl_map_ka.c				\
+		parse/mtl/parse_mtl_map_kd.c				\
+		parse/mtl/parse_mtl_map_ks.c				\
+		parse/mtl/parse_newmtl.c					\
+		parse/mtl/parse_usemtl.c					\
 		\
 		math/product.c								\
 		math/matrix.c								\

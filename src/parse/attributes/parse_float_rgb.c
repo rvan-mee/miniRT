@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/12 17:28:45 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/12 17:46:47 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/14 13:26:11 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	parse_float_rgb(char **linep, t_fvec *rgb)
 {
-	t_fvec	vals;
+	float	vals[3];
 	char	*line;
 
 	line = *linep;
@@ -30,7 +30,9 @@ bool	parse_float_rgb(char **linep, t_fvec *rgb)
 	skip_spaces(&line);
 	if (*line)
 		return (false);
-	*rgb = vals;
+	(*rgb)[0] = vals[0];
+	(*rgb)[1] = vals[1];
+	(*rgb)[2] = vals[2];
 	*linep = line;
 	return (true);
 }

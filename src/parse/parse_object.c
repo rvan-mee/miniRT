@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 19:20:49 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/11 21:07:31 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/18 16:35:04 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ static t_parse_error	(*g_parsefun[])(char **, t_object *, t_conf_data *) = {\
 	[VT_TEXTURE] = parse_vt,									\
 	[VT_NORMAL] = parse_vn,										\
 	[FACE] = parse_face,										\
+	[MTL] = parse_newmtl,										\
+	[USEMTL] = parse_usemtl,									\
 };
 
 static const char		*g_ids[] = {\
@@ -40,6 +42,8 @@ static const char		*g_ids[] = {\
 	[VERTEX] = "v",					\
 	[FACE] = "f",					\
 	[COMMENT] = "#",				\
+	[MTL] = "newmtl",				\
+	[USEMTL] = "usemtl",			\
 };
 
 static t_obj_type	get_obj_type(char *line, t_object *object, size_t *id_len)
@@ -75,14 +79,16 @@ bool	parse_object(char *line, t_object *object, t_conf_data *conf)
 		return (true);
 	line += id_len;
 	if (type == END || !ft_isspace(*line))
-		return (parse_line_error(start_line, OBJECT));
+		return (parse_line_error(start_line, OBJECT, conf->curr_line));
 	object->type = type;
+	object->has_mat = conf->has_mtl;
+	object->mat = conf->curr_mtl;
 	skip_spaces(&line);
 	err = g_parsefun[type](&line, object, conf);
 	if (err != SUCCESS)
-		return (parse_line_error(start_line, err));
+		return (parse_line_error(start_line, err, conf->curr_line));
 	skip_spaces(&line);
 	if (*line != '\0')
-		return (parse_line_error(start_line, FORMAT));
+		return (parse_line_error(start_line, FORMAT, conf->curr_line));
 	return (true);
 }

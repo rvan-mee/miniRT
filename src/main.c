@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:31:51 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/11 15:06:56 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/18 18:17:18 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 #include <thread.h>
 #include <texture.h>
 
-// void	f(void)
-// {
-// 	system("leaks -q miniRT");
-// }
+void	f(void)
+{
+	system("leaks -q miniRT");
+}
 void	stopwatch(uint8_t i, uint8_t options, const char *arg);
 
 #include <unistd.h>
@@ -34,11 +34,12 @@ int	main(int argc, char *argv[])
 	data.width = WIDTH;
 	data.height = HEIGHT;
 	data.thread.job_lst = NULL;
-	data.texture.bmp = parse_bmp("texture.bmp");
-	// atexit(f);
+	if (!parse_bmp("texture.bmp", &data.temp_texture))
+		return (EXIT_FAILURE);
+	atexit(f);
 	if (!parse_config_file(argc, argv, &data.scene) || \
 		!new_bvh(data.scene.objects, data.scene.objects_len, &data.scene.bvh))
-		return (EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	create_mlx(&data);
 	if (init_work_threads(&data))
 	{

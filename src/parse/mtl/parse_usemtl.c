@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/17 11:14:13 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/18 17:54:42 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/19 12:17:42 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ static t_parse_error	parse_mtl_name(char **linep, char **name)
 	name_len = 0;
 	line = *linep;
 	skip_spaces(&line);
-	if (!(ft_isalnum(*line)) && *line != '_')
+	if (!(ft_isalnum(*line)) && *line != '_' && *line != '-')
 		return (NAME);
-	while (ft_isalpha(line[name_len]) || \
-			ft_isdigit(line[name_len]) || line[name_len] == '_')
+	while (ft_isalnum(line[name_len]) || line[name_len] == '_' \
+			|| line[name_len] == '-')
 		name_len++;
 	*name = ft_substr(line, 0, name_len);
 	if (!*name)

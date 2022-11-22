@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 02:00:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/18 20:46:44 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/22 14:27:28 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ bool	parse_scene(int32_t fd, t_scene *dst)
 	ft_bzero(dst, sizeof(t_scene));
 	ft_bzero(&parse_data, sizeof(t_conf_data));
 	parse_data.fd = fd;
-	if (!dynarr_create(&parse_data.lights, 4, sizeof(t_light)) || \
+	if (!dynarr_create(&parse_data.lights, 4, sizeof(t_object)) || \
 		!dynarr_create(&parse_data.materials, 32, sizeof(t_mtl)) || \
 		!dynarr_create(&parse_data.objects, 256, sizeof(t_object)) || \
 		!dynarr_create(&parse_data.vertices, 256, sizeof(t_vertex)) || \

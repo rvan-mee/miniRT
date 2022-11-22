@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/15 20:41:36 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/10/12 14:08:04 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/19 13:18:00 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,14 @@ static void	rotate_object(t_object *object, t_fmat matrix)
 		rotate_vector(&object->triangle.vert[2], matrix);
 		rotate_vector(&object->triangle.v0v1, matrix);
 		rotate_vector(&object->triangle.v0v2, matrix);
+	}
+	else if (object->type == FACE)
+	{
+		rotate_vector(&object->face.vert[0], matrix);
+		rotate_vector(&object->face.vert[1], matrix);
+		rotate_vector(&object->face.vert[2], matrix);
+		rotate_vector(&object->face.v0v1, matrix);
+		rotate_vector(&object->face.v0v2, matrix);
 	}
 }
 

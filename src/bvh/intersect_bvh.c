@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/06 16:27:02 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/11 15:03:43 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/22 15:54:50 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@
 // Pool
 #define P	1
 
-static void	link_nodes(t_prio *nodes, t_prio nodebuf[64])
+static void	link_nodes(t_prio *nodes, t_prio nodebuf[512])
 {
 	uint16_t	i;
 	t_prio		*cur;
 
 	i = 0;
 	cur = nodes;
-	while (i < 64)
+	while (i < 512)
 	{
 		cur->next = nodebuf + i;
 		cur = cur->next;
@@ -114,7 +114,7 @@ static inline void	intersect_next(
 bool	intersect_bvh(const t_bvh *bvh, const t_ray *ray, t_hit *hit)
 {
 	t_prio	nodes[2];
-	t_prio	nodebuf[64];
+	t_prio	nodebuf[512];
 
 	link_nodes(nodes + P, nodebuf);
 	nodes[Q].next = NULL;

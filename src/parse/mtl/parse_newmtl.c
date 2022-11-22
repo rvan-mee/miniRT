@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/10 18:16:39 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/18 20:09:03 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/19 12:18:19 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,10 @@ static t_parse_error	parse_mtl_name(char **linep, \
 	line = *linep;
 	name_len = 0;
 	skip_spaces(&line);
-	if (!(ft_isalnum(*line)) && *line != '_')
+	if (!(ft_isalnum(*line)) && *line != '_' && *line != '-')
 		return (NAME);
-	while (ft_isalnum(line[name_len]) || line[name_len] == '_')
+	while (ft_isalnum(line[name_len]) || line[name_len] == '_' \
+			|| line[name_len] == '-')
 		name_len++;
 	object->material.name = ft_substr(line, 0, name_len);
 	if (!object->material.name)

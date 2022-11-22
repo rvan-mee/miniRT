@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/21 15:46:41 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/12 20:25:20 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/22 17:24:10 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,6 @@
 #include <math.h>
 #include <float.h>
 #include <bvh.h>
-
-#ifndef USE_BVH
-# define USE_BVH		1
-#endif
 
 bool	trace(
 		t_scene *scene,

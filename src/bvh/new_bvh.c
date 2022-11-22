@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/10 18:32:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/12 20:24:47 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/22 18:57:51 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 #include <libft.h>
 #include <bvh.h>
 #include <stdio.h>
-
-#ifndef USE_BVH
-# define USE_BVH		1
-#endif
+#include <minirt.h>
 
 static inline uint32_t	get_alloc_req(uint32_t n)
 {
@@ -79,19 +76,19 @@ uint16_t	print_nodes(t_bvh *b, uint16_t depth, uint32_t node)
 	static uint16_t	maxdepth = 0;
 
 	maxdepth = depth > maxdepth ? depth : maxdepth;
-	dprintf(1, "node %u (len=%u) %s (%.1f,%.1f,%.1f)-(%.1f,%.1f,%.1f)\n",
+	dprintf(1, "node %u (len=%u) %s (%f,%f,%f)-(%f,%f,%f)\n",
 			node, b->clusters[node].len, b->clusters[node].leaf ? "(leaf)" : "",
 			b->clusters[node].aabb.min[X], b->clusters[node].aabb.min[Y], b->clusters[node].aabb.min[Z],
 			b->clusters[node].aabb.max[X], b->clusters[node].aabb.max[Y], b->clusters[node].aabb.max[Z]);
-	if (b->clusters[node].leaf)
-	{
-		for (uint16_t n = depth + 1; n > 0; n--)
-			dprintf(1, "  ");
-		for (uint32_t i = 0; i < b->clusters[node].len; i++)
-			dprintf(1, "%u ", b->clusters[node].prims[i]);
-		dprintf(1, "\n");
-		return (maxdepth);
-	}
+	// if (b->clusters[node].leaf)
+	// {
+	// 	for (uint16_t n = depth + 1; n > 0; n--)
+	// 		dprintf(1, "  ");
+	// 	// for (uint32_t i = 0; i < b->clusters[node].len; i++)
+	// 	// 	dprintf(1, "%u ", b->clusters[node].prims[i]);
+	// 	dprintf(1, "\n");
+	// 	return (maxdepth);
+	// }
 	if (b->clusters[node].len == 1)
 		return (maxdepth);
 	for (uint16_t n = depth + 1; n > 0; n--)
@@ -113,6 +110,7 @@ bool	new_bvh(t_object objects[], uint32_t length, t_bvh *dst)
 
 	if (!USE_BVH)
 		return (true);
+	clock_t start = clock();
 	builder.prims = objects;
 	builder.length = length;
 	builder.node_idx = length;
@@ -120,14 +118,18 @@ bool	new_bvh(t_object objects[], uint32_t length, t_bvh *dst)
 		return (NULL);
 	generate_codes(&builder);
 	success = sort_codes(builder.keys, length);
+	// for (uint32_t i = 1; i < length; i++)
+	// 	if (builder.keys[i - 1].key == builder.keys[i].key)
+	// 		dprintf(1, "REEEEEEEEEEEEEEEEEE\n");
 	if (success)
 	{
 		final_len = cluster_td(&builder, 0, 0, length - 1);
 		merge_nodes(&builder, 0, final_len, 1);
 		*dst = (t_bvh){objects, builder.clusters, builder.node_idx - 1, length};
 	}
-	flatten_bvh(&builder);
+	//flatten_bvh(&builder);
 	free_builder(&builder, success);
-	//dprintf(1, "maxdepth = %u\n", print_nodes(dst, 0, dst->root));
+	// dprintf(1, "maxdepth = %u\n", print_nodes(dst, 0, dst->root));
+	dprintf(1, "Creating bvh took %lf!\n", (clock() - start) / (double) CLOCKS_PER_SEC);
 	return (success);
 }

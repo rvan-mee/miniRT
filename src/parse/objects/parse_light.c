@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/14 17:18:23 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/07 21:03:51 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/22 14:28:50 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_parse_error	parse_light(char **linep, t_object *object, t_conf_data *conf)
 		return (BRIGHT);
 	if (!parse_rgb(&line, &object->colour))
 		return (COLOUR);
-	if (!dynarr_addone(&conf->lights, &object->light))
+	if (!dynarr_addone(&conf->lights, object))
 		return (DYNARR);
 	*linep = line;
 	return (SUCCESS);

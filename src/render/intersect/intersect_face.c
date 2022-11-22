@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/06 18:55:43 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/07 21:09:53 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/22 16:30:28 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ float	intersect_face(const t_object *obj, const t_ray *ray, t_hit *hit)
 	const float		det = dot_product(tr->v0v1, pvec);
 	t_tri_intersect	isect;
 
-	if (fabsf(det) < FLT_EPSILON * 128)
+	if (fabsf(det) < FLT_EPSILON)
 		return (MISS);
 	isect.inv_det = 1.0f / det;
 	isect.tvec = ray->origin - tr->vert[0];

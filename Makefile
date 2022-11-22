@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/11/18 20:37:44 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/11/22 19:01:03 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME := miniRT
 CC := gcc
 
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -march=native -O3 -mbmi2 -pthread -g
+CFLAGS += -march=native -O3 -mbmi2 -pthread # -g -fsanitize=address
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES

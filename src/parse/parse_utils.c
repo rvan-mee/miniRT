@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 11:28:47 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/18 13:35:10 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/22 18:53:44 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,10 @@ static const char	*g_err_message[] = {\
 bool	parse_line_error(const char *line, t_parse_error err, size_t line_c)
 {
 	char	*newline;
-	
+
 	newline = ft_strchr(line, '\n');
 	if (newline != NULL)
 		*newline = '\0';
-	// for (int i = 0; line[i]; i++)
-	// 	printf("char %d pos %d\n", line[i], i);
-		
-	// printf("parsing line: `%s'\n", line);
 	dprintf(STDERR_FILENO, PARSE_ERROR, line_c, line, g_err_message[err]);
 	return (false);
 }

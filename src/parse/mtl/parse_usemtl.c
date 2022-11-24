@@ -18,9 +18,7 @@ static t_parse_error	parse_mtl_name(char **linep, char **name)
 {
 	size_t		name_len;
 	char 		*line;
-	size_t		i;
 
-	i = 0;
 	name_len = 0;
 	line = *linep;
 	skip_spaces(&line);

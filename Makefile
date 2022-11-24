@@ -12,10 +12,10 @@
 
 NAME := miniRT
 
-CC := gcc
+CC = gcc
 
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -march=native -O3 -mbmi2 -pthread # -g -fsanitize=address
+CFLAGS += -march=native -O3 -pthread # -g -fsanitize=address
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES
@@ -166,8 +166,12 @@ else
 	LINKER_FLAGS += -ldl
 endif
 
+# core count of current pc
+CORE_COUNT = $(shell grep '^processor' /proc/cpuinfo | wc -l)
+DEFINES := -D THREAD_C=$(CORE_COUNT)
 #		RANDOM THINGS
-COMPILE := @$(CC) $(INCLUDE) $(CFLAGS)
+COMPILE := $(CC) $(INCLUDE) $(CFLAGS) $(DEFINES)
+
 
 # TEST
 

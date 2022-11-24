@@ -25,6 +25,32 @@ static t_jobs	*take_first_node(t_minirt *data)
 	return (first_node);
 }
 
+static void	ref(t_threading *thread)
+{
+	pthread_mutex_lock(&thread->ref_lock);
+	thread->ref_count++;
+	pthread_mutex_unlock(&thread->ref_lock);
+}
+
+static void	unref(t_threading *thread)
+{
+	pthread_mutex_lock(&thread->ref_lock);
+	thread->ref_count--;
+	pthread_mutex_unlock(&thread->ref_lock);
+}
+
+static void	stop_timer(t_threading *thread)
+{
+	bool	done;
+
+	pthread_mutex_lock(&thread->ref_lock);
+	done = thread->ref_count == 0;
+	pthread_mutex_unlock(&thread->ref_lock);
+	if (!done)
+		return ;
+	dprintf(1, "Render took %lf!\n", (double) (clock() - thread->start_time) / (double) CLOCKS_PER_SEC);
+}
+
 void	*work(void *param)
 {
 	t_minirt	*data;
@@ -35,16 +61,15 @@ void	*work(void *param)
 	{
 		current_job = take_first_node(data);
 		if (!current_job)
+		{
+			stop_timer(&data->thread);
 			wait_for_new_job(data);
+		}
 		else
 		{
-			pthread_mutex_lock(&data->thread.ref_lock);
-			data->thread.ref_count++;
-			pthread_mutex_unlock(&data->thread.ref_lock);
+			ref(&data->thread);
 			current_job->job(data, current_job->job_param);
-			pthread_mutex_lock(&data->thread.ref_lock);
-			data->thread.ref_count--;
-			pthread_mutex_unlock(&data->thread.ref_lock);
+			unref(&data->thread);
 			free(current_job);
 		}
 	}

@@ -67,6 +67,7 @@ bool	init_work_threads(t_minirt *data)
 	data->thread.quit = false;
 	while (*thread < THREAD_C)
 	{
+		data->thread.start_time = clock();
 		if (pthread_create(&data->thread.threads[*thread], NULL, work, data) != 0)
 		{
 			data->thread.quit = true;

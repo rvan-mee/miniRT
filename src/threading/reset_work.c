@@ -77,6 +77,7 @@ bool	reset_work(t_minirt *data)
 {
 	wipe_image(data);
 	create_render_queue(data);
+	data->thread.start_time = clock();
 	if (!data->thread.job_lst)
 		return (false);
 	return (true);

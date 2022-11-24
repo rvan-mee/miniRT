@@ -84,6 +84,7 @@ static void	rotate_object(t_object *object, t_fmat matrix)
 	}
 	else if (object->type == FACE)
 	{
+		rotate_vector(&object->coords, matrix);
 		rotate_vector(&object->face.vert[0], matrix);
 		rotate_vector(&object->face.vert[1], matrix);
 		rotate_vector(&object->face.vert[2], matrix);

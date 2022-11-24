@@ -21,10 +21,12 @@
 # include <pthread.h>
 # include <bmp.h>
 
-# define WIDTH 1920
-# define HEIGHT 1080
+# define WIDTH 2560
+# define HEIGHT 1440
 
-# define THREAD_C	12 // amount of threads
+# ifndef THREAD_C
+#  define THREAD_C	8 // amount of threads
+# endif
 # define BLOCK_C	25 // don't set higher than 50
 
 #ifndef USE_BVH
@@ -269,6 +271,7 @@ typedef struct s_threading
 	pthread_mutex_t	job_lock;
 	size_t			ref_count;
 	pthread_mutex_t	ref_lock;
+	clock_t			start_time;
 }	t_threading;
 
 typedef struct s_minirt {

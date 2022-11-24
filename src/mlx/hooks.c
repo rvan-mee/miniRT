@@ -19,9 +19,10 @@
 #include <thread.h>
 #include <mlx.h>
 
-#define STEPS 5.0f
-#define ROT_AMOUNT 15
-#define DEG 0.0174533
+#define STEPS			0.05f
+#define ROT_AMOUNT		15
+#define DEG				0.0174533
+#define TIME_MSG		"Render cancelled after %lf!\n"
 
 static void	reload_scene(t_minirt *data, enum keys key)
 {
@@ -112,6 +113,8 @@ void	keyhook(mlx_key_data_t keydata, t_minirt *data)
 	pthread_mutex_lock(&data->thread.job_lock);
 	if (keydata.action == MLX_PRESS && g_hook_func[keydata.key])
 	{
+		if (data->thread.job_lst)
+			dprintf(1, TIME_MSG, (clock() - data->thread.start_time) / (double) CLOCKS_PER_SEC);
 		clear_job_lst(data);
 		wait_till_done(data);
 		g_hook_func[keydata.key](data, keydata.key);

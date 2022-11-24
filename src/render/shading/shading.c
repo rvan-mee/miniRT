@@ -62,7 +62,7 @@ uint32_t	get_hit_colour(t_minirt *data, t_scene *scene, t_object *object, t_hit 
 	while (i < scene->lights_len)
 	{
 		light_hits = false;
-		ray.direction = ray.origin - lights[i].coords;
+		ray.direction = lights[i].coords - ray.origin;
 		distance_to_light = dot_product(ray.direction, ray.direction);
 		ray.direction = normalize_vector(ray.direction);
 		facing_ratio = dot_product(ray.direction, hit->normal);

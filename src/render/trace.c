@@ -11,9 +11,7 @@
 /* ************************************************************************** */
 
 #include <minirt.h>
-#include <ft_math.h>
 #include <render.h>
-#include <math.h>
 #include <float.h>
 #include <bvh.h>
 
@@ -23,7 +21,6 @@ bool	trace(
 		const size_t screen[2],
 		t_dynarr *hits)
 {
-	const float	d_offset = (1 - 128 * FLT_EPSILON);
 	float		hit_distance;
 	t_hit		hit;
 	size_t		i;
@@ -45,10 +42,10 @@ bool	trace(
 			hit.distance = hit_distance;
 			hit.object = scene->objects + i;
 		}
+		if (hit.distance == FLT_MAX)
+			return (true);
 	}
-	if (hit.distance == FLT_MAX)
-		return (true);
-	hit.hit = hit.ray.origin + hit.ray.direction * (hit.distance * d_offset);
+	hit.hit = hit.ray.origin + hit.ray.direction * (hit.distance - FLT_EPSILON * 10);
 	calculate_normal(&hit);
 	return (dynarr_addone(hits, &hit));
 }

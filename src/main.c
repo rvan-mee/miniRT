@@ -39,7 +39,7 @@ int	main(int argc, char *argv[])
 	atexit(f);
 	if (!parse_config_file(argc, argv, &data.scene) || \
 		!new_bvh(data.scene.objects, data.scene.objects_len, &data.scene.bvh))
-		exit(EXIT_SUCCESS);
+		return (EXIT_FAILURE);
 	create_mlx(&data);
 	if (init_work_threads(&data))
 	{

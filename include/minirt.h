@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/22 17:24:05 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/25 21:01:40 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define BLOCK_C	25 // don't set higher than 50
 
 #ifndef USE_BVH
-# define USE_BVH	1
+# define USE_BVH	0
 #endif
 
 typedef float	t_fvec __attribute__ ((vector_size (4 * sizeof(float))));
@@ -109,10 +109,10 @@ typedef struct s_mtl_enabled {
 // http://paulbourke.net/dataformats/mtl/
 typedef struct s_mtl {
 	char 			*name;
-	t_rgba			ambient; 		// Ka - ambient colour of material
-	t_rgba			diffuse; 		// Kd - diffuse colour 
-	t_rgba			specular;		// Ks - specular colour
-	t_rgba			emmis_col; 		// Ke - emissive colour
+	t_fvec			ambient; 		// Ka - ambient colour of material
+	t_fvec			diffuse; 		// Kd - diffuse colour 
+	t_fvec			specular;		// Ks - specular colour
+	t_fvec			emmis_col; 		// Ke - emissive colour
 	int32_t			illum;   		// illum - lind of illumination
 	float			reflec;  		// Ns - specular shininess
 	float			transp_d;  		// d - dissolve | tr is the inverse of d ( 1.0 - tr)

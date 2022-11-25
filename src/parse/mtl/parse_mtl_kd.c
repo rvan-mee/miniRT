@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/12 17:13:45 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/18 16:47:38 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/23 13:06:23 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ t_parse_error	parse_mtl_kd(char *line, t_object *object)
 	if (!parse_float_rgb(&line, &rgb))
 		return (KD);
 	object->material.is_enabled.diffuse = true;
-	object->material.diffuse.r = rgb[0] * 255;
-	object->material.diffuse.g = rgb[1] * 255;
-	object->material.diffuse.b = rgb[2] * 255;
-	object->material.diffuse.a = 0xFF;
+	object->material.diffuse = rgb;
 	return (CONTINUE);
 }

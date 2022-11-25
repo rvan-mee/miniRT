@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/04 15:44:05 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/22 15:55:31 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/25 20:48:11 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,15 @@ static bool	parse_normal(char **linep, t_face_indices *index, t_conf_data *conf)
 	if (*line != '/')
 		return (false);
 	line++;
-	if (!ft_isdigit(*line) && *line != '-' && *line != '+')
+	if (!ft_isdigit(*line) && *line != '-')
 		return (false);
 	index->has_normal = true;
 	new_index = ft_atoi(line) - 1;
 	if (new_index < 0)
-		new_index = conf->vertices.length + new_index + 1;
+		new_index += conf->vertices.length + 1;
 	if (new_index < 0 || (size_t)new_index > conf->vertex_normals.length)
 		return (false);
-	if (*line == '-' || *line == '+')
-		line++;
+	line++;
 	skip_digits(&line);
 	index->normal_index = new_index;
 	*linep = line;
@@ -57,16 +56,15 @@ static bool	parse_vertex_texture(char **linep, \
 	int32_t	new_index;
 
 	line = *linep;
-	if (!ft_isdigit(*line) && *line != '-' && *line != '+')
+	if (!ft_isdigit(*line) && *line != '-')
 		return (false);
 	new_index = ft_atoi(line) - 1;
 	if (new_index < 0)
-		new_index = conf->vertices.length + new_index + 1;
+		new_index += conf->vertices.length + 1;
 	if (new_index < 0 || (size_t)new_index > conf->vertex_textures.length)
 		return (false);
 	index->vert_texture_index = new_index;
-	if (*line == '-' || *line == '+')
-		line++;
+	line++;
 	skip_digits(&line);
 	if (*line == '/')
 		index->has_normal = true;
@@ -82,21 +80,20 @@ static bool	parse_vert_index(char **linep, \
 
 	line = *linep;
 	skip_spaces(&line);
-	if (!ft_isdigit(*line) && *line != '-' && *line != '+')
+	if (!ft_isdigit(*line) && *line != '-')
 		return (false);
 	new_index = ft_atoi(line) - 1;
 	if (new_index < 0)
-		new_index = conf->vertices.length + new_index + 1;
+		new_index += conf->vertices.length + 1;
 	if (new_index < 0 || (size_t)new_index > conf->vertices.length)
 		return (false);
 	index->vert_index = new_index;
-	if (*line == '-' || *line == '+')
-		line++;
+	line++;
 	skip_digits(&line);
 	if (*line == '/')
 	{
 		line++;
-		if (ft_isdigit(*line) || *line == '-' || *line == '+')
+		if (ft_isdigit(*line) || *line == '-')
 			index->has_texture = true;
 		else if (*line == '/')
 			index->has_normal = true;
@@ -171,6 +168,8 @@ t_parse_error	parse_face(char **linep, t_object *object, t_conf_data *conf)
 		set_indices(object, conf, &indices, vert);
 		vert++;
 	}
+	object->face.has_normal = indices.has_normal;
+	object->face.has_texture = indices.has_texture;
 	object->face.v0v1 = object->face.vert[B] - object->face.vert[A];
 	object->face.v0v2 = object->face.vert[C] - object->face.vert[A];
 	object->coords[0] = (fminf(fminf(object->face.vert[0][X], object->face.vert[1][X]), object->face.vert[2][X]) + fmaxf(fmaxf(object->face.vert[0][X], object->face.vert[1][X]), object->face.vert[2][X])) / 2;

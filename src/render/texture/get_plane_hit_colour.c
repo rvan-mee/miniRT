@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   parse_mtl_map_kd.c                                 :+:    :+:            */
+/*   get_plane_hit_colour.c                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/11/16 12:03:28 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/25 20:54:08 by rvan-mee      ########   odam.nl         */
+/*   Created: 2022/11/23 12:30:18 by rvan-mee      #+#    #+#                 */
+/*   Updated: 2022/11/23 14:41:30 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <parse.h>
 #include <minirt.h>
-#include <bmp.h>
-#include <parse_mtl.h>
 
-t_parse_error	parse_mtl_map_kd(char *line, t_object *object)
+t_rgba	get_plane_hit_colour(t_object *object, t_hit *hit)
 {
-	t_parse_error	err;
-	t_bmp			tex;
-
-	err = parse_mtl_map(line, &tex);
-	if (err != SUCCESS)
-		return (err);
-	object->material.is_enabled.map_Kd = true;
-	object->material.map_Kd = tex;
-	return (CONTINUE);
+	(void) hit;
+	return (object->colour);
 }

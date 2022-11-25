@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 12:12:27 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/09 20:00:12 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/23 11:55:27 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <thread.h>
 #include <mlx.h>
 
-#define STEPS 5.0f
+#define STEPS 0.5f
 #define ROT_AMOUNT 15
 #define DEG 0.0174533
 

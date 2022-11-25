@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/11/22 19:01:03 by rvan-mee      ########   odam.nl          #
+#    Updated: 2022/11/23 18:36:45 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,7 +83,11 @@ SRCS := main.c										\
 		render/calculate_normal.c					\
 		render/shading/shading.c					\
 		render/texture/get_uv_colour.c				\
-		render/texture/sphere_uv.c					\
+		render/texture/get_sphere_hit_colour.c		\
+		render/texture/get_plane_hit_colour.c		\
+		render/texture/get_cyl_hit_colour.c			\
+		render/texture/get_triangle_hit_colour.c	\
+		render/texture/get_face_hit_colour.c		\
 		\
 		bvh/new_bvh.c								\
 		bvh/morton.c								\

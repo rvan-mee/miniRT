@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/26 14:45:10 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/22 17:24:00 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/23 14:40:54 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,17 @@
 #include <ft_math.h>
 #include <texture.h>
 
-static t_rgba	get_obj_rgba(t_object *object)
+static t_rgba	get_obj_rgba(t_object *object, t_hit *hit)
 {
-	t_rgba	rgb;
-
-	rgb.rgba = 0;
-	if (object->type == SPHERE)
-		return (object->colour);
-	if (object->type == PLANE)
-		return (object->colour);
-	if (object->type == CYLINDER)
-		return (object->colour);
-	if (object->type == TRIANGLE)
-		return (object->colour);
-	if (object->type == FACE)
-		return (object->colour);
-	return (rgb);
+	static t_rgba	(*get_col_arr[])(t_object *, t_hit *) = {\
+		[SPHERE] = get_sphere_hit_colour,	\
+		[PLANE] = get_plane_hit_colour,		\
+		[CYLINDER] = get_cyl_hit_colour,	\
+		[TRIANGLE] = get_tri_hit_colour,	\
+		[FACE] = get_face_hit_colour,		\
+	};
+	
+	return (get_col_arr[object->type](object, hit));
 }
 
 uint32_t	set_shade_colour(t_rgba colour, float facing_ratio)
@@ -59,6 +54,7 @@ uint32_t	get_hit_colour(t_minirt *data, t_scene *scene, t_object *object, t_hit 
 
 	i = 0;
 	j = 0;
+	(void) data;
 	ray.origin = hit->hit;
 	while (i < scene->lights_len)
 	{
@@ -102,11 +98,6 @@ uint32_t	get_hit_colour(t_minirt *data, t_scene *scene, t_object *object, t_hit 
 		i++;
 	}
 	if (!light_hits)
-	{
-		if (object->type == SPHERE)
-			return (set_shade_colour(get_texture_colour_sphere(hit, &data->temp_texture), facing_ratio));
-		else
-			return (set_shade_colour(get_obj_rgba(object), facing_ratio));
-	}
+		return (set_shade_colour(get_obj_rgba(object, hit), facing_ratio));
 	return (0x00000FF);
 }

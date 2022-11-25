@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   sphere_uv.c                                        :+:    :+:            */
+/*   get_sphere_hit_colour.c                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/28 15:40:35 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/16 17:14:18 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/23 14:40:03 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 #define PI 3.141592653589793238
 
-t_rgba	get_texture_colour_sphere(t_hit *hit, t_bmp *texture)
+static t_rgba	get_texture_colour_sphere(t_hit *hit, t_mtl *texture)
 {
 	t_fvec	d;
 	float	u;
@@ -29,5 +29,12 @@ t_rgba	get_texture_colour_sphere(t_hit *hit, t_bmp *texture)
 	d = normalize_vector(d);
 	u = 0.5 + atan2(d[X], d[Z]) / (2 * PI) * -1;
 	v = 0.5 + asin(d[Y]) / PI;
-	return (get_uv_colour(texture, u, v));
+	return (get_uv_colour(&texture->map_Kd, u, v));
+}
+
+t_rgba	get_sphere_hit_colour(t_object *object, t_hit *hit)
+{
+	if (object->has_mat && object->mat->is_enabled.map_Kd)
+		return (get_texture_colour_sphere(hit, object->mat));
+	return (object->colour);
 }

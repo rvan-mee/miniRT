@@ -60,9 +60,6 @@ miniRT
 # vscode config file
 .vscode
 
-# bmp files
-*.bmp
-
 # test exes
 *.test
 *_portrait.bmp

@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 02:00:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/22 14:27:28 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/27 12:15:20 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <libft.h>
 
 #define DUPLICATE_ERROR		"Error\nThere can only be one %s!\n"
 #define UNKNOWN_ERROR		"Error\nUnknown type %s\n"

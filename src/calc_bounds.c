@@ -20,6 +20,24 @@ static t_aabb	face_bounds(t_object *obj)
 	});
 }
 
+static t_aabb	triangle_bounds(t_object *obj)
+{
+	const t_triangle	*t = &obj->triangle;
+
+	return ((t_aabb) {
+		.min = {
+			fminf(fminf(t->vert[0][X], t->vert[1][X]), t->vert[2][X]),
+			fminf(fminf(t->vert[0][Y], t->vert[1][Y]), t->vert[2][Y]),
+			fminf(fminf(t->vert[0][Z], t->vert[1][Z]), t->vert[2][Z]),
+		},
+		.max = {
+			fmaxf(fmaxf(t->vert[0][X], t->vert[1][X]), t->vert[2][X]),
+			fmaxf(fmaxf(t->vert[0][Y], t->vert[1][Y]), t->vert[2][Y]),
+			fmaxf(fmaxf(t->vert[0][Z], t->vert[1][Z]), t->vert[2][Z]),
+		}
+	});
+}
+
 static t_aabb	cyl_bounds(t_object *obj)
 {
 	const t_aabb	bot = {
@@ -62,6 +80,8 @@ t_aabb	calc_bounds(t_object *obj)
 			return (cyl_bounds(obj));
 		case FACE:
 			return (face_bounds(obj));
+		case TRIANGLE:
+			return (triangle_bounds(obj));
 		default:
 		{
 			printf("exit in calc_bounds\n");

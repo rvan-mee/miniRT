@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/26 14:45:10 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/23 14:40:54 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/28 21:55:39 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <render.h>
 #include <ft_math.h>
 #include <texture.h>
+#include <float.h>
 
 static t_rgba	get_obj_rgba(t_object *object, t_hit *hit)
 {
@@ -28,14 +29,25 @@ static t_rgba	get_obj_rgba(t_object *object, t_hit *hit)
 	return (get_col_arr[object->type](object, hit));
 }
 
-uint32_t	set_shade_colour(t_rgba colour, float facing_ratio)
+uint32_t	set_shade_colour(t_rgba colour, float facing_ratio, t_rgba ambient, float ambient_ratio)
 {
 	t_rgba	col;
 
 	col = colour;
-	col.r = (uint8_t) ((float) col.r * facing_ratio);
-	col.g = (uint8_t) ((float) col.g * facing_ratio);
-	col.b = (uint8_t) ((float) col.b * facing_ratio);
+	col.r = (uint8_t) fminf(((float) col.r * facing_ratio) + ambient.r * ambient_ratio, 255.0f);
+	col.g = (uint8_t) fminf(((float) col.g * facing_ratio) + ambient.g * ambient_ratio, 255.0f);
+	col.b = (uint8_t) fminf(((float) col.b * facing_ratio) + ambient.b * ambient_ratio, 255.0f);
+	col.a = 0xFF;
+	return (col.rgba);
+}
+
+uint32_t	get_ambient_colour(t_rgba ambient, float ambient_ratio)
+{
+	t_rgba	col;
+
+	col.r = ambient.r * ambient_ratio;
+	col.g = ambient.g * ambient_ratio;
+	col.b = ambient.b * ambient_ratio;
 	col.a = 0xFF;
 	return (col.rgba);
 }
@@ -58,7 +70,7 @@ uint32_t	get_hit_colour(t_minirt *data, t_scene *scene, t_object *object, t_hit 
 	while (i < scene->lights_len)
 	{
 		light_hits = false;
-		ray.direction = ray.origin - lights[i].coords;
+		ray.direction = lights[i].coords - ray.origin;
 		distance_to_light = dot_product(ray.direction, ray.direction);
 		ray.direction = normalize_vector(ray.direction);
 		facing_ratio = dot_product(ray.direction, hit->normal);
@@ -97,6 +109,6 @@ uint32_t	get_hit_colour(t_minirt *data, t_scene *scene, t_object *object, t_hit 
 		i++;
 	}
 	if (!light_hits)
-		return (set_shade_colour(get_obj_rgba(object, hit), facing_ratio));
-	return (0x00000FF);
+		return (set_shade_colour(get_obj_rgba(object, hit), facing_ratio, data->scene.ambient.colour, data->scene.ambient.ambient.ratio));
+	return (get_ambient_colour(data->scene.ambient.colour, data->scene.ambient.ambient.ratio));
 }

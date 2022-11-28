@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/25 21:01:40 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/28 17:48:50 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define BLOCK_C	25 // don't set higher than 50
 
 #ifndef USE_BVH
-# define USE_BVH	0
+# define USE_BVH	1
 #endif
 
 typedef float	t_fvec __attribute__ ((vector_size (4 * sizeof(float))));

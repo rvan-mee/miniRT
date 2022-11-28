@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:31:51 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/18 18:17:18 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/28 21:59:10 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ int	main(int argc, char *argv[])
 	data.width = WIDTH;
 	data.height = HEIGHT;
 	data.thread.job_lst = NULL;
-	if (!parse_bmp("texture.bmp", &data.temp_texture))
-		return (EXIT_FAILURE);
 	atexit(f);
 	if (!parse_config_file(argc, argv, &data.scene) || \
 		!new_bvh(data.scene.objects, data.scene.objects_len, &data.scene.bvh))

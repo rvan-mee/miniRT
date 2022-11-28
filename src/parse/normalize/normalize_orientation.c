@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/15 20:41:36 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/19 13:18:00 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/27 16:09:49 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,14 @@ static void	rotate_vector(t_fvec *vecp, t_fmat mat)
 
 static void	rotate_object(t_object *object, t_fmat matrix)
 {
+	rotate_vector(&object->coords, matrix);
 	if (object->type == PLANE)
-	{
-		rotate_vector(&object->coords, matrix);
 		rotate_vector(&object->plane.orientation, matrix);
-	}
 	else if (object->type == CYLINDER)
 	{
-		rotate_vector(&object->coords, matrix);
 		rotate_vector(&object->cylinder.orientation, matrix);
 		rotate_vector(&object->cylinder.top, matrix);
 	}
-	else if (object->type == SPHERE)
-		rotate_vector(&object->coords, matrix);
 	else if (object->type == TRIANGLE)
 	{
 		rotate_vector(&object->triangle.vert[0], matrix);

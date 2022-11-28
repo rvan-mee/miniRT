@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/06 16:27:02 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/22 15:54:50 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2022/11/28 15:19:03 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,15 @@ static void	intersect_node(
 		const t_bvh *bvh,
 		const uint32_t idx,
 		const t_ray *ray,
-		t_prio nodes[2])
+		t_prio nodes[2],
+		t_hit *hit)
 {
 	const t_cluster	*c = get_node(bvh, idx);
 	const bool		is_p = is_prim(bvh, idx);
 	float			distance;
-	t_hit			hit;
 
 	if (is_p)
-		distance = intersect(bvh->prims + idx, ray, &hit);
+		distance = intersect(bvh->prims + idx, ray, hit);
 	else
 		distance = aabb_intersect(c->aabb, ray);
 	if (distance == MISS || distance < 0)
@@ -93,18 +93,19 @@ static void	intersect_node(
 static inline void	intersect_next(
 		const t_bvh *bvh,
 		const t_ray *ray,
-		t_prio nodes[2])
+		t_prio nodes[2],
+		t_hit *hit)
 {
 	t_prio	*cur;
 
 	cur = nodes[Q].next;
 	nodes[Q].next = cur->next;
 	if (!get_node(bvh, cur->node)->leaf || is_prim(bvh, get_l(bvh, cur->node)))
-		intersect_node(bvh, get_l(bvh, cur->node), ray, nodes);
+		intersect_node(bvh, get_l(bvh, cur->node), ray, nodes, hit);
 	else
 		insert(get_l(bvh, cur->node), cur->dist, false, nodes);
 	if (!get_node(bvh, cur->node)->leaf || is_prim(bvh, get_r(bvh, cur->node)))
-		intersect_node(bvh, get_r(bvh, cur->node), ray, nodes);
+		intersect_node(bvh, get_r(bvh, cur->node), ray, nodes, hit);
 	else
 		insert(get_r(bvh, cur->node), cur->dist, false, nodes);
 	cur->next = nodes[P].next;
@@ -118,9 +119,9 @@ bool	intersect_bvh(const t_bvh *bvh, const t_ray *ray, t_hit *hit)
 
 	link_nodes(nodes + P, nodebuf);
 	nodes[Q].next = NULL;
-	intersect_node(bvh, bvh->root, ray, nodes);
+	intersect_node(bvh, bvh->root, ray, nodes, hit);
 	while (nodes[Q].next != NULL && !is_prim(bvh, nodes[Q].next->node))
-		intersect_next(bvh, ray, nodes);
+		intersect_next(bvh, ray, nodes, hit);
 	if (nodes[Q].next == NULL)
 		return (false);
 	hit->distance = nodes[Q].next->dist;

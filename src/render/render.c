@@ -110,6 +110,7 @@ static bool	render(t_minirt	*data, t_render *block, \
 	size_t			screen[2];
 	size_t			x;
 	size_t			y;
+	t_ray			ray;
 
 	y = 0;
 	if (!dynarr_create(&hits, width, sizeof(t_hit)))
@@ -121,7 +122,8 @@ static bool	render(t_minirt	*data, t_render *block, \
 		while (x < width)
 		{
 			screen[X] = block->start_pixels[X] + x;
-			if (!trace(&data->scene, &block->rays[y][x], screen, &hits))
+			ray = get_cam_ray(&data->scene.camera, screen[X], screen[Y]);
+			if (!trace(&data->scene, &ray, screen, &hits))
 				return (false); // TODO: dynarr_delete(&hits);
 			x++;
 		}
@@ -153,15 +155,8 @@ void	start_render(t_minirt *data, void *func_data)
 	block = (t_render *)func_data;
 	width = block->end_pixels[X] - block->start_pixels[X];
 	height = block->end_pixels[Y] - block->start_pixels[Y];
-	if (!block)
-		return ;
-	if (!create_rays(data, block))
-	{
-		free_data(data, block);
-		return ;
-	}
 	if (!render(data, block, width, height))
-		quit_working(data);
-	clean_rays(block->rays);
-	free(block);
+		free_data(data, block);
+	else
+		free(block);
 }

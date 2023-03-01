@@ -11,9 +11,7 @@
 /* ************************************************************************** */
 
 #include <minirt.h>
-#include <ft_math.h>
 #include <render.h>
-#include <math.h>
 #include <float.h>
 #include <bvh.h>
 
@@ -48,7 +46,6 @@ bool	trace(
 	}
 	if (hit.distance == FLT_MAX)
 		return (true);
-	// hit.hit = hit.ray.origin + hit.ray.direction * (hit.distance * d_offset);
 	hit.hit = hit.ray.origin + hit.ray.direction * hit.distance;
 	calculate_normal(&hit);
 	hit.hit += hit.normal * (FLT_EPSILON * 128);

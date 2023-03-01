@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <thread.h>
-#include <mlx.h>
 #include <libft.h>
 
 static void	destroy_mutexes(t_minirt *data)

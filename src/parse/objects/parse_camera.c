@@ -13,6 +13,7 @@
 #include <parse.h>
 #include <libft.h>
 #include <math.h>
+#include <ft_math.h>
 
 static bool	parse_fov(char **linep, float *dst)
 {
@@ -34,6 +35,26 @@ static bool	parse_fov(char **linep, float *dst)
 	return (true);
 }
 
+/**
+ * Pre-calculate stuff we need to cast camera rays efficiently.
+ *
+ * u and y are the camera x and y axis in world space
+ *
+ * I'd add a link to the explanation here but norminette :^)
+ */
+static void	calc_ray_info(t_camera *cam, float w, float h)
+{
+	const t_fvec	up = {0, 1, 0};
+	const float		ws_ratio = w / 2.f / tanf(cam->fov / 2.f);
+
+	cam->u = normalize_vector(cross_product(up, cam->orientation));
+	cam->v = normalize_vector(cross_product(cam->orientation, cam->u));
+	cam->proj_vec = (t_fvec){};
+	cam->proj_vec += -w / 2.f * cam->u;
+	cam->proj_vec += h / 2.0f * cam->v;
+	cam->proj_vec += ws_ratio * cam->orientation;
+}
+
 t_parse_error	parse_camera(char **linep, t_object *object, t_conf_data *conf)
 {
 	char	*line;
@@ -48,6 +69,7 @@ t_parse_error	parse_camera(char **linep, t_object *object, t_conf_data *conf)
 		return (VECTOR);
 	if (!parse_fov(&line, &object->camera.fov))
 		return (FOV);
+	calc_ray_info(&object->camera, WIDTH, HEIGHT);
 	*linep = line;
 	return (SUCCESS);
 }

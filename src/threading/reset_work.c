@@ -19,21 +19,6 @@ void	wipe_image(t_minirt *data)
 	ft_bzero(data->img->pixels, data->height * data->width * sizeof(uint32_t));
 }
 
-void	clean_rays(t_ray **rays)
-{
-	size_t	i;
-
-	i = 0;
-	if (!rays)
-		return ;
-	while (rays[i])
-	{
-		free(rays[i]);
-		i++;
-	}
-	free(rays);
-}
-
 void	clear_job_lst(t_minirt *data)
 {
 	t_jobs	*to_free;

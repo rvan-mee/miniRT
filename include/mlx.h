@@ -17,6 +17,7 @@
 # include <minirt.h>
 
 void	keyhook(mlx_key_data_t keydata, t_minirt *data);
+void	mouse_hook(mouse_key_t type, action_t action, modifier_key_t mod, t_minirt *data);
 void	create_mlx(t_minirt *data);
 
 #endif

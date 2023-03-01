@@ -24,7 +24,9 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 
-# define THREAD_C	12 // amount of threads
+# ifndef THREAD_C
+#  define THREAD_C	8 // amount of threads
+# endif
 # define BLOCK_C	25 // don't set higher than 50
 
 #ifndef USE_BVH
@@ -132,6 +134,9 @@ typedef struct s_ambient {
 typedef struct s_camera {
 	t_fvec	orientation;
 	float	fov;
+	t_fvec	u;
+	t_fvec	v;
+	t_fvec	proj_vec;
 }	t_camera;
 
 typedef struct s_light {
@@ -250,7 +255,6 @@ typedef struct s_render_block
 	size_t			end_pixels[2];
 	size_t			size[2];
 	t_object		camera;
-	t_ray			**rays;
 }	t_render;
 
 typedef struct s_jobs {

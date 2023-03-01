@@ -23,7 +23,6 @@ static t_render	*new_render_block(t_minirt *data, size_t start[2], size_t end[2]
 	render_block = malloc(sizeof(t_render));
 	if (!render_block)
 		return (NULL);
-	render_block->rays = NULL;
 	render_block->start_pixels[X] = start[X];
 	render_block->start_pixels[Y] = start[Y];
 	render_block->end_pixels[X] = end[X];

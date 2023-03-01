@@ -14,30 +14,46 @@
 #include <bvh.h>
 #include <mlx.h>
 #include <parse.h>
-#include <stdio.h>
 #include <thread.h>
-#include <texture.h>
 
 void	f(void)
 {
 	system("leaks -q miniRT");
 }
-void	stopwatch(uint8_t i, uint8_t options, const char *arg);
+
+static void	init_data(t_minirt *data, int argc, char **argv)
+{
+	*data = (t_minirt){
+		NULL,
+		NULL,
+		{},
+		argv,
+		argc,
+		WIDTH,
+		HEIGHT,
+		{},
+		{}
+	};
+}
+
+static bool	init_render_data(t_minirt *data)
+{
+	if (!parse_config_file(data->argc, data->argv, &data->scene))
+		return (false);
+	if (!new_bvh(data->scene.objects, data->scene.objects_len, &data->scene.bvh))
+		return (false);
+	return (true);
+}
 
 #include <unistd.h>
 int	main(int argc, char *argv[])
 {
 	t_minirt	data;
 
-	data.argv = argv;
-	data.argc = argc;
-	data.width = WIDTH;
-	data.height = HEIGHT;
-	data.thread.job_lst = NULL;
+	init_data(&data, argc, argv);
 	atexit(f);
-	if (!parse_config_file(argc, argv, &data.scene) || \
-		!new_bvh(data.scene.objects, data.scene.objects_len, &data.scene.bvh))
-		exit(EXIT_SUCCESS);
+	if (!init_render_data(&data))
+		return (EXIT_FAILURE);
 	create_mlx(&data);
 	if (init_work_threads(&data))
 	{

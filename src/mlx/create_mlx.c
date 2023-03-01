@@ -29,4 +29,5 @@ void	create_mlx(t_minirt	*data)
 		exit(EXIT_FAILURE);
 	}
 	mlx_key_hook(data->mlx, (mlx_keyfunc)keyhook, data);
+	mlx_mouse_hook(data->mlx, (mlx_mousefunc)mouse_hook, data);
 }

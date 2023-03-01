@@ -25,6 +25,20 @@ static t_jobs	*take_first_node(t_minirt *data)
 	return (first_node);
 }
 
+static void	ref(t_threading *thread)
+{
+	pthread_mutex_lock(&thread->ref_lock);
+	thread->ref_count++;
+	pthread_mutex_unlock(&thread->ref_lock);
+}
+
+static void	unref(t_threading *thread)
+{
+	pthread_mutex_lock(&thread->ref_lock);
+	thread->ref_count--;
+	pthread_mutex_unlock(&thread->ref_lock);
+}
+
 void	*work(void *param)
 {
 	t_minirt	*data;
@@ -38,13 +52,9 @@ void	*work(void *param)
 			wait_for_new_job(data);
 		else
 		{
-			pthread_mutex_lock(&data->thread.ref_lock);
-			data->thread.ref_count++;
-			pthread_mutex_unlock(&data->thread.ref_lock);
+			ref(&data->thread);
 			current_job->job(data, current_job->job_param);
-			pthread_mutex_lock(&data->thread.ref_lock);
-			data->thread.ref_count--;
-			pthread_mutex_unlock(&data->thread.ref_lock);
+			unref(&data->thread);
 			free(current_job);
 		}
 	}

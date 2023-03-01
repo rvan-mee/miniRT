@@ -45,7 +45,6 @@ int	main(void)
 {
 	t_scene	scene;
 	bool	result = parse_scene(STDIN_FILENO, &scene);
-	normalize(&scene);
 	printf(result ? "true\n" : "false\n");
 	print_fvec("camera coords", scene.camera.camera.coords);
 	print_fvec("orientation", scene.camera.camera.orientation);

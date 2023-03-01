@@ -49,6 +49,7 @@ float	intersect_triangle(const t_object *object, const t_ray *ray, t_hit *hit);
 float	intersect_face(const t_object *obj, const t_ray *ray, t_hit *hit);
 
 void	calculate_normal(t_hit *hit);
+t_ray	get_cam_ray(t_object *camera, size_t x, size_t y);
 
 void	start_render(t_minirt *data, void *func_data);
 

@@ -33,7 +33,6 @@ bool	parse_config_file(int32_t argc, char *argv[], t_scene *scene)
 	close(fd);
 	if (!success)
 		return (false);
-	normalize(scene);
 	dprintf(1, "Parsing took %lf!\n", (clock() - start) / (double) CLOCKS_PER_SEC);
 	return (true);
 }

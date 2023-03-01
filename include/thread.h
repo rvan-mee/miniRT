@@ -24,9 +24,6 @@ bool	add_new_job_node(\
 //	create_render_lst.c
 bool	create_render_queue(t_minirt *data);
 
-//	create_rays.c
-bool	create_rays(t_minirt *data, t_render *block);
-
 //	work.c
 void	*work(void *param);
 
@@ -37,7 +34,6 @@ void	quit_working(t_minirt *data);
 
 //	reset_work.c
 void	wait_till_done(t_minirt *data);
-void	clean_rays(t_ray **rays);
 void	wipe_image(t_minirt *data);
 void	clear_job_lst(t_minirt *data);
 bool	reset_work(t_minirt *data);

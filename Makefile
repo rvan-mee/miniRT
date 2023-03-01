@@ -12,10 +12,10 @@
 
 NAME := miniRT
 
-CC := gcc
+CC = gcc
 
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -march=native -O3 -mbmi2 -pthread # -g -fsanitize=address
+CFLAGS += -march=native -O3 -pthread
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES
@@ -46,9 +46,6 @@ SRCS := main.c										\
 		parse/attributes/parse_rgb.c				\
 		parse/attributes/parse_vector.c				\
 		parse/attributes/parse_mtl_map.c			\
-		parse/normalize/normalize.c					\
-		parse/normalize/normalize_coords.c			\
-		parse/normalize/normalize_orientation.c		\
 		parse/mtl/parse_bmp.c						\
 		parse/mtl/parse_mtl_d.c						\
 		parse/mtl/parse_mtl_illum.c					\
@@ -81,6 +78,7 @@ SRCS := main.c										\
 		render/intersect/intersect_triangle.c		\
 		render/intersect/intersect_face.c			\
 		render/calculate_normal.c					\
+		render/get_cam_ray.c						\
 		render/shading/shading.c					\
 		render/texture/get_uv_colour.c				\
 		render/texture/get_sphere_hit_colour.c		\
@@ -111,7 +109,6 @@ SRCS := main.c										\
 		threading/work_utils.c						\
 		threading/add_job_node.c					\
 		threading/reset_work.c						\
-		threading/create_rays.c						\
 		threading/create_render_queue.c
 
 SRCP := $(addprefix $(SRCD), $(SRCS))
@@ -170,8 +167,12 @@ else
 	LINKER_FLAGS += -ldl
 endif
 
+# core count of current pc
+CORE_COUNT = $(shell grep '^processor' /proc/cpuinfo | wc -l)
+DEFINES := -D THREAD_C=$(CORE_COUNT)
 #		RANDOM THINGS
-COMPILE := @$(CC) $(INCLUDE) $(CFLAGS)
+COMPILE := @$(CC) $(INCLUDE) $(CFLAGS) $(DEFINES)
+
 
 # TEST
 

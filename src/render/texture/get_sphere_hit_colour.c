@@ -10,14 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdint.h>
 #include <texture.h>
 #include <math.h>
 #include <ft_math.h>
 
-#define PI 3.141592653589793238
-
-static t_rgba	get_texture_colour_sphere(t_hit *hit, t_mtl *texture)
+t_rgba	get_texture_colour_sphere(t_hit *hit, t_mtl *texture)
 {
 	t_fvec	d;
 	float	u;
@@ -27,8 +24,8 @@ static t_rgba	get_texture_colour_sphere(t_hit *hit, t_mtl *texture)
 	d[Y] = hit->object->coords[Y] - hit->hit[Y];
 	d[Z] = hit->object->coords[Z] - hit->hit[Z];
 	d = normalize_vector(d);
-	u = 0.5 + atan2(d[X], d[Z]) / (2 * PI) * -1;
-	v = 0.5 + asin(d[Y]) / PI;
+	u = 0.5f + atan2f(d[X], d[Z]) / (float) (2 * M_PI) * -1;
+	v = 0.5f + asinf(d[Y]) / (float) M_PI;
 	return (get_uv_colour(&texture->map_Kd, u, v));
 }
 

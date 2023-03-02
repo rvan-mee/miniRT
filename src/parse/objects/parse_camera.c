@@ -42,7 +42,7 @@ static bool	parse_fov(char **linep, float *dst)
  *
  * I'd add a link to the explanation here but norminette :^)
  */
-static void	calc_ray_info(t_camera *cam, float w, float h)
+void	calc_ray_info(t_camera *cam, float w, float h)
 {
 	const t_fvec	up = {0, 1, 0};
 	const float		ws_ratio = w / 2.f / tanf(cam->fov / 2.f);

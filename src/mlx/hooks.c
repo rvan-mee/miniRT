@@ -66,6 +66,7 @@ static t_fvec	rodrigues_rotation(t_fvec old_rot, t_fvec axis, float angle)
 	return (new_rotation);
 }
 
+void	calc_ray_info(t_camera *cam, float w, float h);
 // rotates along an axis (x or y)
 static void	rotate_cam(t_minirt *data, enum keys key)
 {
@@ -83,6 +84,7 @@ static void	rotate_cam(t_minirt *data, enum keys key)
 		*orientation = rodrigues_rotation(*orientation, -rot_y, amount);
 	else if (key == MLX_KEY_RIGHT)
 		*orientation = rodrigues_rotation(*orientation, rot_y, amount);
+	calc_ray_info(&data->scene.camera.camera, WIDTH, HEIGHT);
 	reset_work(data);
 }
 

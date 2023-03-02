@@ -16,7 +16,7 @@
 
 #define DIFF 1
 
-static t_render	*new_render_block(t_minirt *data, size_t start[2], size_t end[2])
+static t_render	*new_render_block(size_t start[2], size_t end[2])
 {
 	t_render	*render_block;
 
@@ -29,9 +29,6 @@ static t_render	*new_render_block(t_minirt *data, size_t start[2], size_t end[2]
 	render_block->end_pixels[Y] = end[Y];
 	render_block->size[X] = end[X] - start[X];
 	render_block->size[Y] = end[Y] - start[Y];
-	render_block->camera.coords = data->scene.camera.coords;
-	render_block->camera.camera.fov = data->scene.camera.camera.fov;
-	render_block->camera.camera.orientation = data->scene.camera.camera.orientation;
 	return (render_block);
 }
 
@@ -83,7 +80,7 @@ bool	create_render_queue(t_minirt *data)
 		{
 			if (end[X] + offset[0] > data->width)
 				end[X] += offset[X + DIFF];
-			new_block = new_render_block(data, start, end);
+			new_block = new_render_block(start, end);
 			if (!new_block
 				|| !add_new_job_node(data, start_render, new_block))
 				return (clear_job_lst(data), free(new_block), false);

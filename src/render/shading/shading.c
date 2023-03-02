@@ -16,6 +16,8 @@
 #include <texture.h>
 #include <float.h>
 
+#define MAX_REFLECTION_DEPTH	16
+
 static t_rgba	get_obj_rgba(t_object *object, t_hit *hit)
 {
 	static t_rgba	(*get_col_arr[])(t_object *, t_hit *) = {\
@@ -52,7 +54,95 @@ uint32_t	get_ambient_colour(t_rgba ambient, float ambient_ratio)
 	return (col.rgba);
 }
 
-uint32_t	get_hit_colour(t_minirt *data, t_scene *scene, t_object *object, t_hit *hit)
+static t_fvec	rgb_to_vec(t_rgba rgb)
+{
+	return ((t_fvec) {
+		(float) rgb.r / 255.f,
+		(float) rgb.g / 255.f,
+		(float) rgb.b / 255.f
+	});
+}
+
+static t_fvec	reflect(t_fvec in, t_fvec normal)
+{
+	t_fvec	out;
+
+	out = in - (2 * dot_product(normal, in) * normal);
+	return (normalize_vector(out));
+}
+
+t_fvec	phong(t_scene *scene, t_fvec diff_col, t_fvec spec_col, float ns, t_hit *hit)
+{
+	size_t	i;
+	t_hit	shadow;
+	t_fvec	diffuse;
+	t_fvec	specular;
+	t_fvec	colour;
+
+	colour = (t_fvec){};
+	i = 0;
+	while (i < scene->lights_len)
+	{
+		t_object *light = scene->lights + i++;
+		t_ray ray;
+		ray.origin = hit->hit;
+		ray.direction = normalize_vector(light->coords - ray.origin);
+		if (intersect_bvh(&scene->bvh, &ray, &shadow))
+			continue;
+		float dif_ratio = dot_product(ray.direction, hit->normal);
+		if (dif_ratio <= 0)
+			continue;
+		diffuse = diff_col * rgb_to_vec(light->colour) * dif_ratio * light->light.brightness;
+		t_fvec r = normalize_vector((2.f * dif_ratio) * hit->normal - ray.direction);
+		float spec_ratio = powf(fmaxf(dot_product(r, -hit->ray.direction), 0), ns);
+		specular = spec_col * rgb_to_vec(light->colour) * spec_ratio * light->light.brightness;
+		colour += diffuse + specular;
+	}
+	return (colour);
+}
+
+uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth);
+t_fvec	reflect_ray(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth)
+{
+	t_hit	r_hit;
+	t_fvec	colour;
+
+	colour = (t_fvec) {};
+	r_hit.ray = (t_ray) {
+		hit->hit,
+		reflect(hit->ray.direction, hit->normal)
+	};
+	if (!intersect_bvh(&scene->bvh, &r_hit.ray, &r_hit))
+		return (colour);
+	r_hit.hit = r_hit.ray.origin + r_hit.ray.direction * r_hit.distance;
+	calculate_normal(&r_hit);
+	r_hit.hit -= r_hit.ray.direction * (1 - 128 * (FLT_EPSILON));
+	colour = rgb_to_vec((t_rgba) get_hit_colour(scene, r_hit.object, &r_hit, depth + 1));
+	return (colour * object->mat->specular);
+}
+
+uint32_t	use_material(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth)
+{
+	t_rgba	rgba;
+	t_fvec	colour;
+	float	intensity;
+
+	intensity = scene->ambient.ambient.ratio;
+	colour = rgb_to_vec(scene->ambient.colour) * intensity;
+	colour *= object->mat->ambient;
+	colour += phong(scene, object->mat->diffuse, object->mat->specular, object->mat->reflec, hit);
+	if (object->mat->illum == 3 && depth < MAX_REFLECTION_DEPTH)
+		colour += reflect_ray(scene, object, hit, depth);
+	rgba = (t_rgba){
+		.r = (uint8_t) fminf(colour[0] * 255, 255.f),
+		.g = (uint8_t) fminf(colour[1] * 255, 255.f),
+		.b = (uint8_t) fminf(colour[2] * 255, 255.f),
+		.a = 0xFF
+	};
+	return (rgba.rgba);
+}
+
+uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth)
 {
 	const t_object	*lights = scene->lights;
 	bool			light_hits = 0;
@@ -63,9 +153,10 @@ uint32_t	get_hit_colour(t_minirt *data, t_scene *scene, t_object *object, t_hit 
 	size_t			i;
 	size_t			j;
 
+	if (object->has_mat)
+		return (use_material(scene, object, hit, depth));
 	i = 0;
 	j = 0;
-	(void) data;
 	ray.origin = hit->hit;
 	while (i < scene->lights_len)
 	{
@@ -109,6 +200,6 @@ uint32_t	get_hit_colour(t_minirt *data, t_scene *scene, t_object *object, t_hit 
 		i++;
 	}
 	if (!light_hits)
-		return (set_shade_colour(get_obj_rgba(object, hit), facing_ratio, data->scene.ambient.colour, data->scene.ambient.ambient.ratio));
-	return (get_ambient_colour(data->scene.ambient.colour, data->scene.ambient.ambient.ratio));
+		return (set_shade_colour(get_obj_rgba(object, hit), facing_ratio, scene->ambient.colour, scene->ambient.ambient.ratio));
+	return (get_ambient_colour(scene->ambient.colour, scene->ambient.ambient.ratio));
 }

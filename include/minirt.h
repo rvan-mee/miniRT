@@ -254,7 +254,6 @@ typedef struct s_render_block
 	size_t			start_pixels[2];
 	size_t			end_pixels[2];
 	size_t			size[2];
-	t_object		camera;
 }	t_render;
 
 typedef struct s_jobs {

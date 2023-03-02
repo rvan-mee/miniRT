@@ -21,7 +21,7 @@ bool	trace(
 		const size_t screen[2],
 		t_dynarr *hits)
 {
-	// const float	d_offset = (1 - 128 * (FLT_EPSILON));
+	const float	d_offset = (1 - 128 * (FLT_EPSILON));
 	float		hit_distance;
 	t_hit		hit;
 	size_t		i;
@@ -48,6 +48,6 @@ bool	trace(
 		return (true);
 	hit.hit = hit.ray.origin + hit.ray.direction * hit.distance;
 	calculate_normal(&hit);
-	hit.hit += hit.normal * (FLT_EPSILON * 128);
+	hit.hit -= hit.ray.direction * d_offset;
 	return (dynarr_addone(hits, &hit));
 }

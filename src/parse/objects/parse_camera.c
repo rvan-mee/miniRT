@@ -45,7 +45,7 @@ static bool	parse_fov(char **linep, float *dst)
 void	calc_ray_info(t_camera *cam, float w, float h)
 {
 	const t_fvec	up = {0, 1, 0};
-	const float		ws_ratio = w / 2.f / tanf(cam->fov / 2.f);
+	const float		ws_ratio = h / 2.f / tanf(cam->fov / 2.f);
 
 	cam->u = normalize_vector(cross_product(up, cam->orientation));
 	cam->v = normalize_vector(cross_product(cam->orientation, cam->u));

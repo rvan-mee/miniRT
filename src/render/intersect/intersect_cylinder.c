@@ -12,6 +12,7 @@
 
 #include <ft_math.h>
 #include <render.h>
+#include <float.h>
 
 static bool	check_height(
 		const t_object *obj,
@@ -98,7 +99,7 @@ float	intersect_cylinder(const t_object *obj, const t_ray *ray, t_hit *hit)
 
 	(void) hit;
 	angle_diff = dot_product(cyl->orientation, ray->direction);
-	if (angle_diff == 1.0f)
+	if (fabsf(angle_diff) > 1.0f + 128 * FLT_EPSILON)
 		return (intersect_tops(obj, cyl, ray, angle_diff));
 	else if (intersect_inf_cyl(obj, cyl, ray, t))
 	{

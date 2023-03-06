@@ -167,6 +167,7 @@ uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit, uint8_t de
 		facing_ratio = dot_product(ray.direction, hit->normal);
 		if (facing_ratio <= 0)
 		{
+			light_hits = true;
 			i++;
 			light_hits = true;
 			continue ;

@@ -93,10 +93,6 @@ static bool \
 		|| obj->type == VT_TEXTURE || obj->type == VT_NORMAL \
 		|| obj->type == MTL || obj->type == USEMTL)
 		return (true);
-	if (obj->type == VT_TEXTURE)
-		return (dynarr_addone(&conf->vertex_textures, &obj->vertex_texture));
-	if (obj->type == VT_NORMAL)
-		return (dynarr_addone(&conf->vertex_normals, &obj->vertex_normal));
 	if (obj->type == CAMERA)
 		store = &dst->camera;
 	else if (obj->type == AMBIENT)

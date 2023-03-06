@@ -45,7 +45,6 @@ static bool	init_render_data(t_minirt *data)
 	return (true);
 }
 
-#include <unistd.h>
 int	main(int argc, char *argv[])
 {
 	t_minirt	data;
@@ -61,10 +60,5 @@ int	main(int argc, char *argv[])
 		join_threads(&data);
 	}
 	mlx_terminate(data.mlx);
-	exit(EXIT_SUCCESS);
-	// free(data.scene.lights);
-	// free(data.scene.objects);
-	// free(data.texture.bmp->data);
-	// free(data.texture.bmp->name);
 	return (EXIT_SUCCESS);
 }

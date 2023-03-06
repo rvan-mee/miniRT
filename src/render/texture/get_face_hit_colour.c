@@ -13,7 +13,7 @@
 #include <texture.h>
 #include <ft_math.h>
 
-static t_rgba	get_texture_colour_face(t_hit *hit, t_mtl *mtl, t_face *f)
+static t_fvec	get_texture_colour_face(t_hit *hit, t_mtl *mtl, t_face *f)
 {
 	const t_fvec	uvec = {f->uvw[0].u, f->uvw[1].u, f->uvw[2].u, 0.0f};
 	const t_fvec	vvec = {f->uvw[0].v, f->uvw[1].v, f->uvw[2].v, 0.0f};
@@ -32,7 +32,7 @@ static t_rgba	get_texture_colour_face(t_hit *hit, t_mtl *mtl, t_face *f)
 	// return (rgb);
 }
 
-t_rgba	get_face_hit_colour(t_object *object, t_hit *hit)
+t_fvec	get_face_hit_colour(t_object *object, t_hit *hit)
 {
 	if (object->has_mat && object->mat->is_enabled.map_Kd \
 		&& object->face.has_texture)

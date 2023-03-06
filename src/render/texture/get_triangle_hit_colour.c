@@ -12,7 +12,7 @@
 
 #include <texture.h>
 
-t_rgba	get_tri_hit_colour(t_object *object, t_hit *hit)
+t_fvec	get_tri_hit_colour(t_object *object, t_hit *hit)
 {
 	(void) hit;
 	return (object->colour);

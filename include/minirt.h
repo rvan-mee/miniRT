@@ -188,7 +188,7 @@ typedef struct s_cylinder {
 
 typedef struct s_object {
 	t_fvec		coords;
-	t_rgba		colour;
+	t_fvec		colour;
 	union {
 		t_ambient			ambient;
 		t_camera			camera;

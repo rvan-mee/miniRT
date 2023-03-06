@@ -33,19 +33,22 @@ static bool	parse_colour(char **linep, uint8_t *colour)
 	return (true);
 }
 
-bool	parse_rgb(char **linep, t_rgba *colour)
+bool	parse_rgb(char **linep, t_fvec *colour)
 {
 	char	*line;
+	uint8_t	val;
+	uint8_t	i;
 
 	line = *linep;
-	colour->a = 255;
 	skip_spaces(&line);
-	if (!parse_colour(&line, &colour->r) || *line++ != ',')
-		return (false);
-	if (!parse_colour(&line, &colour->g) || *line++ != ',')
-		return (false);
-	if (!parse_colour(&line, &colour->b))
-		return (false);
+	i = 0;
+	while (i < 3)
+	{
+		if (!parse_colour(&line, &val) || (i != 2 && *line++ != ','))
+			return (false);
+		(*colour)[i] = ((float) val) / 255.0f;
+		++i;
+	}
 	*linep = line;
 	return (true);
 }

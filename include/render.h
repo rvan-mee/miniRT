@@ -31,13 +31,26 @@ typedef struct s_tri_intersect
 	float	t;
 }	t_tri_intersect;
 
+typedef struct s_phong {
+	struct {
+		t_hit	*cam_hit;
+		t_fvec	kd;
+		t_fvec	ks;
+		float	ns;
+	};
+	struct {
+		t_ray	shadow_ray;
+		t_fvec	light_rel;
+		float	light_dist_sq;
+		float	brightness;
+	};
+}	t_phong;
+
 bool	trace(
 		t_scene *scene,
 		t_ray *ray,
 		const size_t screen[2],
 		t_dynarr *hits);
-
-bool	cast_primary_rays(t_minirt *data, t_dynarr *hits, size_t y);
 
 bool	intersect_bvh(const t_bvh *bvh, const t_ray *ray, t_hit *hit);
 float	aabb_intersect(const t_aabb bounds, const t_ray *ray);
@@ -52,5 +65,8 @@ void	calculate_normal(t_hit *hit);
 t_ray	get_cam_ray(t_object *camera, size_t x, size_t y);
 
 void	start_render(t_minirt *data, void *func_data);
+t_fvec	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth);
+
+t_fvec	phong(t_scene *scene, t_phong args);
 
 #endif //RENDER_H

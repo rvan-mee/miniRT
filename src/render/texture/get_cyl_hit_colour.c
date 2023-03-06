@@ -12,7 +12,7 @@
 
 #include <minirt.h>
 
-t_rgba	get_cyl_hit_colour(t_object *object, t_hit *hit)
+t_fvec	get_cyl_hit_colour(t_object *object, t_hit *hit)
 {
 	(void) hit;
 	return (object->colour);

@@ -12,7 +12,7 @@
 
 #include <texture.h>
 
-t_rgba	get_uv_colour(t_bmp *texture, float u, float v)
+t_fvec	get_uv_colour(t_bmp *texture, float u, float v)
 {
 	const int32_t	height = texture->height;
 	const int32_t	width = texture->width;
@@ -23,6 +23,9 @@ t_rgba	get_uv_colour(t_bmp *texture, float u, float v)
 	colour.b = texture->data[offset];
 	colour.g = texture->data[offset + 1];
 	colour.r = texture->data[offset + 2];
-	colour.a = 0xFF;
-	return (colour);
+	return ((t_fvec) {
+		(float) colour.r / 255.f,
+		(float) colour.g / 255.f,
+		(float) colour.b / 255.f,
+	});
 }

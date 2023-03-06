@@ -16,7 +16,7 @@ CC = gcc
 
 CFLAGS += -Wall -Werror -Wextra
 CFLAGS += -march=native -O3 -pthread
-#CFLAGS += -fsanitize=address -g
+#CFLAGS += -g #-fsanitize=address
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES
@@ -69,9 +69,10 @@ SRCS := main.c										\
 		math/quadratic.c							\
 		math/normalize_vector.c						\
 		math/vector_utils.c							\
+		math/reflect.c								\
 		\
 		render/render.c								\
-		render/trace.c					\
+		render/trace.c								\
 		render/intersect/intersect.c				\
 		render/intersect/intersect_sphere.c			\
 		render/intersect/intersect_plane.c			\
@@ -81,6 +82,7 @@ SRCS := main.c										\
 		render/calculate_normal.c					\
 		render/get_cam_ray.c						\
 		render/shading/shading.c					\
+		render/shading/phong.c						\
 		render/texture/get_uv_colour.c				\
 		render/texture/get_sphere_hit_colour.c		\
 		render/texture/get_plane_hit_colour.c		\

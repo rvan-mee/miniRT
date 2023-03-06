@@ -14,7 +14,7 @@
 #include <math.h>
 #include <ft_math.h>
 
-t_rgba	get_texture_colour_sphere(t_hit *hit, t_mtl *texture)
+t_fvec	get_texture_colour_sphere(t_hit *hit, t_mtl *texture)
 {
 	t_fvec	d;
 	float	u;
@@ -29,7 +29,7 @@ t_rgba	get_texture_colour_sphere(t_hit *hit, t_mtl *texture)
 	return (get_uv_colour(&texture->map_Kd, u, v));
 }
 
-t_rgba	get_sphere_hit_colour(t_object *object, t_hit *hit)
+t_fvec	get_sphere_hit_colour(t_object *object, t_hit *hit)
 {
 	if (object->has_mat && object->mat->is_enabled.map_Kd)
 		return (get_texture_colour_sphere(hit, object->mat));

@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_plane_hit_colour.c                             :+:    :+:            */
+/*   reflect.c                                          :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
+/*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/11/23 12:30:18 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/23 14:41:30 by rvan-mee      ########   odam.nl         */
+/*   Created: 2023/03/06 19:41:46 by lsinke        #+#    #+#                 */
+/*   Updated: 2023/03/06 19:41:46 by lsinke        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minirt.h>
+#include <ft_math.h>
 
-t_fvec	get_plane_hit_colour(t_object *object, t_hit *hit)
+t_fvec	reflect(t_fvec in, t_fvec normal)
 {
-	(void) hit;
-	return (object->colour);
+	t_fvec	out;
+
+	out = in - 2 * dot_product(normal, in) * normal;
+	return (normalize_vector(out));
 }

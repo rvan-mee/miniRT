@@ -159,7 +159,7 @@ t_parse_error	parse_face(char **linep, t_object *object, t_conf_data *conf)
 	vert = A;
 	indices.has_normal = false;
 	indices.has_texture = false;
-	object->colour.rgba = 0xFFFFFFFF;
+	object->colour = (t_fvec){1, 1, 1};
 	while (vert <= C)
 	{
 		err = parse_indices(&line, &indices, conf, vert);

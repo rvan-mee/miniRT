@@ -12,25 +12,27 @@
 
 #include <render.h>
 #include <libft.h>
-#include <time.h>
-#include <stdio.h>
-#include <unistd.h>
 #include <thread.h>
-
-uint32_t	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth);
 
 static bool	set_color(t_minirt *data, t_dynarr *hits)
 {
-	size_t		i;
-	uint32_t	colour;
-	t_hit		*hit;
+	size_t	i;
+	t_fvec	colour;
+	t_rgba	rgba;
+	t_hit	*hit;
 
 	hit = hits->arr;
 	i = hits->length;
 	while (i--)
 	{
 		colour = get_hit_colour(&data->scene, hit[i].object, &hit[i], 0);
-		mlx_put_pixel(data->img, hit[i].screen_x, hit[i].screen_y, colour);
+		rgba = (t_rgba){
+			.r = (uint8_t) fminf(colour[0] * 255, 255.f),
+			.g = (uint8_t) fminf(colour[1] * 255, 255.f),
+			.b = (uint8_t) fminf(colour[2] * 255, 255.f),
+			.a = 0xFF
+		};
+		mlx_put_pixel(data->img, hit[i].screen_x, hit[i].screen_y, rgba.rgba);
 	}
 	return (true);
 }

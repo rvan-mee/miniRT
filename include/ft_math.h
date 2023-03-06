@@ -33,4 +33,15 @@ bool	solve_quadratic(t_quadratic *quadratic, float t[2]);
 
 int		compare_points(t_fvec a, t_fvec b, uint8_t axis);
 
+/**
+ * Reflect about a normal
+ *
+ * @param in The "incoming" unit vector. This should be pointing in the same
+ *   direction of the normal (normal dot in should be positive)
+ * @param normal The normal unit vector we want to reflect around.
+ * @return A unit vector, with the same angle difference with the normal as
+ *   the in vector
+ */
+t_fvec	reflect(t_fvec in, t_fvec normal);
+
 #endif

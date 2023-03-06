@@ -19,7 +19,7 @@
 #define V 1
 
 typedef struct s_bmp t_bmp;
-typedef float t_float_rgb[3];
+
 typedef enum e_parse_error {
 	SUCCESS,
 	OBJECT,
@@ -107,7 +107,7 @@ t_parse_error	parse_vn(char **linep, t_object *object, t_conf_data *conf);
 t_parse_error	parse_face(char **linep, t_object *object, t_conf_data *conf);
 t_parse_error	parse_usemtl(char **linep, t_object *object, t_conf_data *conf);
 t_parse_error	parse_newmtl(char **linep, t_object *object, t_conf_data *conf);
-bool			parse_rgb(char **linep, t_rgba *colour);
+bool			parse_rgb(char **linep, t_fvec *colour);
 bool			parse_line_error(const char *line, t_parse_error err, size_t line_c);
 void			skip_spaces(char **linep);
 void			skip_digits(char **linep);

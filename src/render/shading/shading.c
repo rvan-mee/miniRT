@@ -85,17 +85,19 @@ t_fvec	phong(t_scene *scene, t_fvec diff_col, t_fvec spec_col, float ns, t_hit *
 	{
 		t_object *light = scene->lights + i++;
 		t_ray ray;
+		t_fvec light_rel = light->coords - ray.origin;
 		ray.origin = hit->hit;
-		ray.direction = normalize_vector(light->coords - ray.origin);
+		ray.direction = normalize_vector(light_rel);
 		if (intersect_bvh(&scene->bvh, &ray, &shadow))
 			continue;
 		float dif_ratio = dot_product(ray.direction, hit->normal);
 		if (dif_ratio <= 0)
 			continue;
-		diffuse = diff_col * rgb_to_vec(light->colour) * dif_ratio * light->light.brightness;
-		t_fvec r = normalize_vector((2.f * dif_ratio) * hit->normal - ray.direction);
+		float brightness = light->light.brightness / dot_product(light_rel, light_rel);
+		diffuse = diff_col * rgb_to_vec(light->colour) * dif_ratio * brightness;
+		t_fvec r = reflect(ray.direction, hit->normal);
 		float spec_ratio = powf(fmaxf(dot_product(r, -hit->ray.direction), 0), ns);
-		specular = spec_col * rgb_to_vec(light->colour) * spec_ratio * light->light.brightness;
+		specular = spec_col * rgb_to_vec(light->colour) * spec_ratio * brightness;
 		colour += diffuse + specular;
 	}
 	return (colour);
@@ -125,10 +127,8 @@ uint32_t	use_material(t_scene *scene, t_object *object, t_hit *hit, uint8_t dept
 {
 	t_rgba	rgba;
 	t_fvec	colour;
-	float	intensity;
 
-	intensity = scene->ambient.ambient.ratio;
-	colour = rgb_to_vec(scene->ambient.colour) * intensity;
+	colour = rgb_to_vec(scene->ambient.colour) * scene->ambient.ambient.ratio;
 	colour *= object->mat->ambient;
 	colour += phong(scene, object->mat->diffuse, object->mat->specular, object->mat->reflec, hit);
 	if (object->mat->illum == 3 && depth < MAX_REFLECTION_DEPTH)

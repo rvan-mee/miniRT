@@ -43,7 +43,7 @@ void	wait_for_new_job(t_minirt *data)
 			break ;
 		pthread_mutex_unlock(&data->thread.job_lock);
 		locked = false;
-		usleep(50);
+		usleep(1000);
 	}
 	if (locked)
 		pthread_mutex_unlock(&data->thread.job_lock);

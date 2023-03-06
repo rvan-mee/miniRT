@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_plane_hit_colour.c                             :+:    :+:            */
+/*   get_texture_cyl.c                               :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/11/23 12:30:18 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/23 14:41:30 by rvan-mee      ########   odam.nl         */
+/*   Created: 2022/11/23 12:30:56 by rvan-mee      #+#    #+#                 */
+/*   Updated: 2022/11/23 14:41:47 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minirt.h>
 
-t_fvec	get_plane_hit_colour(t_object *object, t_hit *hit)
+t_fvec	get_texture_cyl(t_hit *hit, t_bmp *texture)
 {
 	(void) hit;
-	return (object->colour);
+	(void) texture;
+	return ((t_fvec) {1, 1, 1});
 }

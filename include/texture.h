@@ -18,10 +18,10 @@
 
 t_fvec	get_uv_colour(t_bmp *texture, float u, float v);
 
-t_fvec	get_cyl_hit_colour(t_object *object, t_hit *hit);
-t_fvec	get_face_hit_colour(t_object *object, t_hit *hit);
-t_fvec	get_plane_hit_colour(t_object *object, t_hit *hit);
-t_fvec	get_sphere_hit_colour(t_object *object, t_hit *hit);
-t_fvec	get_tri_hit_colour(t_object *object, t_hit *hit);
+t_fvec	get_texture_cyl(t_hit *hit, t_bmp *texture);
+t_fvec	get_texture_face(t_hit *hit, t_bmp *texture);
+t_fvec	get_texture_plane(t_hit *hit, t_bmp *texture);
+t_fvec	get_texture_sphere(t_hit *hit, t_bmp *texture);
+t_fvec	get_texture_triangle(t_hit *hit, t_bmp *texture);
 
 #endif

@@ -18,17 +18,17 @@
 
 #define MAX_REFLECTION_DEPTH	16
 
-t_fvec	get_obj_rgba(t_object *object, t_hit *hit)
+t_fvec	get_texture(t_object *object, t_hit *hit, t_bmp *texture)
 {
-	static t_fvec	(*get_col_arr[])(t_object *, t_hit *) = {\
-		[SPHERE] = get_sphere_hit_colour,	\
-		[PLANE] = get_plane_hit_colour,		\
-		[CYLINDER] = get_cyl_hit_colour,	\
-		[TRIANGLE] = get_tri_hit_colour,	\
-		[FACE] = get_face_hit_colour,		\
+	static t_fvec	(*get_col_arr[])(t_hit *, t_bmp *) = {\
+		[SPHERE] = get_texture_sphere,		\
+		[PLANE] = get_texture_plane,		\
+		[CYLINDER] = get_texture_cyl,		\
+		[TRIANGLE] = get_texture_triangle,	\
+		[FACE] = get_texture_face
 	};
 	
-	return (get_col_arr[object->type](object, hit));
+	return (get_col_arr[object->type](hit, texture));
 }
 
 static t_fvec	reflect_ray(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth)
@@ -67,7 +67,13 @@ static t_fvec	use_material(t_scene *scene, t_object *object, t_hit *hit, uint8_t
 		.ks = object->mat->specular,
 		.ns = object->mat->reflec
 	};
+	if (object->mat->is_enabled.map_Kd)
+		p_args.kd *= get_texture(object, hit, &object->mat->map_Kd);
+	if (object->mat->is_enabled.map_Ks)
+		p_args.ks *= get_texture(object, hit, &object->mat->map_Ks);
 	colour = get_ambient(scene, object->mat->ambient);
+	if (object->mat->is_enabled.map_Ka)
+		colour *= get_texture(object, hit, &object->mat->map_Ka);
 	colour += phong(scene, p_args);
 	if (object->mat->illum == 3 && depth < MAX_REFLECTION_DEPTH)
 		colour += reflect_ray(scene, object, hit, depth);

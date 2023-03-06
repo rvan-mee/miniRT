@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_triangle_hit_colour.c                          :+:    :+:            */
+/*   get_texture_plane.c                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/10/29 18:36:03 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/23 14:41:41 by rvan-mee      ########   odam.nl         */
+/*   Created: 2022/11/23 12:30:18 by rvan-mee      #+#    #+#                 */
+/*   Updated: 2022/11/23 14:41:30 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <texture.h>
+#include <minirt.h>
 
-t_fvec	get_tri_hit_colour(t_object *object, t_hit *hit)
+t_fvec	get_texture_plane(t_hit *hit, t_bmp *texture)
 {
 	(void) hit;
-	return (object->colour);
+	(void) texture;
+	return ((t_fvec) {1, 1, 1});
 }

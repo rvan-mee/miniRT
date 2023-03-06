@@ -84,11 +84,11 @@ SRCS := main.c										\
 		render/shading/shading.c					\
 		render/shading/phong.c						\
 		render/texture/get_uv_colour.c				\
-		render/texture/get_sphere_hit_colour.c		\
-		render/texture/get_plane_hit_colour.c		\
-		render/texture/get_cyl_hit_colour.c			\
-		render/texture/get_triangle_hit_colour.c	\
-		render/texture/get_face_hit_colour.c		\
+		render/texture/get_texture_sphere.c			\
+		render/texture/get_texture_plane.c			\
+		render/texture/get_texture_cyl.c			\
+		render/texture/get_texture_triangle.c		\
+		render/texture/get_texture_face.c			\
 		\
 		bvh/new_bvh.c								\
 		bvh/morton.c								\

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_sphere_hit_colour.c                            :+:    :+:            */
+/*   get_texture_sphere.c                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
@@ -14,7 +14,7 @@
 #include <math.h>
 #include <ft_math.h>
 
-t_fvec	get_texture_colour_sphere(t_hit *hit, t_mtl *texture)
+t_fvec	get_texture_sphere(t_hit *hit, t_bmp *texture)
 {
 	t_fvec	d;
 	float	u;
@@ -26,12 +26,5 @@ t_fvec	get_texture_colour_sphere(t_hit *hit, t_mtl *texture)
 	d = normalize_vector(d);
 	u = 0.5f + atan2f(d[X], d[Z]) / (float) (2 * M_PI) * -1;
 	v = 0.5f + asinf(d[Y]) / (float) M_PI;
-	return (get_uv_colour(&texture->map_Kd, u, v));
-}
-
-t_fvec	get_sphere_hit_colour(t_object *object, t_hit *hit)
-{
-	if (object->has_mat && object->mat->is_enabled.map_Kd)
-		return (get_texture_colour_sphere(hit, object->mat));
-	return (object->colour);
+	return (get_uv_colour(texture, u, v));
 }

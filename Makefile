@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2022/11/23 18:36:45 by rvan-mee      ########   odam.nl          #
+#    Updated: 2023/03/06 12:14:44 by lsinke        ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ NAME := miniRT
 CC = gcc
 
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -march=native -O0 -pthread -g
+CFLAGS += -march=native -O3 -pthread
+#CFLAGS += -fsanitize=address -g
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES
@@ -163,12 +164,12 @@ LIBS += $(MLX42_L)
 ifeq ($(shell uname -s), Darwin)
 	GLFW := $(shell brew --prefix glfw)/lib
 	LINKER_FLAGS += -L $(GLFW)
+	CORE_COUNT = $(shell sysctl -n hw.ncpu)
 else
 	LINKER_FLAGS += -ldl
+	CORE_COUNT = $(shell grep '^processor' /proc/cpuinfo | wc -l)
 endif
 
-# core count of current pc
-CORE_COUNT = $(shell grep '^processor' /proc/cpuinfo | wc -l)
 DEFINES := -D THREAD_C=$(CORE_COUNT)
 #		RANDOM THINGS
 COMPILE := @$(CC) $(INCLUDE) $(CFLAGS) $(DEFINES)

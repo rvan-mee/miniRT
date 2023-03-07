@@ -57,6 +57,7 @@ static t_parse_error	set_current_mtl(char *name, t_conf_data *conf)
 		i++;
 	}
 	conf->has_mtl = false;
+	free(name);
 	return (NON_EXIST);
 }
 

@@ -265,13 +265,16 @@ typedef struct s_jobs {
 typedef struct s_threading
 {
 	bool			quit;
+	bool			stop;
+	pthread_cond_t	stop_cond;
+	size_t			threads_done;
+	pthread_cond_t	done_cond;
 	pthread_mutex_t	quit_lock;
 	pthread_t		threads[THREAD_C];
 	size_t			created_threads;
 	t_jobs			*job_lst;
 	pthread_mutex_t	job_lock;
-	size_t			ref_count;
-	pthread_mutex_t	ref_lock;
+	uint64_t		render_start;
 }	t_threading;
 
 typedef struct s_minirt {

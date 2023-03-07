@@ -25,18 +25,29 @@ static t_jobs	*take_first_node(t_minirt *data)
 	return (first_node);
 }
 
-static void	ref(t_threading *thread)
+static void	pause_thread(t_threading *thread)
 {
-	pthread_mutex_lock(&thread->ref_lock);
-	thread->ref_count++;
-	pthread_mutex_unlock(&thread->ref_lock);
+	thread->threads_done++;
+	if (thread->threads_done == thread->created_threads)
+	{
+		printf("All threads done after %lums\n",
+			get_time_ms() - thread->render_start);
+		pthread_cond_broadcast(&thread->done_cond);
+	}
+	while (thread->stop)
+		pthread_cond_wait(&thread->stop_cond, &thread->quit_lock);
+	thread->threads_done--;
 }
 
-static void	unref(t_threading *thread)
+static bool	keep_working(t_threading *thread)
 {
-	pthread_mutex_lock(&thread->ref_lock);
-	thread->ref_count--;
-	pthread_mutex_unlock(&thread->ref_lock);
+	pthread_mutex_lock(&thread->quit_lock);
+	if (thread->stop)
+		pause_thread(thread);
+	if (thread->quit)
+		return (pthread_mutex_unlock(&thread->quit_lock), false);
+	pthread_mutex_unlock(&thread->quit_lock);
+	return (true);
 }
 
 void	*work(void *param)
@@ -48,15 +59,13 @@ void	*work(void *param)
 	while (keep_working(&data->thread))
 	{
 		current_job = take_first_node(data);
-		if (!current_job)
-			wait_for_new_job(data);
-		else
+		if (current_job == NULL)
 		{
-			ref(&data->thread);
-			current_job->job(data, current_job->job_param);
-			unref(&data->thread);
-			free(current_job);
+			stop_working(&data->thread, true);
+			continue;
 		}
+		current_job->job(data, current_job->job_param);
+		free(current_job);
 	}
 	return (NULL);
 }

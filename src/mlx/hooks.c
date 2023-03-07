@@ -112,9 +112,9 @@ static void	(*g_hook_func[MLX_KEY_MENU + 1])(t_minirt *, enum keys) = {\
 
 void	keyhook(mlx_key_data_t keydata, t_minirt *data)
 {
-	pthread_mutex_lock(&data->thread.job_lock);
 	if (keydata.action == MLX_PRESS && g_hook_func[keydata.key])
 	{
+		stop_working(&data->thread, true);
 		clear_job_lst(data);
 		wait_till_done(data);
 		g_hook_func[keydata.key](data, keydata.key);
@@ -125,7 +125,6 @@ void	keyhook(mlx_key_data_t keydata, t_minirt *data)
 		clear_job_lst(data);
 		mlx_close_window(data->mlx);
 	}
-	pthread_mutex_unlock(&data->thread.job_lock);
 }
 
 void	mouse_hook(mouse_key_t type, action_t action, modifier_key_t mod, t_minirt *data)

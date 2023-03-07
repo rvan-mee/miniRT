@@ -11,40 +11,31 @@
 /* ************************************************************************** */
 
 #include <thread.h>
-#include <unistd.h>
+#include <sys/time.h>
 
 void	quit_working(t_minirt *data)
 {
 	pthread_mutex_lock(&data->thread.quit_lock);
 	data->thread.quit = true;
+	data->thread.stop = false;
+	pthread_cond_broadcast(&data->thread.stop_cond);
 	pthread_mutex_unlock(&data->thread.quit_lock);
 }
 
-bool	keep_working(t_threading *thread)
+void	stop_working(t_threading *thread, bool stop)
 {
-	bool	should_work;
-
 	pthread_mutex_lock(&thread->quit_lock);
-	should_work = !thread->quit;
+	thread->stop = stop;
+	if (!stop)
+		pthread_cond_broadcast(&thread->stop_cond);
 	pthread_mutex_unlock(&thread->quit_lock);
-	return (should_work);
 }
 
-void	wait_for_new_job(t_minirt *data)
+uint64_t	get_time_ms(void)
 {
-	bool	locked;
+	struct timeval	tv;
 
-	locked = false;
-	while (keep_working(&data->thread))
-	{
-		pthread_mutex_lock(&data->thread.job_lock);
-		locked = true;
-		if (data->thread.job_lst)
-			break ;
-		pthread_mutex_unlock(&data->thread.job_lock);
-		locked = false;
-		usleep(1000);
-	}
-	if (locked)
-		pthread_mutex_unlock(&data->thread.job_lock);
+	if (gettimeofday(&tv, NULL))
+		return (-1);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }

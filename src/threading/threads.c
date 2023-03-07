@@ -13,28 +13,22 @@
 #include <thread.h>
 #include <libft.h>
 
-static void	destroy_mutexes(t_minirt *data)
+static bool	destroy_locks(t_minirt *data)
 {
+	pthread_cond_destroy(&data->thread.done_cond);
+	pthread_cond_destroy(&data->thread.stop_cond);
 	pthread_mutex_destroy(&data->thread.quit_lock);
 	pthread_mutex_destroy(&data->thread.job_lock);
-	pthread_mutex_destroy(&data->thread.ref_lock);
+	return (false);
 }
 
-static bool	init_mutexes(t_minirt *data)
+static bool	init_locks(t_minirt *data)
 {
-	if (pthread_mutex_init(&data->thread.quit_lock, NULL) != 0)
-		return (false);
-	if (pthread_mutex_init(&data->thread.ref_lock, NULL) != 0)
-	{
-		pthread_mutex_destroy(&data->thread.quit_lock);
-		return (false);
-	}
-	if (pthread_mutex_init(&data->thread.job_lock, NULL) != 0)
-	{
-		pthread_mutex_destroy(&data->thread.ref_lock);
-		pthread_mutex_destroy(&data->thread.quit_lock);
-		return (false);
-	}
+	if (pthread_cond_init(&data->thread.done_cond, NULL) ||
+		pthread_cond_init(&data->thread.stop_cond, NULL) ||
+		pthread_mutex_init(&data->thread.quit_lock, NULL) ||
+		pthread_mutex_init(&data->thread.job_lock, NULL))
+		return (destroy_locks(data));
 	return (true);
 }
 
@@ -48,33 +42,42 @@ void	join_threads(t_minirt *data)
 		pthread_join(data->thread.threads[i], NULL);
 		i++;
 	}
-	destroy_mutexes(data);
+	destroy_locks(data);
 }
 
-bool	init_work_threads(t_minirt *data)
+static bool	create_threads(t_minirt *data, t_threading *thread)
 {
-	size_t	*thread;
+	size_t	*i;
 
-	data->thread.created_threads = 0;
-	data->thread.ref_count = 0;
-	thread = &data->thread.created_threads;
-	wipe_image(data);
-	if (!init_mutexes(data))
-		return (false);
-	create_render_queue(data);
-	pthread_mutex_lock(&data->thread.quit_lock);
-	data->thread.quit = false;
-	while (*thread < THREAD_C)
+	i = &thread->created_threads;
+	pthread_mutex_lock(&thread->quit_lock);
+	while (thread->created_threads < THREAD_C)
 	{
-		if (pthread_create(&data->thread.threads[*thread], NULL, work, data) != 0)
+		if (pthread_create(&thread->threads[*i], NULL, work, data))
 		{
-			data->thread.quit = true;
+			thread->quit = true;
 			pthread_mutex_unlock(&data->thread.quit_lock);
 			join_threads(data);
 			return (false);
 		}
-		*thread += 1;
+		thread->created_threads++;
 	}
-	pthread_mutex_unlock(&data->thread.quit_lock);
+	pthread_mutex_unlock(&thread->quit_lock);
+	return (true);
+}
+
+bool	init_work_threads(t_minirt *data)
+{
+	t_threading	*thread;
+
+	thread = &data->thread;
+	wipe_image(data);
+	if (!init_locks(data))
+		return (false);
+	if (!create_render_queue(data))
+		return (destroy_locks(data));
+	if (!create_threads(data, thread))
+		return (false);
+	thread->render_start = get_time_ms();
 	return (true);
 }

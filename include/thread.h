@@ -15,11 +15,10 @@
 
 # include <minirt.h>
 
+typedef void (*t_job)(t_minirt *, void *);
+
 // add_job_node.c
-bool	add_new_job_node(\
-	t_minirt *data, \
-	void (*func)(t_minirt *, void *), \
-	void *job_param);
+bool	add_new_job_node(t_minirt *data, t_job func, void *job_param);
 
 //	create_render_lst.c
 bool	create_render_queue(t_minirt *data);
@@ -28,9 +27,9 @@ bool	create_render_queue(t_minirt *data);
 void	*work(void *param);
 
 //	work_utils.c
-void	wait_for_new_job(t_minirt *data);
-bool	keep_working(t_threading *thread);
 void	quit_working(t_minirt *data);
+void	stop_working(t_threading *thread, bool stop);
+uint64_t	get_time_ms(void);
 
 //	reset_work.c
 void	wait_till_done(t_minirt *data);

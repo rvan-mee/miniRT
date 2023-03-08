@@ -93,6 +93,8 @@ static bool \
 		|| obj->type == VT_TEXTURE || obj->type == VT_NORMAL \
 		|| obj->type == MTL || obj->type == USEMTL)
 		return (true);
+	if (obj->type == EXPOSURE)
+		return (dst->camera.camera.exposure = conf->exposure, true);
 	if (obj->type == CAMERA)
 		store = &dst->camera;
 	else if (obj->type == AMBIENT)

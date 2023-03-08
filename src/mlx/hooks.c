@@ -94,6 +94,18 @@ static void	create_picture(t_minirt *data, enum keys key)
 	create_bmp(data->img);
 }
 
+static void	change_exposure(t_minirt *data, enum keys key)
+{
+	const bool	decrement = key == MLX_KEY_Z;
+
+	if (decrement)
+		data->scene.camera.camera.exposure -= 0.5f;
+	else
+		data->scene.camera.camera.exposure += 0.5f;
+	printf("Changed camera exposure to %f\n", data->scene.camera.camera.exposure);
+	reset_work(data);
+}
+
 // MLX_KEY_MENU is the last var inside the enum
 static void	(*g_hook_func[MLX_KEY_MENU + 1])(t_minirt *, enum keys) = {\
 	[MLX_KEY_R] = reload_scene,							\
@@ -108,6 +120,8 @@ static void	(*g_hook_func[MLX_KEY_MENU + 1])(t_minirt *, enum keys) = {\
 	[MLX_KEY_DOWN] = rotate_cam,						\
 	[MLX_KEY_LEFT] = rotate_cam,						\
 	[MLX_KEY_RIGHT] = rotate_cam,						\
+	[MLX_KEY_Z] = change_exposure,						\
+	[MLX_KEY_X] = change_exposure,						\
 };
 
 void	keyhook(mlx_key_data_t keydata, t_minirt *data)

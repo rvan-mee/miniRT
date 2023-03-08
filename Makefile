@@ -42,6 +42,7 @@ SRCS := main.c										\
 		parse/objects/parse_vt.c					\
 		parse/objects/parse_vn.c					\
 		parse/objects/parse_face.c					\
+		parse/objects/parse_exposure.c				\
 		parse/attributes/parse_float.c				\
 		parse/attributes/parse_float_rgb.c			\
 		parse/attributes/parse_rgb.c				\

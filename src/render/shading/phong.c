@@ -49,7 +49,8 @@ t_fvec	phong(t_scene *scene, t_phong args)
 		args.light_dist_sq = dot_product(args.light_rel, args.light_rel);
 		args.shadow_ray.origin = args.cam_hit->hit;
 		args.shadow_ray.direction = normalize_vector(args.light_rel);
-		args.brightness = light->light.brightness / args.light_dist_sq * 1000; // todo: idk
+		args.brightness = light->light.brightness / args.light_dist_sq;
+		args.brightness *= scene->camera.camera.exposure;
 		if (intersect_bvh(&scene->bvh, &args.shadow_ray, &shadow_hit)
 			&& shadow_hit.distance * shadow_hit.distance < args.light_dist_sq)
 			continue;

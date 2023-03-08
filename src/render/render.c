@@ -14,25 +14,49 @@
 #include <libft.h>
 #include <thread.h>
 
+#define GAMMA_A	1.055f
+#define GAMMA_B	0.055f
+#define GAMMA	2.4f
+#define LINEAR_CUTOFF	0.0031308f
+#define LINEAR_FACTOR	12.92f
+
+static uint32_t	encode_gamma(t_fvec rgb)
+{
+	uint8_t	channel;
+	t_rgba	srgb;
+
+	channel = 0;
+	while (channel < 3)
+	{
+		if (rgb[channel] <= LINEAR_CUTOFF)
+			rgb[channel] *= LINEAR_FACTOR;
+		else
+			rgb[channel] = GAMMA_A * powf(rgb[channel], 1.0f / GAMMA) - GAMMA_B;
+		++channel;
+	}
+	srgb = (t_rgba){
+		.r = (uint8_t) fminf(rgb[0] * 255, 255.f),
+		.g = (uint8_t) fminf(rgb[1] * 255, 255.f),
+		.b = (uint8_t) fminf(rgb[2] * 255, 255.f),
+		.a = 0xFF
+	};
+	return (srgb.rgba);
+}
+
 static bool	set_color(t_minirt *data, t_dynarr *hits)
 {
-	size_t	i;
-	t_fvec	colour;
-	t_rgba	rgba;
-	t_hit	*hit;
+	size_t		i;
+	t_fvec		colour;
+	uint32_t	srgb;
+	t_hit		*hit;
 
 	hit = hits->arr;
 	i = hits->length;
 	while (i--)
 	{
 		colour = get_hit_colour(&data->scene, hit[i].object, &hit[i], 0);
-		rgba = (t_rgba){
-			.r = (uint8_t) fminf(colour[0] * 255, 255.f),
-			.g = (uint8_t) fminf(colour[1] * 255, 255.f),
-			.b = (uint8_t) fminf(colour[2] * 255, 255.f),
-			.a = 0xFF
-		};
-		mlx_put_pixel(data->img, hit[i].screen_x, hit[i].screen_y, rgba.rgba);
+		srgb = encode_gamma(colour);
+		mlx_put_pixel(data->img, hit[i].screen_x, hit[i].screen_y, srgb);
 	}
 	return (true);
 }

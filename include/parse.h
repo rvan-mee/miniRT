@@ -56,7 +56,8 @@ typedef enum e_parse_error {
 	EXTENTION,
 	BMP_ERR,
 	NON_EXIST,
-	CONTINUE
+	CONTINUE,
+	EXPOS
 }	t_parse_error;
 
 typedef enum e_parse_mtl {
@@ -89,6 +90,7 @@ typedef struct s_conf_data
 	t_mtl		*curr_mtl;
 	size_t		curr_line;
 	int32_t		fd;
+	float		exposure;
 }	t_conf_data;
 
 bool			parse_config_file(int32_t argc, char *argv[], t_scene *scene);
@@ -107,6 +109,7 @@ t_parse_error	parse_vn(char **linep, t_object *object, t_conf_data *conf);
 t_parse_error	parse_face(char **linep, t_object *object, t_conf_data *conf);
 t_parse_error	parse_usemtl(char **linep, t_object *object, t_conf_data *conf);
 t_parse_error	parse_newmtl(char **linep, t_object *object, t_conf_data *conf);
+t_parse_error	parse_exposure(char **linep, t_object *object, t_conf_data *conf);
 bool			parse_rgb(char **linep, t_fvec *colour);
 bool			parse_line_error(const char *line, t_parse_error err, size_t line_c);
 void			skip_spaces(char **linep);

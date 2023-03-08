@@ -52,6 +52,7 @@ typedef enum e_object_type {
 	FACE,
 	MTL,
 	USEMTL,
+	EXPOSURE,
 	END
 }	t_obj_type;
 
@@ -137,6 +138,7 @@ typedef struct s_camera {
 	t_fvec	u;
 	t_fvec	v;
 	t_fvec	proj_vec;
+	float	exposure;
 }	t_camera;
 
 typedef struct s_light {

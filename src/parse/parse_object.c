@@ -27,6 +27,7 @@ static t_parse_error	(*g_parsefun[])(char **, t_object *, t_conf_data *) = {\
 	[FACE] = parse_face,										\
 	[MTL] = parse_newmtl,										\
 	[USEMTL] = parse_usemtl,									\
+	[EXPOSURE] = parse_exposure,								\
 };
 
 static const char		*g_ids[] = {\
@@ -44,6 +45,7 @@ static const char		*g_ids[] = {\
 	[COMMENT] = "#",				\
 	[MTL] = "newmtl",				\
 	[USEMTL] = "usemtl",			\
+	[EXPOSURE] = "exposure",		\
 };
 
 static t_obj_type	get_obj_type(char *line, t_object *object, size_t *id_len)

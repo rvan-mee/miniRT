@@ -108,7 +108,6 @@ bool	new_bvh(t_object objects[], uint32_t length, t_bvh *dst)
 		merge_nodes(&builder, 0, final_len, 1);
 		*dst = (t_bvh){objects, builder.clusters, builder.node_idx - 1, length};
 	}
-	flatten_bvh(&builder);
 	free_builder(&builder, success);
 	// dprintf(1, "maxdepth = %u\n", print_nodes(dst, 0, dst->root));
 	dprintf(1, "Creating bvh took %lf!\n", (clock() - start) / (double) CLOCKS_PER_SEC);

@@ -95,7 +95,6 @@ SRCS := main.c										\
 		bvh/cluster.c								\
 		bvh/aac_merge.c								\
 		bvh/intersect_bvh.c							\
-		bvh/flatten_bvh.c							\
 		\
 		aabb/aabb_combine.c							\
 		aabb/aabb_sa.c								\

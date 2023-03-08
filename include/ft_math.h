@@ -15,6 +15,8 @@
 # include <minirt.h>
 # include <stdbool.h>
 
+# define FLOAT_EPSILON	1e-8f
+
 typedef struct s_quadratic
 {
 	float	a;

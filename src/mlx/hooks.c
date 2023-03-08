@@ -42,17 +42,17 @@ static void	move_cam(t_minirt *data, enum keys key)
 
 	cam = &data->scene.camera;
 	if (key == MLX_KEY_W)
-		cam->coords[Z] += STEPS;
-	else if (key == MLX_KEY_A)
-		cam->coords[X] -= STEPS;
+		cam->coords += STEPS * cam->camera.orientation;
 	else if (key == MLX_KEY_S)
-		cam->coords[Z] -= STEPS;
+		cam->coords -= STEPS * cam->camera.orientation;
+	else if (key == MLX_KEY_A)
+		cam->coords -= STEPS * cam->camera.u;
 	else if (key == MLX_KEY_D)
-		cam->coords[X] += STEPS;
+		cam->coords += STEPS * cam->camera.u;
 	else if (key == MLX_KEY_Q)
-		cam->coords[Y] -= STEPS;
+		cam->coords -= STEPS * cam->camera.v;
 	else if (key == MLX_KEY_E)
-		cam->coords[Y] += STEPS;
+		cam->coords += STEPS * cam->camera.v;
 	reset_work(data);
 }
 
@@ -70,8 +70,8 @@ void	calc_ray_info(t_camera *cam, float w, float h);
 // rotates along an axis (x or y)
 static void	rotate_cam(t_minirt *data, enum keys key)
 {
-	const t_fvec	rot_x = {1, 0, 0, 0};
-	const t_fvec	rot_y = {0, 1, 0, 0};
+	const t_fvec	rot_x = data->scene.camera.camera.u;
+	const t_fvec	rot_y = data->scene.camera.camera.v;
 	const float		amount = DEG * ROT_AMOUNT;
 	t_fvec			*orientation;
 

@@ -6,11 +6,25 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/29 17:00:23 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/16 17:13:52 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2023/03/08 18:06:02 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <texture.h>
+#include <math.h>
+
+#define GAMMA_A	1.055f
+#define GAMMA_B	0.055f
+#define GAMMA	2.4f
+#define LINEAR_CUTOFF	0.04045f
+#define LINEAR_FACTOR	12.92f
+
+static float	decode_gamma(float component)
+{
+	if (component < LINEAR_CUTOFF)
+		return (component / LINEAR_FACTOR);
+	return (powf((GAMMA_B + component) / GAMMA_A, GAMMA));
+}
 
 t_fvec	get_uv_colour(t_bmp *texture, float u, float v)
 {
@@ -24,8 +38,8 @@ t_fvec	get_uv_colour(t_bmp *texture, float u, float v)
 	colour.g = texture->data[offset + 1];
 	colour.r = texture->data[offset + 2];
 	return ((t_fvec) {
-		(float) colour.r / 255.f,
-		(float) colour.g / 255.f,
-		(float) colour.b / 255.f,
+		decode_gamma(colour.r / 255.f),
+		decode_gamma(colour.g / 255.f),
+		decode_gamma(colour.b / 255.f),
 	});
 }

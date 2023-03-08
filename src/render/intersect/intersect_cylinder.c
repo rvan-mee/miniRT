@@ -99,7 +99,7 @@ float	intersect_cylinder(const t_object *obj, const t_ray *ray, t_hit *hit)
 
 	(void) hit;
 	angle_diff = dot_product(cyl->orientation, ray->direction);
-	if (fabsf(angle_diff) > 1.0f + 128 * FLT_EPSILON)
+	if (angle_diff == 0)
 		return (intersect_tops(obj, cyl, ray, angle_diff));
 	else if (intersect_inf_cyl(obj, cyl, ray, t))
 	{
@@ -108,7 +108,5 @@ float	intersect_cylinder(const t_object *obj, const t_ray *ray, t_hit *hit)
 		if (t[1] > 0 && check_height(obj, cyl, ray, t[1]))
 			return (fminf(intersect_tops(obj, cyl, ray, angle_diff), t[1]));
 	}
-	if (angle_diff == 0.0f)
-		return (MISS);
 	return (intersect_tops(obj, cyl, ray, angle_diff));
 }

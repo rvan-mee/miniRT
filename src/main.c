@@ -35,7 +35,7 @@ static void	init_data(t_minirt *data, int argc, char **argv)
 	};
 }
 
-static bool	init_render_data(t_minirt *data)
+bool	init_render_data(t_minirt *data)
 {
 	if (!parse_config_file(data->argc, data->argv, &data->scene))
 		return (false);
@@ -46,22 +46,18 @@ static bool	init_render_data(t_minirt *data)
 
 static int	cleanup(t_minirt *data, int status)
 {
-	size_t	i;
-	t_mtl	*mtl;
+	size_t i;
 
-	mlx_terminate(data->mlx);
+	if (data->mlx)
+		mlx_terminate(data->mlx);
 	i = 0;
-	mtl = data->scene.materials;
-	if (mtl)
+	while (i < data->scene.materials_len)
 	{
-		while (i < data->scene.materials_len)
-		{
-			free(mtl[i].map_Ka.data);
-			free(mtl[i].map_Kd.data);
-			free(mtl[i].map_Ks.data);
-			free(mtl[i].name);
-			i++;
-		}
+		free(data->scene.materials[i].map_Ka.data);
+		free(data->scene.materials[i].map_Kd.data);
+		free(data->scene.materials[i].map_Ks.data);
+		free(data->scene.materials[i].name);
+		i++;
 	}
 	free(data->scene.materials);
 	free(data->scene.lights);
@@ -76,10 +72,9 @@ int	main(int argc, char *argv[])
 
 	init_data(&data, argc, argv);
 	atexit(f);
-	if (!init_render_data(&data))
-		return (EXIT_FAILURE);
-	create_mlx(&data);
-	if (!init_work_threads(&data))
+	if (!init_render_data(&data) || \
+		!create_mlx(&data) ||
+		!init_work_threads(&data))
 		return (cleanup(&data, EXIT_FAILURE));
 	mlx_loop(data.mlx);
 	join_threads(&data);

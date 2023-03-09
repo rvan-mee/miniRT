@@ -26,6 +26,7 @@ SRCS := main.c										\
 		mlx/create_mlx.c							\
 		mlx/hooks.c									\
 		mlx/bmp.c									\
+		mlx/reload_scene.c							\
 		\
 		parse/parse.c								\
 		parse/parse_scene.c							\

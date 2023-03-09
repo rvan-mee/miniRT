@@ -290,6 +290,7 @@ typedef struct s_aabb {
 	t_fvec	max;
 }	t_aabb;
 
+bool	init_render_data(t_minirt *data);
 void	start_render(t_minirt *data, void *func_data);
 
 t_aabb	calc_bounds(t_object *obj);

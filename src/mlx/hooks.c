@@ -13,9 +13,7 @@
 #include <minirt.h>
 #include <math.h>
 #include <ft_math.h>
-#include <parse.h>
 #include <bmp.h>
-#include <stdlib.h>
 #include <thread.h>
 #include <mlx.h>
 #include <render.h>
@@ -23,18 +21,6 @@
 #define STEPS			0.5f
 #define ROT_AMOUNT		15
 #define DEG				0.0174533
-
-static void	reload_scene(t_minirt *data, enum keys key)
-{
-	(void) key;
-	free(data->scene.lights);
-	free(data->scene.objects);
-	if (!parse_config_file(data->argc, data->argv, &data->scene))
-		return ;
-	mlx_resize_image(data->img, data->width, data->height);
-	mlx_set_window_size(data->mlx, data->width, data->height);
-	reset_work(data);
-}
 
 static void	move_cam(t_minirt *data, enum keys key)
 {

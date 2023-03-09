@@ -55,12 +55,12 @@ static void	tr_f_normal(t_hit *hit)
 	if (hit->object->type == TRIANGLE)
 	{
 		tr = &hit->object->triangle;
-		hit->normal = -normalize_vector(cross_product(tr->v0v1, tr->v0v2));
+		hit->normal = normalize_vector(cross_product(tr->v0v1, tr->v0v2));
 	}
 	else
 	{
 		face = &hit->object->face;
-		hit->normal = -normalize_vector(cross_product(face->v0v1, face->v0v2));
+		hit->normal = normalize_vector(cross_product(face->v0v1, face->v0v2));
 	}
 }
 

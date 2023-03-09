@@ -151,7 +151,7 @@ static void	set_indices(
 t_parse_error	parse_face(char **linep, t_object *object, t_conf_data *conf)
 {
 	t_face_indices	indices;
-	t_parse_error	err;			
+	t_parse_error	err;
 	char			*line;
 	int32_t			vert;
 

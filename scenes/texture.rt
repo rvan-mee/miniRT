@@ -1,0 +1,26 @@
+A	0.0				255,0,0
+C	0,0,0			0,0,-1		60
+L	0,0,0			0.1			255,255,255
+
+newmtl Texture
+	Ns 5
+	Kd 1 1 1
+	Ka 1 1 1
+	Ks 0 0 0
+	map_Kd scenes/texture.bmp
+
+usemtl Texture
+# top left
+v 0.5 0.25 -1
+# bot left
+v 0.5 -0.25 -1
+# top right
+v -0.5 0.25  -1
+# bot right
+v -0.5 -0.25 -1
+vt 0 1
+vt 0 0
+vt 1 1
+vt 1 0
+f 1/1 2/2 3/3
+f 4/4 3/3 2/2

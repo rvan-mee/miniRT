@@ -31,7 +31,7 @@ typedef struct rgb
 }	t_rgb;
 
 typedef struct s_bmp {
-	int32_t			padding;
+	uint8_t			pixel_size;
 	int32_t			line_size;
 	int32_t			width;
 	int32_t			height;
@@ -45,7 +45,7 @@ typedef struct s_bmp_file_header {
 	uint32_t	size;
 	uint16_t	app_specific_unused;
 	uint16_t	app_specific_unused2;
-	uint32_t	header_offset;
+	uint32_t	file_pixel_offset;
 	uint32_t	dib_header_size;
 	int32_t		width_pixels;
 	int32_t		height_pixels;

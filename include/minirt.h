@@ -226,10 +226,6 @@ typedef struct s_scene {
 	t_object			*objects;
 	size_t				objects_len;
 	t_bvh				bvh;
-	t_vertex			*vertices;
-	size_t				vertices_len;
-	t_vertex_texture	*vertex_textures;
-	size_t				vertex_textures_len;
 	t_mtl				*materials;
 	size_t				materials_len;
 }	t_scene;
@@ -247,8 +243,7 @@ typedef struct s_hit {
 	t_fvec		normal;
 	size_t		screen_x;
 	size_t		screen_y;
-	float		u;
-	float		v;
+	t_fvec		bary;
 }	t_hit;
 
 typedef struct s_render_block
@@ -288,7 +283,6 @@ typedef struct s_minirt {
 	size_t		width;
 	size_t		height;
 	t_threading	thread;
-	t_bmp		temp_texture;
 }	t_minirt;
 
 typedef struct s_aabb {

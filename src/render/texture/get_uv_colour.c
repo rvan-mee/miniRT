@@ -28,18 +28,18 @@ static float	decode_gamma(float component)
 
 t_fvec	get_uv_colour(t_bmp *texture, float u, float v)
 {
-	const int32_t	height = texture->height;
-	const int32_t	width = texture->width;
+	const uint32_t	x = (uint32_t)((float) texture->width * u);
+	const uint32_t	y = (uint32_t)((float) texture->height * (1.f - v));
 	t_rgba			colour;
 	uint32_t		offset;
 
-	offset = (((height - (int32_t)(height * v)) * width) + (int32_t)(width * u)) * RGB;
+	offset = x * texture->pixel_size + y * texture->line_size;
 	colour.b = texture->data[offset];
 	colour.g = texture->data[offset + 1];
 	colour.r = texture->data[offset + 2];
 	return ((t_fvec) {
-		decode_gamma(colour.r / 255.f),
-		decode_gamma(colour.g / 255.f),
-		decode_gamma(colour.b / 255.f),
+		decode_gamma((float) colour.r / 255.f),
+		decode_gamma((float) colour.g / 255.f),
+		decode_gamma((float) colour.b / 255.f),
 	});
 }

@@ -22,13 +22,13 @@ static int32_t	write_bmp_header(int32_t fd, t_bmp bmp_data)
 	static t_bmp_file_header	header;
 
 	header.type = FILE_TYPE;
-	header.size = (HEIGHT * WIDTH * sizeof(int32_t)) + HEADER_SIZE;
-	header.header_offset = HEADER_SIZE;
+	header.size = bmp_data.data_size + HEADER_SIZE;
+	header.file_pixel_offset = HEADER_SIZE;
 	header.dib_header_size = DIB_HEADER_SIZE;
-	header.width_pixels = WIDTH;
-	header.height_pixels = HEIGHT;
+	header.width_pixels = bmp_data.width;
+	header.height_pixels = bmp_data.height;
 	header.color_planes = COLOR_PLANES_COUNT;
-	header.bits_per_pixel = BITS_PER_PIXEL;
+	header.bits_per_pixel = bmp_data.pixel_size * 8;
 	header.image_size_bytes = bmp_data.data_size;
 	if (write(fd, &header, sizeof(t_bmp_file_header)) == -1)
 	{
@@ -99,9 +99,12 @@ void	create_bmp(mlx_image_t *img) // TODO: take width and height from t_minirt *
 	fd = create_new_bmp_file();
 	if (fd == -1)
 		return ;
-	data.padding = WIDTH % sizeof(int32_t);
-	data.line_size = RGB * WIDTH + data.padding;
-	data.data_size = data.line_size * HEIGHT;
+	data.height = HEIGHT;
+	data.width = WIDTH;
+	data.pixel_size = RGB;
+	data.line_size = data.pixel_size * data.width;
+	data.line_size += data.line_size % 4;
+	data.data_size = data.line_size * data.height;
 	data.data = ft_calloc(data.data_size, sizeof(unsigned char));
 	if (!data.data || write_bmp_header(fd, data) == -1)
 	{

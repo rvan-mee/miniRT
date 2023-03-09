@@ -31,7 +31,6 @@ static void	init_data(t_minirt *data, int argc, char **argv)
 		argc,
 		WIDTH,
 		HEIGHT,
-		{},
 		{}
 	};
 }

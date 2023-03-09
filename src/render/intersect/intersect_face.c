@@ -33,7 +33,6 @@ float	intersect_face(const t_object *obj, const t_ray *ray, t_hit *hit)
 	if (isect.v < 0.0f || isect.u + isect.v > 1.0f)
 		return (MISS);
 	isect.t = dot_product(tr->v0v2, isect.qvec) * isect.inv_det;
-	hit->u = isect.u;
-	hit->v = isect.v;
+	hit->bary = (t_fvec){1.0f - isect.u - isect.v, isect.u, isect.v};
 	return (isect.t);
 }

@@ -15,6 +15,23 @@
 #include <float.h>
 #include <bvh.h>
 
+static bool	intersect_old(t_scene *scene, t_ray *ray, t_hit *hit)
+{
+	size_t	i;
+	float	hit_distance;
+
+	i = scene->objects_len;
+	while (i--)
+	{
+		hit_distance = intersect(scene->objects + i, ray, hit);
+		if (hit_distance < 0 || hit_distance >= hit->distance)
+			continue;
+		hit->distance = hit_distance;
+		hit->object = scene->objects + i;
+	}
+	return (hit_distance != FLT_MAX);
+}
+
 bool	trace(
 		t_scene *scene,
 		t_ray *ray,
@@ -22,29 +39,20 @@ bool	trace(
 		t_dynarr *hits)
 {
 	const float	d_offset = (1 - 128 * (FLT_EPSILON));
-	float		hit_distance;
 	t_hit		hit;
-	size_t		i;
 
-	hit = (t_hit){(*ray), FLT_MAX, {}, NULL, {}, screen[X], screen[Y], 0, 0};
+	hit = (t_hit){
+		.ray = *ray,
+		.distance = FLT_MAX,
+		.screen_x = screen[X],
+		.screen_y = screen[Y]
+	};
 	if (USE_BVH)
 	{
 		if (!intersect_bvh(&scene->bvh, ray, &hit))
 			return (true);
 	}
-	else
-	{
-		i = scene->objects_len;
-		while (i--)
-		{
-			hit_distance = intersect(scene->objects + i, ray, &hit);
-			if (hit_distance < 0 || hit_distance >= hit.distance)
-				continue;
-			hit.distance = hit_distance;
-			hit.object = scene->objects + i;
-		}
-	}
-	if (hit.distance == FLT_MAX)
+	else if (!intersect_old(scene, ray, &hit))
 		return (true);
 	hit.hit = hit.ray.origin + hit.ray.direction * hit.distance;
 	calculate_normal(&hit);

@@ -12,7 +12,6 @@
 
 #include <parse.h>
 #include <parse_mtl.h>
-#include <minirt.h>
 #include <bmp.h>
 #include <libft.h>
 
@@ -34,5 +33,6 @@ t_parse_error	parse_mtl_map(char *line, t_bmp *bmp)
 		return (free(path), EXTENTION);
 	if (!parse_bmp(path, bmp))
 		return (free(path), BMP_ERR);
+	free(path);
 	return (SUCCESS);
 }

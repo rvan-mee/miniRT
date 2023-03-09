@@ -1,0 +1,35 @@
+{
+   dl_catch_exception
+   Memcheck:Leak
+   ...
+   fun:_dl_catch_exception
+   ...
+}
+{
+   glfwinit
+   Memcheck:Leak
+   ...
+   fun:glfwInit
+   ...
+}
+{
+   glfwCreateWindow
+   Memcheck:Leak
+   ...
+   fun:glfwCreateWindow
+   ...
+}
+{
+   xrminitparseinfo
+   Memcheck:Leak
+   ...
+   fun:_XrmInitParseInfo
+   ...
+}
+{
+   call_init
+   Memcheck:Leak
+   ...
+   fun:call_init
+   ...
+}

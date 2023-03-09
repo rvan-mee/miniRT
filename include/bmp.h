@@ -37,7 +37,6 @@ typedef struct s_bmp {
 	int32_t			height;
 	int32_t			data_size;
 	unsigned char	*data;
-	char			*name;
 }	t_bmp;
 
 typedef struct s_bmp_file_header {

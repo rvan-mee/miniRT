@@ -102,11 +102,8 @@ static t_parse_error	mtl_parse_func(char *line, t_object *object)
 
 static void	clear_maps(t_object *obj)
 {
-	free(obj->material.map_Ka.name);
 	free(obj->material.map_Ka.data);
-	free(obj->material.map_Kd.name);
 	free(obj->material.map_Kd.data);
-	free(obj->material.map_Ks.name);
 	free(obj->material.map_Ks.data);
 }
 

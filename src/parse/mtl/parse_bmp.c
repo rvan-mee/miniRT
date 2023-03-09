@@ -57,7 +57,6 @@ bool	parse_bmp(char *path, t_bmp *dst)
 {
 	int32_t	fd;
 
-	dst->name = path;
 	if (!check_extension(path, ".bmp"))
 		return (false);
 	if (!open_file(path, &fd))

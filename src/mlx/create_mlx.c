@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <libft.h>
 
+void	quit_working(t_minirt *data);
 void	create_mlx(t_minirt	*data)
 {
 	data->mlx = mlx_init(data->width, data->height, "miniRT", false);
@@ -30,4 +31,5 @@ void	create_mlx(t_minirt	*data)
 	}
 	mlx_key_hook(data->mlx, (mlx_keyfunc)keyhook, data);
 	mlx_mouse_hook(data->mlx, (mlx_mousefunc)mouse_hook, data);
+	mlx_close_hook(data->mlx, (mlx_closefunc)quit_working, data);
 }

@@ -21,5 +21,8 @@ void	mouse_hook(mouse_key_t type, action_t action, modifier_key_t mod, t_minirt 
 bool	create_mlx(t_minirt *data);
 
 void	reload_scene(t_minirt *data, enum keys key);
+void	move_cam(t_minirt *data, enum keys key);
+void	rotate_cam(t_minirt *data, enum keys key);
+void	change_exposure(t_minirt *data, enum keys key);
 
 #endif

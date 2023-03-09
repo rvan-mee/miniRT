@@ -27,6 +27,7 @@ SRCS := main.c										\
 		mlx/hooks.c									\
 		mlx/bmp.c									\
 		mlx/reload_scene.c							\
+		mlx/adjust_camera.c							\
 		\
 		parse/parse.c								\
 		parse/parse_scene.c							\

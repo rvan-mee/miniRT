@@ -14,7 +14,6 @@
 #include <render.h>
 #include <ft_math.h>
 #include <texture.h>
-#include <float.h>
 
 #define MAX_REFLECTION_DEPTH	16
 
@@ -37,13 +36,12 @@ static t_fvec	reflect_ray(t_scene *scene, t_object *object, t_hit *hit, uint8_t 
 	t_fvec	colour;
 
 	colour = (t_fvec) {};
-	r_hit.ray.origin = hit->hit;
 	r_hit.ray.direction = reflect(hit->ray.direction, hit->normal);
+	r_hit.ray.origin = hit->hit + r_hit.ray.direction * 1e-3f;
 	if (!intersect_bvh(&scene->bvh, &r_hit.ray, &r_hit))
 		return (colour);
 	r_hit.hit = r_hit.ray.origin + r_hit.ray.direction * r_hit.distance;
 	calculate_normal(&r_hit);
-	r_hit.hit -= r_hit.ray.direction * (1 - 128 * (FLT_EPSILON));
 	colour = get_hit_colour(scene, r_hit.object, &r_hit, depth + 1);
 	return (colour * object->mat->specular);
 }

@@ -70,7 +70,7 @@ t_parse_error	parse_camera(char **linep, t_object *object, t_conf_data *conf)
 	if (!parse_fov(&line, &object->camera.fov))
 		return (FOV);
 	calc_ray_info(&object->camera, WIDTH, HEIGHT);
-	object->camera.exposure = fmaxf(1.0f, conf->exposure);
+	object->camera.exposure = conf->exposure;
 	*linep = line;
 	return (SUCCESS);
 }

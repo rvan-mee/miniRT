@@ -147,6 +147,7 @@ bool	parse_scene(int32_t fd, t_scene *dst)
 		!dynarr_create(&parse_data.vertex_normals, 256, sizeof(t_normals)) || \
 		!dynarr_create(&parse_data.vertex_textures, 256, vt_size))
 		return (cleanup(NULL, &parse_data));
+	parse_data.exposure = -1.0f;
 	if (!read_objects(fd, dst, &parse_data))
 		return (false);
 	dst->lights = parse_data.lights.arr;

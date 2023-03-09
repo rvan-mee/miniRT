@@ -16,7 +16,7 @@
 t_parse_error	parse_exposure(char **linep, t_object *object, t_conf_data *conf)
 {
 	(void) object;
-	if (!parse_float(linep, &conf->exposure, 0.1f, FLT_MAX))
+	if (!parse_float(linep, &conf->exposure, -FLT_MAX, -FLT_MIN))
 		return (EXPOS);
 	return (SUCCESS);
 }

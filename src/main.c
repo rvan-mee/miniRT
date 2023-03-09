@@ -41,6 +41,7 @@ bool	init_render_data(t_minirt *data)
 		return (false);
 	if (!new_bvh(data->scene.objects, data->scene.objects_len, &data->scene.bvh))
 		return (false);
+	get_scene_scale(&data->scene);
 	return (true);
 }
 

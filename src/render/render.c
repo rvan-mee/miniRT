@@ -55,6 +55,9 @@ static bool	set_color(t_minirt *data, t_dynarr *hits)
 	while (i--)
 	{
 		colour = get_hit_colour(&data->scene, hit[i].object, &hit[i], 0);
+		colour[0] = 1.0f - expf(colour[0] * data->scene.camera.camera.exposure);
+		colour[1] = 1.0f - expf(colour[1] * data->scene.camera.camera.exposure);
+		colour[2] = 1.0f - expf(colour[2] * data->scene.camera.camera.exposure);
 		srgb = encode_gamma(colour);
 		mlx_put_pixel(data->img, hit[i].screen_x, hit[i].screen_y, srgb);
 	}

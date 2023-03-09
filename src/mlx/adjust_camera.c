@@ -18,36 +18,9 @@
 
 #define STEPS	0.1f
 
-static float	adjust_step_for_size(t_bvh *bvh)
-{
-	const t_aabb	plane_bounds = {
-		{-10000, -10000, -10000},
-		{10000, 10000, 10000}
-	};
-	t_cluster		*cluster;
-	t_fvec			delta;
-
-	cluster = bvh->clusters + bvh->root;
-	while (true)
-	{
-		if (ft_memcmp(&cluster->aabb, &plane_bounds, sizeof(t_aabb)) != 0)
-		{
-			delta = cluster->aabb.max - cluster->aabb.min;
-			return (sqrtf(powf(delta[X], 2.f) + powf(delta[Y], 2.f)) * STEPS);
-		}
-		if (cluster->len == 1)
-			return (STEPS);
-		if (bvh->clusters[cluster->l].len > 1)
-			cluster = bvh->clusters + cluster->l;
-		else
-			cluster = bvh->clusters + cluster->r;
-	}
-
-}
-
 void	move_cam(t_minirt *data, enum keys key)
 {
-	const float	step = adjust_step_for_size(&data->scene.bvh);
+	const float	step = STEPS * data->scene.scale;
 	t_object *cam;
 
 	cam = &data->scene.camera;
@@ -99,12 +72,16 @@ void	rotate_cam(t_minirt *data, enum keys key)
 
 void	change_exposure(t_minirt *data, enum keys key)
 {
-	const bool	decrement = key == MLX_KEY_Z;
+	const bool	increase_effect = key == MLX_KEY_X;
+	t_camera	 *cam;
+	float		amount;
 
-	if (decrement)
-		data->scene.camera.camera.exposure -= 0.5f;
+	cam = &data->scene.camera.camera;
+	if (increase_effect)
+		amount = cam->exposure / 8.0f;
 	else
-		data->scene.camera.camera.exposure += 0.5f;
-	printf("Changed camera exposure to %f\n", data->scene.camera.camera.exposure);
+		amount = cam->exposure / -10.0f;
+	cam->exposure += amount;
+	printf("Changed camera exposure to %f\n", cam->exposure);
 	reset_work(data);
 }

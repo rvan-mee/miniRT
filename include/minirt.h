@@ -219,15 +219,16 @@ typedef struct s_bvh {
 }	t_bvh;
 
 typedef struct s_scene {
-	t_object			camera;
-	t_object			ambient;
-	t_object			*lights;
-	size_t				lights_len;
-	t_object			*objects;
-	size_t				objects_len;
-	t_bvh				bvh;
-	t_mtl				*materials;
-	size_t				materials_len;
+	t_object	camera;
+	t_object	ambient;
+	t_object	*lights;
+	size_t		lights_len;
+	t_object	*objects;
+	size_t		objects_len;
+	t_bvh		bvh;
+	t_mtl		*materials;
+	size_t		materials_len;
+	float		scale;
 }	t_scene;
 
 typedef struct s_ray {
@@ -292,6 +293,7 @@ typedef struct s_aabb {
 
 bool	init_render_data(t_minirt *data);
 void	start_render(t_minirt *data, void *func_data);
+void	get_scene_scale(t_scene *scene);
 
 t_aabb	calc_bounds(t_object *obj);
 

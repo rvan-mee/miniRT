@@ -1,6 +1,7 @@
 #include <minirt.h>
 #include <math.h>
 #include <stdlib.h>
+#include <float.h>
 
 static t_aabb	face_bounds(t_object *obj)
 {
@@ -65,6 +66,8 @@ static t_aabb	cyl_bounds(t_object *obj)
 
 t_aabb	calc_bounds(t_object *obj)
 {
+	const float	half_flt_max = FLT_MAX / 2;
+
 	switch (obj->type) {
 		case SPHERE:
 			return ((t_aabb){
@@ -73,8 +76,8 @@ t_aabb	calc_bounds(t_object *obj)
 			});
 		case PLANE:
 			return ((t_aabb){
-				{-10000, -10000, -10000},
-				{10000, 10000, 10000}
+				{-half_flt_max, -half_flt_max, -half_flt_max},
+				{+half_flt_max, +half_flt_max, +half_flt_max}
 			});
 		case CYLINDER:
 			return (cyl_bounds(obj));

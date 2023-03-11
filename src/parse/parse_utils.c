@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/13 11:28:47 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/22 18:53:44 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2023/03/11 13:46:41 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ invalid illumination value\n"
 invalid optical density value\n"
 #define TF_ERROR		"\nthis material contains an \
 invalid transmission filter colour\n"
+#define EXPOSURE_ERROR	"\nthis material contains an \
+invalid exposure value\n"
 
 static const char	*g_err_message[] = {\
 	[OBJECT] = OBJECT_ERROR,		\
@@ -93,7 +95,8 @@ static const char	*g_err_message[] = {\
 	[DUPLICATE] = DUPLICATE_ERROR,	\
 	[EXTENTION] = EXTENSION_ERROR,	\
 	[BMP_ERR] = BMP_ERROR,			\
-	[NON_EXIST] = EXIST_ERROR,
+	[NON_EXIST] = EXIST_ERROR,		\
+	[EXPOS] = EXPOSURE_ERROR,
 };
 
 bool	parse_line_error(const char *line, t_parse_error err, size_t line_c)

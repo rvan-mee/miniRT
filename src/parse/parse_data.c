@@ -59,7 +59,7 @@ bool	init_parse(t_conf_data *data, int32_t fd)
 	while (i < ARR_COUNT)
 	{
 		p = g_arrparams[i++];
-		if (!dynarr_create((t_dynarr *)((void *)&data + p[0]), p[1], p[2]))
+		if (!dynarr_create((t_dynarr *)((void *)data + p[0]), p[1], p[2]))
 			return (cleanup_parse(NULL, data));
 	}
 	data->fd = fd;

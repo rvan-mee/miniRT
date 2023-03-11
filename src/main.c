@@ -24,30 +24,29 @@ void	f(void)
 static void	init_data(t_minirt *data, int argc, char **argv)
 {
 	*data = (t_minirt){
-		NULL,
-		NULL,
-		{},
-		argv,
-		argc,
-		WIDTH,
-		HEIGHT,
-		{}
+		.argv = argv,
+		.argc = argc,
+		.width = WIDTH,
+		.height = HEIGHT
 	};
 }
 
 bool	init_render_data(t_minirt *data)
 {
-	if (!parse_config_file(data->argc, data->argv, &data->scene))
+	t_scene	*scene;
+
+	scene = &data->scene;
+	if (!parse_config_file(data->argc, data->argv, scene))
 		return (false);
-	if (!new_bvh(data->scene.objects, data->scene.objects_len, &data->scene.bvh))
+	if (!new_bvh(scene->objects, scene->objects_len, &scene->bvh))
 		return (false);
-	get_scene_scale(&data->scene);
+	get_scene_scale(scene);
 	return (true);
 }
 
 static int	cleanup(t_minirt *data, int status)
 {
-	size_t i;
+	size_t	i;
 
 	if (data->mlx)
 		mlx_terminate(data->mlx);
@@ -74,7 +73,7 @@ int	main(int argc, char *argv[])
 	init_data(&data, argc, argv);
 	atexit(f);
 	if (!init_render_data(&data) || \
-		!create_mlx(&data) ||
+		!create_mlx(&data) || \
 		!init_work_threads(&data))
 		return (cleanup(&data, EXIT_FAILURE));
 	mlx_loop(data.mlx);

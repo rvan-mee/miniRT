@@ -13,26 +13,38 @@
 #include <parse.h>
 #include <unistd.h>
 #include <stdio.h>
-
-#define ERR_USAGE		"Error\nPlease use ./miniRT [config file]\n"
 #include <time.h>
+#include <inttypes.h>
+
+#define ERR_USAGE	"Error\nPlease use ./miniRT [config file]\n"
+#define TIME_MSG1	"Parsing took %"
+#define TIME_MSG2	"ms!\n"
+
+static void	print_timer(const uint64_t start)
+{
+	const static uint64_t	clocks_per_ms = CLOCKS_PER_SEC / 1000;
+	const uint64_t			end = clock();
+
+	printf(TIME_MSG1 PRIu64 TIME_MSG2, (end - start) / clocks_per_ms);
+}
+
 bool	parse_config_file(int32_t argc, char *argv[], t_scene *scene)
 {
-	int32_t	fd;
-	bool	success;
+	const uint64_t	start = clock();
+	int32_t			fd;
+	bool			success;
 
 	if (argc != 2)
 	{
 		dprintf(STDERR_FILENO, ERR_USAGE);
 		return (false);
 	}
-	clock_t start = clock();
 	if ((!check_extension(argv[1], ".rt")) || !open_file(argv[1], &fd))
 		return (false);
 	success = parse_scene(fd, scene);
 	close(fd);
 	if (!success)
 		return (false);
-	dprintf(1, "Parsing took %lf!\n", (clock() - start) / (double) CLOCKS_PER_SEC);
+	print_timer(start);
 	return (true);
 }

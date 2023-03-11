@@ -31,7 +31,7 @@ static void	pause_thread(t_threading *thread)
 	thread->threads_done++;
 	if (thread->threads_done == thread->created_threads)
 	{
-		printf("All threads done after %"PRIu64"\n",
+		printf("All threads done after %"PRIu64"ms\n",
 			get_time_ms() - thread->render_start);
 		pthread_cond_broadcast(&thread->done_cond);
 	}

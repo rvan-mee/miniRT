@@ -16,7 +16,7 @@ CC = gcc
 
 CFLAGS += -Wall -Werror -Wextra
 CFLAGS += -march=native -O3 -pthread
-#CFLAGS += -g #-fsanitize=address
+CFLAGS += -g #-fsanitize=address
 INCLUDE += -I $(INCD)
 
 # SOURCE FILES
@@ -33,6 +33,7 @@ SRCS := main.c										\
 		parse/parse_scene.c							\
 		parse/parse_object.c						\
 		parse/parse_utils.c							\
+		parse/parse_data.c							\
 		parse/objects/parse_ambient.c				\
 		parse/objects/parse_camera.c				\
 		parse/objects/parse_cylinder.c				\
@@ -64,6 +65,7 @@ SRCS := main.c										\
 		parse/mtl/parse_mtl_map_ka.c				\
 		parse/mtl/parse_mtl_map_kd.c				\
 		parse/mtl/parse_mtl_map_ks.c				\
+		parse/mtl/parse_mtl_name.c					\
 		parse/mtl/parse_newmtl.c					\
 		parse/mtl/parse_usemtl.c					\
 		\
@@ -103,12 +105,11 @@ SRCS := main.c										\
 		aabb/aabb_combine.c							\
 		aabb/aabb_sa.c								\
 		aabb/aabb_intersect.c						\
+		aabb/calc_bounds.c							\
 		\
 		tree/new_tree.c								\
 		tree/new_node.c								\
 		tree/sort_points.c							\
-		\
-		calc_bounds.c								\
 		\
 		threading/threads.c							\
 		threading/work.c							\

@@ -48,44 +48,11 @@ static const char		*g_ids[] = {\
 	[MTL_MAP_KS] = "map_Ks",									\
 };
 
-static t_parse_error	parse_mtl_name(char **linep, \
-						t_object *object, t_conf_data *conf)
-{
-	const t_mtl	*mtl_arr = conf->materials.arr;
-	char		*line;
-	size_t		name_len;
-	size_t		i;
-
-	i = 0;
-	line = *linep;
-	name_len = 0;
-	skip_spaces(&line);
-	if (!(ft_isalnum(*line)) && *line != '_' && *line != '-')
-		return (NAME);
-	while (ft_isalnum(line[name_len]) || line[name_len] == '_' \
-			|| line[name_len] == '-')
-		name_len++;
-	object->material.name = ft_substr(line, 0, name_len);
-	if (!object->material.name)
-		return (ALLOC);
-	line += name_len;
-	skip_spaces(&line);
-	if (*line)
-		return (free(object->material.name), NAME);
-	while (i < conf->materials.length)
-		if (!ft_strncmp(object->material.name, mtl_arr[i++].name, name_len + 1))
-			return (free(object->material.name), DUP);
-	*linep = line;
-	return (SUCCESS);
-}
-
 static t_parse_error	mtl_parse_func(char *line, t_object *object)
 {
-	t_parse_mtl		type;
-	size_t			len;
+	t_parse_mtl	type;
+	size_t		len;
 
-	if (line[0] == '\n')
-		return (SUCCESS);
 	skip_spaces(&line);
 	type = MTL_UNINIT;
 	while (++type != MTL_END)
@@ -97,28 +64,54 @@ static t_parse_error	mtl_parse_func(char *line, t_object *object)
 			return (g_parse_mtl[type](line, object));
 		}
 	}
-	return (MTL_ERR);
+	return (SUCCESS);
 }
 
-static void	clear_maps(t_object *obj)
+static t_parse_error	check_dup(t_conf_data *data, char *name)
 {
-	free(obj->material.map_Ka.data);
-	free(obj->material.map_Kd.data);
-	free(obj->material.map_Ks.data);
+	const size_t	len = ft_strlen(name);
+	t_mtl			*mtl;
+	size_t			i;
+
+	i = 0;
+	while (i < data->materials.length)
+	{
+		mtl = dynarr_get(&data->materials, i++);
+		if (ft_strncmp(name, mtl->name, len + 1) == 0)
+			return (DUP);
+	}
+	return (CONTINUE);
+}
+
+//TODO: Add more properties that are required for certain illum modes?
+static bool	check_properties(t_mtl *mtl)
+{
+	const t_mtl_enabled	on = mtl->is_enabled;
+
+	return (on.ambient && on.diffuse && on.specular && on.reflec);
+}
+
+static t_parse_error	err_cleanup(t_mtl *mtl, t_parse_error err)
+{
+	free(mtl->map_Ka.data);
+	free(mtl->map_Kd.data);
+	free(mtl->map_Ks.data);
+	free(mtl->name);
+	return (err);
 }
 
 t_parse_error	parse_newmtl(char **linep, t_object *object, t_conf_data *conf)
 {
 	t_parse_error	err;
 	char			*line;
+	t_mtl			*mtl;
 
-	ft_bzero(&object->material.is_enabled, sizeof(t_mtl_enabled));
-	ft_bzero(&object->material.map_Ka, sizeof(t_bmp));
-	ft_bzero(&object->material.map_Kd, sizeof(t_bmp));
-	ft_bzero(&object->material.map_Ks, sizeof(t_bmp));
-	if (parse_mtl_name(linep, object, conf) != SUCCESS)
-		return (MTL_ERR);
-	while (1)
+	mtl = &object->material;
+	err = parse_mtl_name(linep, &mtl->name);
+	if (err != SUCCESS)
+		return (err);
+	err = check_dup(conf, mtl->name);
+	while (err == CONTINUE)
 	{
 		line = get_next_line(conf->fd);
 		if (!line)
@@ -126,12 +119,12 @@ t_parse_error	parse_newmtl(char **linep, t_object *object, t_conf_data *conf)
 		conf->curr_line++;
 		err = mtl_parse_func(line, object);
 		free(line);
-		if (err == SUCCESS)
-			break ;
-		if (err != CONTINUE)
-			return (clear_maps(object), free(object->material.name), err);
 	}
-	if (!dynarr_addone(&conf->materials, &object->material))
-		return (clear_maps(object), free(object->material.name), DYNARR);
+	if (err != SUCCESS)
+		return (err_cleanup(mtl, err));
+	if (!dynarr_addone(&conf->materials, mtl))
+		return (err_cleanup(mtl, DYNARR));
+	if (!check_properties(mtl))
+		return (err_cleanup(mtl, MTL_ERR));
 	return (SUCCESS);
 }

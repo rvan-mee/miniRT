@@ -16,7 +16,6 @@
 #include <errno.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <libft.h>
 
 #define DUPLICATE_ERROR		"Error\nThere can only be one %s!\n"
 #define UNKNOWN_ERROR		"Error\nUnknown type %s\n"
@@ -37,34 +36,6 @@ static const char	*g_type_strs[] = {\
 	[MTL] = "material",					\
 	[END] = "end",
 };
-
-static bool	cleanup(char *line, t_conf_data *data)
-{
-	size_t	i;
-	t_mtl	*mtl;
-
-	i = 0;
-	mtl = data->materials.arr;
-	if (mtl)
-	{
-		while (i < data->materials.length)
-		{
-			free(mtl[i].map_Ka.data);
-			free(mtl[i].map_Kd.data);
-			free(mtl[i].map_Ks.data);
-			free(mtl[i].name);
-			i++;
-		}
-	}
-	free(line);
-	dynarr_delete(&data->lights);
-	dynarr_delete(&data->objects);
-	dynarr_delete(&data->vertices);
-	dynarr_delete(&data->vertex_textures);
-	dynarr_delete(&data->vertex_normals);
-	dynarr_delete(&data->materials);
-	return (false);
-}
 
 static bool	check_error(t_scene *dst, t_conf_data *data)
 {
@@ -123,10 +94,11 @@ static bool \
 		if (line == NULL)
 			break ;
 		conf->curr_line++;
+		object = (t_object){};
 		if (*line != '\n' && *line != '\0')
 			if (!parse_object(line, &object, conf) || \
 				!store_object(&object, dst, conf))
-				return (cleanup(line, conf));
+				return (cleanup_parse(line, conf));
 		free(line);
 	}
 	return (check_error(dst, conf));
@@ -134,30 +106,11 @@ static bool \
 
 bool	parse_scene(int32_t fd, t_scene *dst)
 {
-	t_conf_data		parse_data;
-	const size_t	vt_size = sizeof(t_vertex_texture);
+	t_conf_data		data;
 
-	ft_bzero(dst, sizeof(t_scene));
-	ft_bzero(&parse_data, sizeof(t_conf_data));
-	parse_data.fd = fd;
-	if (!dynarr_create(&parse_data.lights, 4, sizeof(t_object)) || \
-		!dynarr_create(&parse_data.materials, 32, sizeof(t_mtl)) || \
-		!dynarr_create(&parse_data.objects, 256, sizeof(t_object)) || \
-		!dynarr_create(&parse_data.vertices, 256, sizeof(t_vertex)) || \
-		!dynarr_create(&parse_data.vertex_normals, 256, sizeof(t_normals)) || \
-		!dynarr_create(&parse_data.vertex_textures, 256, vt_size))
-		return (cleanup(NULL, &parse_data));
-	parse_data.exposure = -1.0f;
-	if (!read_objects(fd, dst, &parse_data))
+	init_parse(&data, fd);
+	if (!read_objects(fd, dst, &data))
 		return (false);
-	dst->lights = parse_data.lights.arr;
-	dst->lights_len = parse_data.lights.length;
-	dst->objects = parse_data.objects.arr;
-	dst->objects_len = parse_data.objects.length;
-	dst->materials = parse_data.materials.arr;
-	dst->materials_len = parse_data.materials.length;
-	dynarr_delete(&parse_data.vertex_textures);
-	dynarr_delete(&parse_data.vertex_normals);
-	dynarr_delete(&parse_data.vertices);
+	set_scene(dst, &data);
 	return (true);
 }

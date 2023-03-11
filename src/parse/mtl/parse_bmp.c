@@ -47,7 +47,7 @@ static bool	read_bmp(int32_t fd, t_bmp *bmp)
 	bmp->data = malloc(bmp->data_size);
 	if (!bmp->data)
 		return (false);
-	if (!read_file(fd, bmp->data, bmp_head.file_pixel_offset - HEADER_SIZE) ||
+	if (!read_file(fd, bmp->data, bmp_head.file_pixel_offset - HEADER_SIZE) || \
 		!read_file(fd, bmp->data, bmp->data_size))
 		return (free(bmp->data), false);
 	return (true);

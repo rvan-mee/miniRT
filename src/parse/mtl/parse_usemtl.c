@@ -14,30 +14,6 @@
 #include <minirt.h>
 #include <libft.h>
 
-static t_parse_error	parse_mtl_name(char **linep, char **name)
-{
-	size_t		name_len;
-	char 		*line;
-
-	name_len = 0;
-	line = *linep;
-	skip_spaces(&line);
-	if (!(ft_isalnum(*line)) && *line != '_' && *line != '-')
-		return (NAME);
-	while (ft_isalnum(line[name_len]) || line[name_len] == '_' \
-			|| line[name_len] == '-')
-		name_len++;
-	*name = ft_substr(line, 0, name_len);
-	if (!*name)
-		return (ALLOC);
-	line += name_len;
-	skip_spaces(&line);
-	if (*line)
-		return (free(*name), NAME);
-	*linep = line;
-	return (SUCCESS);
-}
-
 static t_parse_error	set_current_mtl(char *name, t_conf_data *conf)
 {
 	const size_t	name_len = ft_strlen(name);

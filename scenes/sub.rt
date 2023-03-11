@@ -1,9 +1,10 @@
 A	0.0 255,0,0
-C	15,17,-55				0,0,1		70
-L	50,10,-55		1			255,255,10
-pl	0,0,100		0,0,-1		0,0,255
+C	15,17,-55					0,0,1			70
+L	35,15,-50		1			255,255,255
+L	0,0,30			1			255,0,255
+pl	0,0,40			0,0,-1		0,0,255
 
-exposure 1500
+exposure -25
 
 newmtl Texture
 	Ns 100
@@ -12,8 +13,8 @@ newmtl Texture
 	Kd .8 .8 .8
 	Ka 0.2 0.2 0.2
 	Ks 0 0 0
-	map_Kd scenes/sub_texture.bmp
-	map_Ka scenes/sub_texture.bmp
+	map_Kd scenes/textures/sub_texture.bmp
+	map_Ka scenes/textures/sub_texture.bmp
 
 usemtl Texture
 v 7.485754 17.484188 -35.041773

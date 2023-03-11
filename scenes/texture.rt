@@ -7,7 +7,9 @@ newmtl Texture
 	Kd 1 1 1
 	Ka 1 1 1
 	Ks 0 0 0
-	map_Kd scenes/texture.bmp
+	map_Kd scenes/textures/GlobeTexture.bmp
+
+exposure -8.5
 
 usemtl Texture
 # top left

@@ -16,7 +16,7 @@
 
 #define ARR_COUNT	6
 
-const static size_t	g_arrparams[ARR_COUNT][3] = {\
+static const size_t	g_arrparams[ARR_COUNT][3] = {\
 	{offsetof(t_conf_data, lights), 4, sizeof(t_object)},				\
 	{offsetof(t_conf_data, materials), 32, sizeof(t_mtl)},				\
 	{offsetof(t_conf_data, objects), 256, sizeof(t_object)},			\

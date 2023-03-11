@@ -22,7 +22,7 @@
 
 static void	print_timer(const uint64_t start)
 {
-	const static uint64_t	clocks_per_ms = CLOCKS_PER_SEC / 1000;
+	static const uint64_t	clocks_per_ms = CLOCKS_PER_SEC / 1000;
 	const uint64_t			end = clock();
 
 	printf(TIME_MSG1 PRIu64 TIME_MSG2, (end - start) / clocks_per_ms);

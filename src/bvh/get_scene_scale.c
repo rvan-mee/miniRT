@@ -34,5 +34,5 @@ void	get_scene_scale(t_scene *scene)
 		else
 			cluster = bvh->clusters + cluster->r;
 	}
-	scene->scale = sqrtf(powf(delta[X], 2.f) + powf(delta[Y], 2.f));
+	scene->scale = sqrtf(powf(delta[X], 2.f) + powf(delta[Z], 2.f));
 }

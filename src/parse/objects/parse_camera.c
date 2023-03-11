@@ -35,6 +35,18 @@ static bool	parse_fov(char **linep, float *dst)
 	return (true);
 }
 
+static t_fvec	rotate(t_fvec old_rot, t_fvec axis, float angle)
+{
+	t_fvec	new_rotation;
+
+	if (angle == 0)
+		return (old_rot);
+	new_rotation = old_rot * cosf(angle);
+	new_rotation += cross_product(axis, old_rot) * sinf(angle);
+	new_rotation += axis * dot_product(axis, old_rot) * (1 - cosf(angle));
+	return (new_rotation);
+}
+
 /**
  * Pre-calculate stuff we need to cast camera rays efficiently.
  *
@@ -42,35 +54,40 @@ static bool	parse_fov(char **linep, float *dst)
  *
  * I'd add a link to the explanation here but norminette :^)
  */
-void	calc_ray_info(t_camera *cam, float w, float h)
+void	calc_ray_info(t_camera *cam)
 {
-	const t_fvec	up = {0, 1, 0};
-	const float		ws_ratio = h / 2.f / tanf(cam->fov / 2.f);
+	const float	dz = (WIDTH / 2.f) / tanf(cam->fov / 2.f);
 
-	cam->u = normalize_vector(cross_product(up, cam->orientation));
-	cam->v = normalize_vector(cross_product(cam->orientation, cam->u));
+	cam->rotated = rotate(cam->orientation, (t_fvec) {0, 1, 0}, cam->rotation[0]);
+	cam->rotated = normalize_vector(cam->rotated);
+	cam->u = normalize_vector(cross_product((t_fvec) {0, 1, 0}, cam->rotated));
+	cam->rotated = rotate(cam->rotated, cam->u, cam->rotation[1]);
+	cam->rotated = normalize_vector(cam->rotated);
+	cam->v = normalize_vector(cross_product(cam->rotated, cam->u));
 	cam->proj_vec = (t_fvec){};
-	cam->proj_vec += -w / 2.f * cam->u;
-	cam->proj_vec += h / 2.0f * cam->v;
-	cam->proj_vec += ws_ratio * cam->orientation;
+	cam->proj_vec += -WIDTH / 2.0f * cam->u;
+	cam->proj_vec += HEIGHT / 2.0f * cam->v;
+	cam->proj_vec += dz * cam->rotated;
 }
 
 t_parse_error	parse_camera(char **linep, t_object *object, t_conf_data *conf)
 {
-	char	*line;
+	t_camera	*cam;
+	char		*line;
 
 	(void) conf;
+	cam = &object->camera;
 	line = *linep;
 	if (!parse_vector(&line, &object->coords, false)
 		|| !ft_isspace(*line))
 		return (COORD);
-	if (!parse_vector(&line, &object->camera.orientation, true)
+	if (!parse_vector(&line, &cam->orientation, true)
 		|| !ft_isspace(*line))
 		return (VECTOR);
-	if (!parse_fov(&line, &object->camera.fov))
+	if (!parse_fov(&line, &cam->fov))
 		return (FOV);
-	calc_ray_info(&object->camera, WIDTH, HEIGHT);
-	object->camera.exposure = conf->exposure;
+	calc_ray_info(&object->camera);
+	cam->exposure = conf->exposure;
 	*linep = line;
 	return (SUCCESS);
 }

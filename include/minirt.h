@@ -134,6 +134,8 @@ typedef struct s_ambient {
 
 typedef struct s_camera {
 	t_fvec	orientation;
+	t_fvec	rotated;
+	float	rotation[2];
 	float	fov;
 	t_fvec	u;
 	t_fvec	v;

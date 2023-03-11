@@ -22,6 +22,6 @@ t_ray	get_cam_ray(t_object *camera, size_t x, size_t y)
 	ray.direction = (cam->u * ((float) x + 0.5f)) +
 					(-cam->v * ((float) y + 0.5f)) +
 					(cam->proj_vec);
-	ray.direction = normalize_vector(ray.direction - ray.origin);
+	ray.direction = normalize_vector(ray.direction);
 	return (ray);
 }

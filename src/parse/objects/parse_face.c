@@ -137,15 +137,15 @@ static void	set_indices(
 	t_face_indices *index, \
 	int32_t vert)
 {
-	const t_normals			*normals = conf->vertex_normals.arr;
-	const t_vertex			*vertices = conf->vertices.arr;
-	const t_vertex_texture	*texture = conf->vertex_textures.arr;
+	const t_fvec	*normals = conf->vertex_normals.arr;
+	const t_fvec	*vertices = conf->vertices.arr;
+	const t_fvec	*texture = conf->vertex_textures.arr;
 
-	object->face.vert[vert] = vertices[index->vert_index].point;
+	object->face.vert[vert] = vertices[index->vert_index];
 	if (index->has_normal)
-		object->face.normals[vert] = normals[index->normal_index].normal;
+		object->face.normals[vert] = normals[index->normal_index];
 	if (index->has_texture)
-		object->face.uvw[vert] = texture[index->vert_texture_index].uvw;
+		object->face.uvw[vert] = texture[index->vert_texture_index];
 }
 #include <math.h>
 t_parse_error	parse_face(char **linep, t_object *object, t_conf_data *conf)

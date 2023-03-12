@@ -20,9 +20,9 @@ static const size_t	g_arrparams[ARR_COUNT][3] = {\
 	{offsetof(t_conf_data, lights), 4, sizeof(t_object)},				\
 	{offsetof(t_conf_data, materials), 32, sizeof(t_mtl)},				\
 	{offsetof(t_conf_data, objects), 256, sizeof(t_object)},			\
-	{offsetof(t_conf_data, vertices), 256, sizeof(t_vertex)},			\
-	{offsetof(t_conf_data, vertex_normals), 256, sizeof(t_normals)},	\
-	{offsetof(t_conf_data, vertex_textures), 256, sizeof(t_vertex_texture)}
+	{offsetof(t_conf_data, vertices), 256, sizeof(t_fvec)},				\
+	{offsetof(t_conf_data, vertex_normals), 256, sizeof(t_fvec)},		\
+	{offsetof(t_conf_data, vertex_textures), 256, sizeof(t_fvec)}
 };
 
 bool	cleanup_parse(void *anything, t_conf_data *data)

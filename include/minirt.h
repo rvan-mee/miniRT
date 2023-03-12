@@ -72,11 +72,6 @@ typedef union u_rgba {
 	};
 }	t_rgba;
 
-typedef struct s_normals
-{
-	t_fvec	normal;
-}	t_normals;
-
 typedef struct s_uvw {
 	float	u;
 	float	v;
@@ -165,7 +160,7 @@ typedef struct s_face {
 	bool		has_normal;
 	t_fvec		normals[3];
 	bool		has_texture;
-	t_uvw		uvw[3];
+	t_fvec		uvw[3];
 	t_mtl		texture;
 	t_fvec		v0v1;
 	t_fvec		v0v2;
@@ -201,9 +196,6 @@ typedef struct s_object {
 		t_sphere			sphere;
 		t_cylinder			cylinder;
 		t_triangle			triangle;
-		t_vertex			vertex;
-		t_vertex_texture	vertex_texture;
-		t_normals			vertex_normal;
 		t_face				face;
 		t_mtl				material;
 	};

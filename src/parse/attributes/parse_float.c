@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include <libft.h>
-
 #include <stdlib.h>
+
 bool	parse_float(char **linep, float *dst, float min, float max)
 {
 	char	*end;

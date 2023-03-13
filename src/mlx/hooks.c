@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 12:12:27 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/09 20:00:12 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2023/03/13 16:12:23 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static void	(*g_hook_func[MLX_KEY_MENU + 1])(t_minirt *, enum keys) = {\
 	[MLX_KEY_RIGHT] = rotate_cam,						\
 	[MLX_KEY_Z] = change_exposure,						\
 	[MLX_KEY_X] = change_exposure,						\
+	[MLX_KEY_C] = print_camera_atributes,				\
 };
 
 void	keyhook(mlx_key_data_t keydata, t_minirt *data)

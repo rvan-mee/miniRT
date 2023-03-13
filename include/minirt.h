@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/11 20:24:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/11/28 17:48:50 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2023/03/13 16:21:48 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@
 
 #ifndef USE_BVH
 # define USE_BVH	1
+#endif
+
+#ifndef USE_SMOOTH_SHADING
+#  define USE_SMOOTH_SHADING 0
 #endif
 
 typedef float	t_fvec __attribute__ ((vector_size (4 * sizeof(float))));

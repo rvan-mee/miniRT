@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/03/09 11:50:57 by lsinke        #+#    #+#                 */
-/*   Updated: 2023/03/09 11:50:57 by lsinke        ########   odam.nl         */
+/*   Updated: 2023/03/13 16:21:33 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,16 @@ void	change_exposure(t_minirt *data, enum keys key)
 	cam->exposure += amount;
 	printf("Changed camera exposure to %f\n", cam->exposure);
 	reset_work(data);
+}
+
+void	print_camera_atributes(t_minirt *data, enum keys key)
+{
+	const t_object	*cam_pos = &data->scene.camera; 
+	const t_camera	*cam = &data->scene.camera.camera;
+
+	(void) key;
+	printf("C\t%f,%f,%f\t%f,%f,%f\t%d\n", \
+	cam_pos->coords[0], cam_pos->coords[1], cam_pos->coords[2], \
+	cam->rotated[0], cam->rotated[1], cam->rotated[2], \
+	(int)(cam->fov * (float)(180.0 / M_PI)));
 }

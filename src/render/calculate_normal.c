@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/12 13:54:27 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/06 20:08:45 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2023/03/13 15:58:32 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,10 @@ static void	tr_f_normal(t_hit *hit)
 	else
 	{
 		face = &hit->object->face;
-		hit->normal = normalize_vector(cross_product(face->v0v1, face->v0v2));
+		if (USE_SMOOTH_SHADING && face->has_normal)
+			hit->normal = hit->bary[0] * face->normals[0] + hit->bary[1] * face->normals[1] + hit->bary[2] * face->normals[2];
+		else
+			hit->normal = normalize_vector(cross_product(face->v0v1, face->v0v2));
 	}
 }
 

@@ -41,9 +41,7 @@ SRCS := main.c										\
 		parse/objects/parse_sphere.c				\
 		parse/objects/parse_light.c					\
 		parse/objects/parse_triangle.c				\
-		parse/objects/parse_vertex.c				\
-		parse/objects/parse_vt.c					\
-		parse/objects/parse_vn.c					\
+		parse/objects/parse_obj_vec.c				\
 		parse/objects/parse_face.c					\
 		parse/objects/parse_exposure.c				\
 		parse/attributes/parse_float.c				\

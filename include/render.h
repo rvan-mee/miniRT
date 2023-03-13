@@ -69,4 +69,6 @@ t_fvec	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit, uint8_t dept
 
 t_fvec	phong(t_scene *scene, t_phong args);
 
+float	get_ray_bias(t_fvec normal, t_fvec dir);
+
 #endif //RENDER_H

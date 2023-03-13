@@ -34,10 +34,12 @@ static t_fvec	reflect_ray(t_scene *scene, t_object *object, t_hit *hit, uint8_t 
 {
 	t_hit	r_hit;
 	t_fvec	colour;
+	float	bias;
 
 	colour = (t_fvec) {};
 	r_hit.ray.direction = reflect(hit->ray.direction, hit->normal);
-	r_hit.ray.origin = hit->hit + r_hit.ray.direction * 1e-3f;
+	bias = get_ray_bias(hit->normal, r_hit.ray.direction);
+	r_hit.ray.origin = hit->hit + r_hit.ray.direction * bias;
 	if (!intersect_bvh(&scene->bvh, &r_hit.ray, &r_hit))
 		return (colour);
 	r_hit.hit = r_hit.ray.origin + r_hit.ray.direction * r_hit.distance;

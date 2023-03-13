@@ -32,6 +32,20 @@ static t_fvec	phong_light(t_object *light, t_phong args)
 	return (colour);
 }
 
+static void	create_shadow_ray(t_object *light, t_phong *args)
+{
+	const t_hit		*hit = args->cam_hit;
+	const t_fvec	light_rel = light->coords - args->cam_hit->hit;
+	t_ray			*ray;
+	float			bias;
+
+	ray = &args->shadow_ray;
+	args->light_dist_sq = dot_product(light_rel, light_rel);
+	ray->direction = normalize_vector(light_rel);
+	bias = get_ray_bias(hit->normal, hit->ray.direction);
+	ray->origin = hit->hit + ray->direction * bias;
+}
+
 t_fvec	phong(t_scene *scene, t_phong args)
 {
 	t_object	*light;
@@ -45,10 +59,7 @@ t_fvec	phong(t_scene *scene, t_phong args)
 	{
 		shadow_hit = (t_hit){};
 		light = scene->lights + i++;
-		args.light_rel = light->coords - args.cam_hit->hit;
-		args.light_dist_sq = dot_product(args.light_rel, args.light_rel);
-		args.shadow_ray.direction = normalize_vector(args.light_rel);
-		args.shadow_ray.origin = args.cam_hit->hit + args.shadow_ray.direction * 1e-3f;;
+		create_shadow_ray(light, &args);
 		if (dot_product(args.shadow_ray.direction, args.cam_hit->normal) < 0)
 			continue;
 		args.brightness = light->light.brightness * scene->scale / args.light_dist_sq;

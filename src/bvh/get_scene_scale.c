@@ -16,9 +16,9 @@
 
 void	get_scene_scale(t_scene *scene)
 {
-	const t_bvh	*bvh = &scene->bvh;
+	const t_bvh		*bvh = &scene->bvh;
 	const t_cluster	*cluster;
-	t_fvec		delta;
+	t_fvec			delta;
 
 	scene->scale = 1.0f;
 	cluster = bvh->clusters + bvh->root;
@@ -34,5 +34,5 @@ void	get_scene_scale(t_scene *scene)
 		else
 			cluster = bvh->clusters + cluster->r;
 	}
-	scene->scale = sqrtf(powf(delta[X], 2.f) + powf(delta[Z], 2.f));
+	scene->scale = fmaxf(1.0f, sqrtf(powf(delta[X], 2.f) + powf(delta[Z], 2.f)));
 }

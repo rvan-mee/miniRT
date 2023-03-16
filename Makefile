@@ -107,10 +107,6 @@ SRCS := main.c										\
 		aabb/aabb_intersect.c						\
 		aabb/calc_bounds.c							\
 		\
-		tree/new_tree.c								\
-		tree/new_node.c								\
-		tree/sort_points.c							\
-		\
 		threading/threads.c							\
 		threading/work.c							\
 		threading/work_utils.c						\

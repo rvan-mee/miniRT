@@ -14,7 +14,8 @@
 # define MLX_H
 
 # include <MLX42/MLX42.h>
-# include <minirt.h>
+
+typedef struct s_minirt	t_minirt;
 
 void	keyhook(mlx_key_data_t keydata, t_minirt *data);
 void	mouse_hook(mouse_key_t type, action_t action, modifier_key_t mod, t_minirt *data);

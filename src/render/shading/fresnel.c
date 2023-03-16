@@ -50,9 +50,9 @@ static t_fvec	transmit_ray(t_scene *scene, t_object *object, t_hit *hit, uint8_t
 	float	bias;
 
 	transmittance = 0;
-	if (object->mat->is_enabled.transp_d)
+	if (is_flag(object->mat, DISSOLVED))
 		transmittance = 1.0f - object->mat->transp_d;
-	else if (object->mat->is_enabled.transp_tr)
+	else if (is_flag(object->mat, TRANSPARENT))
 		transmittance = object->mat->transp_tr;
 	if (transmittance > 0)
 	{

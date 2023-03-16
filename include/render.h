@@ -13,8 +13,7 @@
 #ifndef RENDER_H
 # define RENDER_H
 
-# include <dynarr.h>
-# include <minirt.h>
+# include <scene.h>
 # include <math.h>
 
 # define MISS INFINITY
@@ -42,7 +41,6 @@ typedef struct s_phong {
 	};
 	struct {
 		t_ray	shadow_ray;
-		t_fvec	light_rel;
 		float	light_dist_sq;
 		float	brightness;
 	};

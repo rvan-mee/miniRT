@@ -10,19 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <bvh.h>
+#include <scene.h>
 #include <thread.h>
 #include <math.h>
-#include "libft.h"
+#include <libft.h>
 
 #define STEPS	0.05f
 
 void	move_cam(t_minirt *data, enum keys key)
 {
-	const float	step = STEPS * data->scene.scale;
+	const float	step = STEPS * data->scene->scale;
 	t_object *cam;
 
-	cam = &data->scene.camera;
+	cam = &data->scene->camera;
 	if (key == MLX_KEY_W)
 		cam->coords += step * cam->camera.rotated;
 	else if (key == MLX_KEY_S)
@@ -45,7 +45,7 @@ void	rotate_cam(t_minirt *data, enum keys key)
 	t_camera	*cam;
 	uint8_t		axis;
 
-	cam = &data->scene.camera.camera;
+	cam = &data->scene->camera.camera;
 	amount = M_PI / 12;
 	axis = (key == MLX_KEY_UP || key == MLX_KEY_DOWN);
 	if (key == MLX_KEY_UP || key == MLX_KEY_LEFT)
@@ -69,7 +69,7 @@ void	change_exposure(t_minirt *data, enum keys key)
 	t_camera	 *cam;
 	float		amount;
 
-	cam = &data->scene.camera.camera;
+	cam = &data->scene->camera.camera;
 	if (increase_effect)
 		amount = cam->exposure / 9.0f;
 	else
@@ -85,7 +85,7 @@ void	change_fov(t_minirt *data, enum keys key)
 	t_camera	 *cam;
 	float		amount;
 
-	cam = &data->scene.camera.camera;
+	cam = &data->scene->camera.camera;
 	amount = M_PI / 36;
 	if (!increase_fov)
 		amount = -amount;
@@ -97,8 +97,8 @@ void	change_fov(t_minirt *data, enum keys key)
 
 void	print_camera_attributes(t_minirt *data, enum keys key)
 {
-	const t_object	*cam_pos = &data->scene.camera; 
-	const t_camera	*cam = &data->scene.camera.camera;
+	const t_object	*cam_pos = &data->scene->camera;
+	const t_camera	*cam = &data->scene->camera.camera;
 
 	(void) key;
 	printf("C\t%f,%f,%f\t%f,%f,%f\t%d\n", \

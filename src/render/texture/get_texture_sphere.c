@@ -13,6 +13,7 @@
 #include <texture.h>
 #include <math.h>
 #include <ft_math.h>
+#include <scene.h>
 
 t_fvec	get_texture_sphere(t_hit *hit, t_bmp *texture)
 {

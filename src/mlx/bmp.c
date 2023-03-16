@@ -10,12 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
 #include <minirt.h>
+#include <libft.h>
 #include <bmp.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <stdlib.h>
 
 static int32_t	write_bmp_header(int32_t fd, t_bmp bmp_data)
 {

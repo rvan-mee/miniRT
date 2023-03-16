@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minirt.h>
 #include <ft_math.h>
+#include <scene.h>
 
 static void	sphere_normal(t_hit *hit)
 {
@@ -83,7 +83,7 @@ void	calculate_normal(t_hit *hit)
 	{
 		hit->normal = -hit->normal;
 		if (hit->object->type != PLANE \
-			&& hit->object->has_mat && hit->object->mat->is_enabled.opt_dens)
+			&& hit->object->has_mat && is_flag(hit->object->mat, REFRACT_IDX))
 			hit->refl = hit->object->mat->opt_dens;
 	}
 }

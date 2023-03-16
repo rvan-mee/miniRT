@@ -12,7 +12,6 @@
 
 #include <mlx.h>
 #include <minirt.h>
-#include <libft.h>
 
 void	quit_working(t_minirt *data);
 bool	create_mlx(t_minirt	*data)

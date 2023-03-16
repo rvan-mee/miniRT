@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <parse.h>
+#include <libft.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <time.h>
@@ -28,7 +29,13 @@ static void	print_timer(const uint64_t start)
 	printf(TIME_MSG1 PRIu64 TIME_MSG2, (end - start) / clocks_per_ms);
 }
 
-bool	parse_config_file(int32_t argc, char *argv[], t_scene *scene)
+static bool	alloc_scene(t_scene **dst)
+{
+	*dst = ft_calloc(1, sizeof(t_scene));
+	return (*dst != NULL);
+}
+
+bool	parse_config_file(int32_t argc, char *argv[], t_scene **scene)
 {
 	const uint64_t	start = clock();
 	int32_t			fd;
@@ -39,9 +46,9 @@ bool	parse_config_file(int32_t argc, char *argv[], t_scene *scene)
 		dprintf(STDERR_FILENO, ERR_USAGE);
 		return (false);
 	}
-	if ((!check_extension(argv[1], ".rt")) || !open_file(argv[1], &fd))
+	if (!check_extension(argv[1], ".rt") || !open_file(argv[1], &fd))
 		return (false);
-	success = parse_scene(fd, scene);
+	success = alloc_scene(scene) && parse_scene(fd, *scene);
 	close(fd);
 	if (!success)
 		return (false);

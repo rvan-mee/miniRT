@@ -86,7 +86,7 @@ uint16_t	print_nodes(t_bvh *b, uint16_t depth, uint32_t node)
 	return (maxdepth);
 }
 
-bool	new_bvh(t_object objects[], uint32_t length, t_bvh *dst)
+bool	new_bvh(t_object *objects, uint32_t length, t_bvh *dst)
 {
 	t_bvhbuilder	builder;
 	uint32_t		final_len;

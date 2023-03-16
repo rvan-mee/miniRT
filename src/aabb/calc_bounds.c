@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minirt.h>
+#include <scene.h>
 #include <math.h>
 #include <float.h>
 

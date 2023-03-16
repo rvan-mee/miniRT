@@ -15,6 +15,7 @@
 #include <mlx.h>
 #include <parse.h>
 #include <thread.h>
+#include <scene.h>
 
 void	f(void)
 {
@@ -33,11 +34,13 @@ static void	init_data(t_minirt *data, int argc, char **argv)
 
 bool	init_render_data(t_minirt *data)
 {
+	t_scene	**scenep;
 	t_scene	*scene;
 
-	scene = &data->scene;
-	if (!parse_config_file(data->argc, data->argv, scene))
+	scenep = &data->scene;
+	if (!parse_config_file(data->argc, data->argv, scenep))
 		return (false);
+	scene = *scenep;
 	if (!new_bvh(scene->objects, scene->objects_len, &scene->bvh))
 		return (false);
 	get_scene_scale(scene);
@@ -51,18 +54,19 @@ static int	cleanup(t_minirt *data, int status)
 	if (data->mlx)
 		mlx_terminate(data->mlx);
 	i = 0;
-	while (i < data->scene.materials_len)
+	while (i < data->scene->materials_len)
 	{
-		free(data->scene.materials[i].map_Ka.data);
-		free(data->scene.materials[i].map_Kd.data);
-		free(data->scene.materials[i].map_Ks.data);
-		free(data->scene.materials[i].name);
+		free(data->scene->materials[i].map_Ka.data);
+		free(data->scene->materials[i].map_Kd.data);
+		free(data->scene->materials[i].map_Ks.data);
+		free(data->scene->materials[i].name);
 		i++;
 	}
-	free(data->scene.materials);
-	free(data->scene.lights);
-	free(data->scene.objects);
-	free(data->scene.bvh.clusters);
+	free(data->scene->materials);
+	free(data->scene->lights);
+	free(data->scene->objects);
+	free(data->scene->bvh.clusters);
+	free(data->scene);
 	return (status);
 }
 

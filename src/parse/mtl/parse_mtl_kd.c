@@ -16,11 +16,11 @@ t_parse_error	parse_mtl_kd(char *line, t_object *object)
 {
 	t_fvec	rgb;
 
-	if (object->material.is_enabled.diffuse)
+	if (is_flag(&object->material, DIFFUSE_C))
 		return (DUPLICATE);
 	if (!parse_float_rgb(&line, &rgb))
 		return (KD);
-	object->material.is_enabled.diffuse = true;
+	set_flag(&object->material, DIFFUSE_C);
 	object->material.diffuse = rgb;
 	return (CONTINUE);
 }

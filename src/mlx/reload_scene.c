@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <scene.h>
 #include <mlx.h>
 #include <thread.h>
 #include <stdlib.h>
@@ -45,12 +46,12 @@ void	reload_scene(t_minirt *data, enum keys key)
 	t_object	old_cam;
 
 	(void) key;
-	old_cam = data->scene.camera;
-	destroy_scene(&data->scene);
-	data->scene = (t_scene){};
+	old_cam = data->scene->camera;
+	destroy_scene(data->scene);
+	*data->scene = (t_scene){};
 	if (!init_render_data(data))
 		return (panic_time(data));
-	data->scene.camera = old_cam;
+	data->scene->camera = old_cam;
 	mlx_resize_image(data->img, data->width, data->height);
 	mlx_set_window_size(data->mlx, data->width, data->height);
 	reset_work(data);

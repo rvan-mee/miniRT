@@ -13,7 +13,6 @@
 #include <parse.h>
 #include <libft.h>
 #include <unistd.h>
-#include <bmp.h>
 
 #define HEADER_SIZE 54
 

@@ -16,11 +16,11 @@ t_parse_error	parse_mtl_ks(char *line, t_object *object)
 {
 	t_fvec	rgb;
 
-	if (object->material.is_enabled.specular)
+	if (is_flag(&object->material, SPECULAR_C))
 		return (DUPLICATE);
 	if (!parse_float_rgb(&line, &rgb))
 		return (KS);
-	object->material.is_enabled.specular = true;
+	set_flag(&object->material, SPECULAR_C);
 	object->material.specular = rgb;
 	return (CONTINUE);
 }

@@ -23,7 +23,7 @@ t_parse_error	parse_mtl_map_ka(char *line, t_object *object)
 	err = parse_mtl_map(line, &tex);
 	if (err != SUCCESS)
 		return (err);
-	object->material.is_enabled.map_Ka = true;
+	set_flag(&object->material, AMBIENT_MAP);
 	object->material.map_Ka = tex;
 	return (CONTINUE);
 }

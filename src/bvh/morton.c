@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <bvh.h>
+#include <scene.h>
 #include <libft.h>
 #include <x86intrin.h>
 #include <math.h>

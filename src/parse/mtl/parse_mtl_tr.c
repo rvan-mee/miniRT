@@ -19,8 +19,8 @@ t_parse_error	parse_mtl_tr(char *line, t_object *object)
 	char	*end;
 	bool	d;
 
-	d = object->material.is_enabled.transp_d;
-	if (object->material.is_enabled.transp_tr)
+	d = is_flag(&object->material, DISSOLVED);
+	if (is_flag(&object->material, TRANSPARENT))
 		return (DUPLICATE);
 	skip_spaces(&line);
 	if (!ft_isdigit(*line))
@@ -34,6 +34,6 @@ t_parse_error	parse_mtl_tr(char *line, t_object *object)
 	(d && object->material.transp_d + transparency != 1))
 		return (TR);
 	object->material.transp_tr = transparency;
-	object->material.is_enabled.transp_tr = true;
+	set_flag(&object->material, TRANSPARENT);
 	return (CONTINUE);
 }

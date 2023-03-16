@@ -12,7 +12,6 @@
 
 #include <thread.h>
 #include <libft.h>
-#include <unistd.h>
 
 void	wipe_image(t_minirt *data)
 {

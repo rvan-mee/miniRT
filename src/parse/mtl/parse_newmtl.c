@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <parse.h>
-#include <minirt.h>
 #include <libft.h>
 #include <parse_mtl.h>
 #include <get_next_line.h>
@@ -86,9 +85,13 @@ static t_parse_error	check_dup(t_conf_data *data, char *name)
 //TODO: Add more properties that are required for certain illum modes?
 static bool	check_properties(t_mtl *mtl)
 {
-	const t_mtl_enabled	on = mtl->is_enabled;
+	static const t_mtl_flag	req = \
+		AMBIENT_C | \
+		DIFFUSE_C | \
+		SPECULAR_C | \
+		SPECULAR_EXP;
 
-	return (on.ambient && on.diffuse && on.specular && on.reflec);
+	return (is_flag(mtl, req));
 }
 
 static t_parse_error	err_cleanup(t_mtl *mtl, t_parse_error err)

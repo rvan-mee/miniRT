@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minirt.h>
 #include <render.h>
-#include <math.h>
 
 static inline
 bool	contains(const t_aabb bounds, const t_fvec point)

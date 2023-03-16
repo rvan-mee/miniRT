@@ -10,10 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minirt.h>
 #include <render.h>
 #include <float.h>
-#include <bvh.h>
 
 static bool	intersect_old(t_scene *scene, t_ray *ray, t_hit *hit)
 {

@@ -16,11 +16,11 @@ t_parse_error	parse_mtl_ka(char *line, t_object *object)
 {
 	t_fvec	rgb;
 
-	if (object->material.is_enabled.ambient)
+	if (is_flag(&object->material, AMBIENT_C))
 		return (DUPLICATE);
 	if (!parse_float_rgb(&line, &rgb))
 		return (KA);
-	object->material.is_enabled.ambient = true;
+	set_flag(&object->material, AMBIENT_C);
 	object->material.ambient = rgb;
 	return (CONTINUE);
 }

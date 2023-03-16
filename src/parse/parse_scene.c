@@ -11,11 +11,9 @@
 /* ************************************************************************** */
 
 #include <parse.h>
-#include <dynarr.h>
 #include <get_next_line.h>
 #include <errno.h>
 #include <unistd.h>
-#include <stdio.h>
 
 #define DUPLICATE_ERROR		"Error\nThere can only be one %s!\n"
 #define UNKNOWN_ERROR		"Error\nUnknown type %s\n"

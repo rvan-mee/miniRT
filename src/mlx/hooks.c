@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minirt.h>
-#include <bmp.h>
 #include <thread.h>
 #include <mlx.h>
 #include <render.h>
@@ -70,10 +68,10 @@ void	mouse_hook(mouse_key_t type, action_t action, modifier_key_t mod, t_minirt 
 	int32_t		x, y;
 	mlx_get_mouse_pos(data->mlx, &x, &y);
 	size_t		screen[2] = {x, y};
-	t_ray		ray = get_cam_ray(&data->scene.camera, screen[X], screen[Y]);
-	if (trace(&data->scene, &ray, screen, &hits))
+	t_ray		ray = get_cam_ray(&data->scene->camera, screen[X], screen[Y]);
+	if (trace(data->scene, &ray, screen, &hits))
 	{
 		printf("hit at (%lu,%lu) ==> (%f, %f, %f) == objects[%lu]\n", screen[X], screen[Y],
-			   hit.hit[X], hit.hit[Y], hit.hit[Z], hit.object - data->scene.objects);
+			   hit.hit[X], hit.hit[Y], hit.hit[Z], hit.object - data->scene->objects);
 	}
 }

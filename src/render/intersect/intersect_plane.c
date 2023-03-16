@@ -13,7 +13,6 @@
 #include <minirt.h>
 #include <render.h>
 #include <ft_math.h>
-#include <float.h>
 #include <math.h>
 
 float	intersect_plane(const t_object *object, const t_ray *ray, t_hit *hit)

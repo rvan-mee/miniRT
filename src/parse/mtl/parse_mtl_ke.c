@@ -16,11 +16,11 @@ t_parse_error	parse_mtl_ke(char *line, t_object *object)
 {
 	t_fvec	rgb;
 
-	if (object->material.is_enabled.emmis_col)
+	if (is_flag(&object->material, EMMISIVE_C))
 		return (DUPLICATE);
 	if (!parse_float_rgb(&line, &rgb))
 		return (KE);
-	object->material.is_enabled.emmis_col = true;
+	set_flag(&object->material, EMMISIVE_C);
 	object->material.emmis_col = rgb;
 	return (CONTINUE);
 }

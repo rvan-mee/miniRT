@@ -65,14 +65,14 @@ static t_fvec	use_material(t_scene *scene, t_object *object, t_hit *hit, uint8_t
 		.ks = object->mat->specular,
 		.ns = object->mat->reflec
 	};
-	if (object->mat->is_enabled.map_Kd)
+	if (is_flag(object->mat, DIFFUSE_MAP))
 		p_args.kd *= get_texture(object, hit, &object->mat->map_Kd);
-	if (object->mat->is_enabled.map_Ks)
+	if (is_flag(object->mat, SPECULAR_MAP))
 		p_args.ks *= get_texture(object, hit, &object->mat->map_Ks);
 	colour = get_ambient(scene, object->mat->ambient);
-	if (object->mat->is_enabled.map_Ka)
+	if (is_flag(object->mat, AMBIENT_MAP))
 		colour *= get_texture(object, hit, &object->mat->map_Ka);
-	if (object->mat->is_enabled.opt_dens)
+	if (is_flag(object->mat, REFRACT_IDX))
 		return (fresnel(scene, object, hit, depth));
 	else
 	{

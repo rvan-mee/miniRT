@@ -16,11 +16,11 @@ t_parse_error	parse_mtl_tf(char *line, t_object *object)
 {
 	t_fvec	rgb;
 
-	if (object->material.is_enabled.tra_filter)
+	if (is_flag(&object->material, TRANSMISSION_FILTER))
 		return (DUPLICATE);
 	if (!parse_float_rgb(&line, &rgb))
 		return (KA);
-	object->material.is_enabled.tra_filter = true;
+	set_flag(&object->material, TRANSMISSION_FILTER);
 	object->material.tra_filter.r = rgb[0] * 255;
 	object->material.tra_filter.g = rgb[1] * 255;
 	object->material.tra_filter.b = rgb[2] * 255;

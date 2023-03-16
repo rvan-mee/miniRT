@@ -35,7 +35,7 @@ t_parse_error	parse_mtl_illum(char *line, t_object *object)
 {
 	int32_t	illum;
 
-	if (object->material.is_enabled.illum)
+	if (is_flag(&object->material, ILLUM_MODE))
 		return (DUPLICATE);
 	skip_spaces(&line);
 	if (!parse_num(&line, &illum))
@@ -43,7 +43,7 @@ t_parse_error	parse_mtl_illum(char *line, t_object *object)
 	skip_spaces(&line);
 	if (*line)
 		return (ILLUM);
-	object->material.is_enabled.illum = true;
+	set_flag(&object->material, ILLUM_MODE);
 	object->material.illum = illum;
 	return (CONTINUE);
 }

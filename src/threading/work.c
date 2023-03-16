@@ -13,6 +13,7 @@
 #include <thread.h>
 #include <stdlib.h>
 #include <inttypes.h>
+#include <stdio.h>
 
 static t_jobs	*take_first_node(t_minirt *data)
 {

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <parse.h>
-#include <minirt.h>
 #include <libft.h>
 
 static t_parse_error	set_current_mtl(char *name, t_conf_data *conf)

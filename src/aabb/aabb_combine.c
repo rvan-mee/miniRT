@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minirt.h>
+#include <bvh.h>
 #include <math.h>
 
 t_aabb	aabb_combine(const t_aabb a, const t_aabb b)

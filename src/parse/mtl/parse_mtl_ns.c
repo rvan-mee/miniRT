@@ -18,7 +18,7 @@ t_parse_error	parse_mtl_ns(char *line, t_object *object)
 	char	*end;
 	float	reflec;
 
-	if (object->material.is_enabled.reflec)
+	if (is_flag(&object->material, SPECULAR_EXP))
 		return (DUPLICATE);
 	skip_spaces(&line);
 	if (!ft_isdigit(*line))
@@ -30,7 +30,7 @@ t_parse_error	parse_mtl_ns(char *line, t_object *object)
 	skip_spaces(&line);
 	if (*line)
 		return (ILLUM);
-	object->material.is_enabled.reflec = true;
+	set_flag(&object->material, SPECULAR_EXP);
 	object->material.reflec = reflec;
 	return (CONTINUE);
 }

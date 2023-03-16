@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include <parse.h>
-#include <minirt.h>
-#include <bmp.h>
 #include <parse_mtl.h>
 
 t_parse_error	parse_mtl_map_kd(char *line, t_object *object)
@@ -23,7 +21,7 @@ t_parse_error	parse_mtl_map_kd(char *line, t_object *object)
 	err = parse_mtl_map(line, &tex);
 	if (err != SUCCESS)
 		return (err);
-	object->material.is_enabled.map_Kd = true;
+	set_flag(&object->material, DIFFUSE_MAP);
 	object->material.map_Kd = tex;
 	return (CONTINUE);
 }

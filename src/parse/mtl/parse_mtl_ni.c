@@ -18,7 +18,7 @@ t_parse_error	parse_mtl_ni(char *line, t_object *object)
 	float	density;
 	char	*end;
 
-	if (object->material.is_enabled.opt_dens)
+	if (is_flag(&object->material, REFRACT_IDX))
 		return (DUPLICATE);
 	skip_spaces(&line);
 	if (!ft_isdigit(*line))
@@ -31,6 +31,6 @@ t_parse_error	parse_mtl_ni(char *line, t_object *object)
 	if (*line)
 		return (D);
 	object->material.opt_dens = density;
-	object->material.is_enabled.opt_dens = true;
+	set_flag(&object->material, REFRACT_IDX);
 	return (CONTINUE);
 }

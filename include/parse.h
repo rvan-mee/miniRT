@@ -13,7 +13,7 @@
 #ifndef PARSE_H
 # define PARSE_H
 
-# include <minirt.h>
+# include <scene.h>
 
 #define U 0
 #define V 1
@@ -93,7 +93,7 @@ typedef struct s_conf_data
 	float		exposure;
 }	t_conf_data;
 
-bool			parse_config_file(int32_t argc, char *argv[], t_scene *scene);
+bool			parse_config_file(int32_t argc, char *argv[], t_scene **scene);
 bool			parse_scene(int32_t fd, t_scene *dst);
 bool			parse_object(char *line, t_object *object, t_conf_data *conf);
 t_parse_error	parse_ambient(char **linep, t_object *object, t_conf_data *conf);

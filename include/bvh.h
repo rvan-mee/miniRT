@@ -27,6 +27,11 @@ typedef uint32_t				t_nodeidx;
 // An index in the prim array
 typedef uint32_t				t_objidx;
 
+typedef struct s_aabb {
+	t_fvec	min;
+	t_fvec	max;
+}	t_aabb;
+
 // A morton code, saving the objects original index and the morton
 // representation of its coordinates
 typedef struct s_morton {
@@ -76,6 +81,13 @@ struct s_priority_queue {
 	t_prio		*next;
 };
 
+typedef struct s_bvh {
+	t_object	*prims;
+	t_cluster	*clusters;
+	uint32_t	root;
+	uint32_t	prim_size;
+}	t_bvh;
+
 /**
  * Create a new bounding volume hierarchy using approximate agglomerative
  * clustering. Tons of credit (and hate) to:
@@ -89,7 +101,7 @@ struct s_priority_queue {
  *
  * If true has been returned, the caller should free dst->clusters!
  */
-bool		new_bvh(t_object objects[], uint32_t length, t_bvh *dst);
+bool		new_bvh(t_object *objects, uint32_t length, t_bvh *dst);
 
 /**
  * Generate morton codes for all primitives in the prims array of the builder.
@@ -129,7 +141,22 @@ uint32_t	merge_nodes(
 				uint32_t len,
 				uint32_t new_len);
 
-void		flatten_bvh(t_bvhbuilder *b);
+t_aabb		calc_bounds(t_object *obj);
+
+/**
+ * Combine two axis aligned bounding boxes
+ */
+t_aabb		aabb_combine(t_aabb a, t_aabb b);
+
+/**
+ * Calculate surface area of a bounding box
+ */
+float		sa(t_aabb aabb);
+
+/**
+ * Calculate surface area of two combined bounding boxes
+ */
+float		combo_sa(t_aabb a, t_aabb b);
 
 static inline
 bool	is_prim(const t_bvh *bvh, const t_nodeidx idx)

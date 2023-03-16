@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include <parse.h>
-#include <parse_mtl.h>
-#include <bmp.h>
 #include <libft.h>
 
 t_parse_error	parse_mtl_map(char *line, t_bmp *bmp)

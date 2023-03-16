@@ -15,8 +15,6 @@
 #include <ft_math.h>
 #include <texture.h>
 
-#define MAX_REFLECTION_DEPTH	16
-
 t_fvec	get_texture(t_object *object, t_hit *hit, t_bmp *texture)
 {
 	static t_fvec	(*get_col_arr[])(t_hit *, t_bmp *) = {\
@@ -74,9 +72,15 @@ static t_fvec	use_material(t_scene *scene, t_object *object, t_hit *hit, uint8_t
 	colour = get_ambient(scene, object->mat->ambient);
 	if (object->mat->is_enabled.map_Ka)
 		colour *= get_texture(object, hit, &object->mat->map_Ka);
-	colour += phong(scene, p_args);
-	if (object->mat->illum == 3 && depth < MAX_REFLECTION_DEPTH)
-		colour += reflect_ray(scene, object, hit, depth);
+	if (object->mat->is_enabled.opt_dens)
+		return (fresnel(scene, object, hit, depth));
+	else
+	{
+		// todo: look at this
+		colour += phong(scene, p_args);
+		if (object->mat->illum == 3 && depth < MAX_REFLECTION_DEPTH)
+			colour += reflect_ray(scene, object, hit, depth);
+	}
 	return (colour);
 }
 

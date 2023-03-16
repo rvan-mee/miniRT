@@ -86,6 +86,7 @@ SRCS := main.c										\
 		render/get_cam_ray.c						\
 		render/shading/shading.c					\
 		render/shading/phong.c						\
+		render/shading/fresnel.c					\
 		render/shading/get_ray_bias.c				\
 		render/texture/get_uv_colour.c				\
 		render/texture/get_texture_sphere.c			\

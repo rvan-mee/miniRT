@@ -78,6 +78,12 @@ void	calculate_normal(t_hit *hit)
 	};
 
 	lut[hit->object->type](hit);
+	hit->refl = 1.0f;
 	if (dot_product(hit->ray.direction, hit->normal) > 0)
+	{
 		hit->normal = -hit->normal;
+		if (hit->object->type != PLANE \
+			&& hit->object->has_mat && hit->object->mat->is_enabled.opt_dens)
+			hit->refl = hit->object->mat->opt_dens;
+	}
 }

@@ -243,6 +243,7 @@ typedef struct s_hit {
 	size_t		screen_x;
 	size_t		screen_y;
 	t_fvec		bary;
+	float		refl;
 }	t_hit;
 
 typedef struct s_render_block

@@ -19,6 +19,8 @@
 
 # define MISS INFINITY
 
+#define MAX_REFLECTION_DEPTH	16
+
 typedef	float	(*t_intersectfun)(const t_object *object, const t_ray *ray, t_hit *hit);
 
 typedef struct s_tri_intersect
@@ -68,6 +70,7 @@ void	start_render(t_minirt *data, void *func_data);
 t_fvec	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth);
 
 t_fvec	phong(t_scene *scene, t_phong args);
+t_fvec	fresnel(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth);
 
 float	get_ray_bias(t_fvec normal, t_fvec dir);
 

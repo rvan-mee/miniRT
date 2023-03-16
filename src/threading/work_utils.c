@@ -13,13 +13,13 @@
 #include <thread.h>
 #include <sys/time.h>
 
-void	quit_working(t_minirt *data)
+void	quit_working(t_threading *thread)
 {
-	pthread_mutex_lock(&data->thread.quit_lock);
-	data->thread.quit = true;
-	data->thread.stop = false;
-	pthread_cond_broadcast(&data->thread.stop_cond);
-	pthread_mutex_unlock(&data->thread.quit_lock);
+	pthread_mutex_lock(&thread->quit_lock);
+	thread->quit = true;
+	thread->stop = false;
+	pthread_cond_broadcast(&thread->stop_cond);
+	pthread_mutex_unlock(&thread->quit_lock);
 }
 
 void	stop_working(t_threading *thread, bool stop)

@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include <math.h>
 #include <libft.h>
 #include <bvh.h>
 #include <stdio.h>
+#include <time.h>
 
 static inline uint32_t	get_alloc_req(uint32_t n)
 {

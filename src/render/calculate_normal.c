@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <ft_math.h>
-#include <scene.h>
+#include <render.h>
 
 static void	sphere_normal(t_hit *hit)
 {

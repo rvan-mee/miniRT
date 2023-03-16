@@ -23,7 +23,6 @@
 static uint32_t	encode_gamma(t_fvec rgb)
 {
 	uint8_t	channel;
-	t_rgba	srgb;
 
 	channel = 0;
 	while (channel < 3)
@@ -34,13 +33,10 @@ static uint32_t	encode_gamma(t_fvec rgb)
 			rgb[channel] = GAMMA_A * powf(rgb[channel], 1.0f / GAMMA) - GAMMA_B;
 		++channel;
 	}
-	srgb = (t_rgba){
-		.r = (uint8_t) fminf(rgb[0] * 255, 255.f),
-		.g = (uint8_t) fminf(rgb[1] * 255, 255.f),
-		.b = (uint8_t) fminf(rgb[2] * 255, 255.f),
-		.a = 0xFF
-	};
-	return (srgb.rgba);
+	return (((uint32_t) fminf(rgb[0] * 0xFF, 255.f)) << 24 | \
+			((uint32_t) fminf(rgb[1] * 0xFF, 255.f)) << 16 | \
+			((uint32_t) fminf(rgb[2] * 0xFF, 255.f)) << 8 |
+			0xFF);
 }
 
 static bool	set_color(t_minirt *data, t_dynarr *hits)
@@ -97,14 +93,11 @@ static bool	render(t_minirt	*data, t_render *block, \
 	return (true);
 }
 
-static void	free_data(t_minirt *data, t_render *block)
+static void	free_data(t_minirt *data)
 {
-	quit_working(data);
-	free(block);
-	pthread_mutex_lock(&data->thread.job_lock);
-	clear_job_lst(data);
+	quit_working(data->thread);
+	clear_job_lst(data->thread);
 	mlx_close_window(data->mlx);
-	pthread_mutex_unlock(&data->thread.job_lock);
 }
 
 void	start_render(t_minirt *data, void *func_data)
@@ -117,7 +110,6 @@ void	start_render(t_minirt *data, void *func_data)
 	width = block->end_pixels[X] - block->start_pixels[X];
 	height = block->end_pixels[Y] - block->start_pixels[Y];
 	if (!render(data, block, width, height))
-		free_data(data, block);
-	else
-		free(block);
+		free_data(data);
+	free(block);
 }

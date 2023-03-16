@@ -37,7 +37,7 @@ static void	destroy_scene(t_scene *scene)
 static void	panic_time(t_minirt *data)
 {
 	perror("Unrecoverable error while reloading scene");
-	quit_working(data);
+	quit_working(data->thread);
 	mlx_close_window(data->mlx);
 }
 

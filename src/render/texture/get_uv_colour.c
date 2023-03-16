@@ -19,27 +19,33 @@
 #define LINEAR_CUTOFF	0.04045f
 #define LINEAR_FACTOR	12.92f
 
-static float	decode_gamma(float component)
+static t_fvec	decode_gamma(t_fvec col)
 {
-	if (component < LINEAR_CUTOFF)
-		return (component / LINEAR_FACTOR);
-	return (powf((GAMMA_B + component) / GAMMA_A, GAMMA));
+	uint8_t	idx;
+
+	idx = 0;
+	while (idx < 3)
+	{
+		if (col[idx] < LINEAR_CUTOFF)
+			col[idx] /= LINEAR_FACTOR;
+		else
+			col[idx] = powf((GAMMA_B + col[idx]) / GAMMA_A, GAMMA);
+		++idx;
+	}
+	return (col);
 }
 
 t_fvec	get_uv_colour(t_bmp *texture, float u, float v)
 {
 	const uint32_t	x = (uint32_t)((float) texture->width * u);
 	const uint32_t	y = (uint32_t)((float) texture->height * (1.f - v));
-	t_rgba			colour;
+	t_fvec			colour;
 	uint32_t		offset;
 
 	offset = x * texture->pixel_size + y * texture->line_size;
-	colour.b = texture->data[offset];
-	colour.g = texture->data[offset + 1];
-	colour.r = texture->data[offset + 2];
-	return ((t_fvec) {
-		decode_gamma((float) colour.r / 255.f),
-		decode_gamma((float) colour.g / 255.f),
-		decode_gamma((float) colour.b / 255.f),
-	});
+	colour[2] = texture->data[offset];
+	colour[1] = texture->data[offset + 1];
+	colour[0] = texture->data[offset + 2];
+	colour /= 255.f;
+	return (decode_gamma(colour));
 }

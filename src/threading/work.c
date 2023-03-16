@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <minirt.h>
 #include <thread.h>
 #include <stdlib.h>
 #include <inttypes.h>
@@ -19,11 +20,11 @@ static t_jobs	*take_first_node(t_minirt *data)
 {
 	t_jobs	*first_node;
 
-	pthread_mutex_lock(&data->thread.job_lock);
-	first_node = data->thread.job_lst;
+	pthread_mutex_lock(&data->thread->job_lock);
+	first_node = data->thread->job_lst;
 	if (first_node)
-		data->thread.job_lst = data->thread.job_lst->next_job;
-	pthread_mutex_unlock(&data->thread.job_lock);
+		data->thread->job_lst = data->thread->job_lst->next_job;
+	pthread_mutex_unlock(&data->thread->job_lock);
 	return (first_node);
 }
 
@@ -58,12 +59,12 @@ void	*work(void *param)
 	t_jobs		*current_job;
 
 	data = param;
-	while (keep_working(&data->thread))
+	while (keep_working(data->thread))
 	{
 		current_job = take_first_node(data);
 		if (current_job == NULL)
 		{
-			stop_working(&data->thread, true);
+			stop_working(data->thread, true);
 			continue;
 		}
 		current_job->job(data, current_job->job_param);

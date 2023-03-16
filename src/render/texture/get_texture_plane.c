@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minirt.h>
-#include <bmp.h>
+#include <texture.h>
 
 t_fvec	get_texture_plane(t_hit *hit, t_bmp *texture)
 {

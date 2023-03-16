@@ -13,8 +13,7 @@
 #ifndef TEXTURE_H
 # define TEXTURE_H
 
-# include <minirt.h>
-# include <bmp.h>
+# include <render.h>
 
 t_fvec	get_uv_colour(t_bmp *texture, float u, float v);
 

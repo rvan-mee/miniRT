@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <scene.h>
+#include <render.h>
 #include <ft_math.h>
 
 t_ray	get_cam_ray(t_object *camera, size_t x, size_t y)

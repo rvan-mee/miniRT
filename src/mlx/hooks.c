@@ -45,15 +45,15 @@ void	keyhook(mlx_key_data_t keydata, t_minirt *data)
 {
 	if (keydata.action == MLX_PRESS && g_hook_func[keydata.key])
 	{
-		stop_working(&data->thread, true);
-		clear_job_lst(data);
-		wait_till_done(data);
+		stop_working(data->thread, true);
+		clear_job_lst(data->thread);
+		wait_till_done(data->thread);
 		g_hook_func[keydata.key](data, keydata.key);
 	}
 	else if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{
-		quit_working(data);
-		clear_job_lst(data);
+		quit_working(data->thread);
+		clear_job_lst(data->thread);
 		mlx_close_window(data->mlx);
 	}
 }

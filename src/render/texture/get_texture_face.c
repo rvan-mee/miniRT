@@ -12,7 +12,6 @@
 
 #include <texture.h>
 #include <ft_math.h>
-#include <scene.h>
 
 /*static t_fvec	get_texture_colour_face(t_hit *hit, t_mtl *mtl, t_face *f)
 {

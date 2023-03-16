@@ -65,7 +65,7 @@ typedef struct s_mtl {
 	float		transp_d;  		// d - dissolve | tr is the inverse of d ( 1.0 - tr)
 	float		transp_tr;  	// Tr - transparency | tr is the inverse of d ( 1.0 - tr)
 	float		opt_dens; 		// Ni - optical density
-	t_rgba		tra_filter; 	// Tf - Transmission filter
+	t_fvec		tra_filter; 	// Tf - Transmission filter
 	t_bmp		map_Kd;
 	t_bmp		map_Ka;
 	t_bmp		map_Ks;
@@ -105,7 +105,6 @@ typedef struct s_triangle {
 typedef struct s_face {
 	bool		is_triangle;
 	t_fvec		vert[3];
-	t_rgba		colour;
 	bool		has_normal;
 	t_fvec		normals[3];
 	bool		has_texture;

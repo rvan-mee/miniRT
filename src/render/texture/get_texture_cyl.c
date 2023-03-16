@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minirt.h>
-#include <bmp.h>
+#include <render.h>
 
 t_fvec	get_texture_cyl(t_hit *hit, t_bmp *texture)
 {

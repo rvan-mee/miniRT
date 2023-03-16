@@ -32,11 +32,8 @@ static t_render	*new_render_block(size_t start[2], size_t end[2])
 	return (render_block);
 }
 
-static void	set_offset(t_minirt *data, size_t offset[3])
+static void	set_offset(size_t width, size_t height, size_t offset[3])
 {
-	const size_t	width = data->width;
-	const size_t	height = data->height;
-
 	if (height < width)
 		offset[0] = height / BLOCK_C;
 	else
@@ -60,30 +57,30 @@ static void	increment(size_t *start, size_t *end, size_t *offset, int coord)
 
 // is it faster to go >>> down <<< down >>>
 // or >>> down reset left >>> down reset left >>>
-bool	create_render_queue(t_minirt *data)
+bool	create_render_queue(t_threading *thread, size_t width, size_t height)
 {
 	size_t		offset[3];
 	size_t		start[2];
 	size_t		end[2];
 	t_render	*new_block;
 
-	set_offset(data, offset);
+	set_offset(width, height, offset);
 	start[Y] = 0;
 	end[Y] = offset[0];
-	while (end[Y] <= data->height)
+	while (end[Y] <= height)
 	{
 		start[X] = 0;
 		end[X] = offset[0];
-		if (end[Y] + offset[0] > data->height)
+		if (end[Y] + offset[0] > height)
 			end[Y] += offset[Y + DIFF];
-		while (end[X] <= data->width)
+		while (end[X] <= width)
 		{
-			if (end[X] + offset[0] > data->width)
+			if (end[X] + offset[0] > width)
 				end[X] += offset[X + DIFF];
 			new_block = new_render_block(start, end);
 			if (!new_block
-				|| !add_new_job_node(data, start_render, new_block))
-				return (clear_job_lst(data), free(new_block), false);
+				|| !add_new_job_node(thread, start_render, new_block))
+				return (clear_job_lst(thread), free(new_block), false);
 			increment(start, end, offset, X);
 		}
 		increment(start, end, offset, Y);

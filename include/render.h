@@ -20,7 +20,26 @@
 
 #define MAX_REFLECTION_DEPTH	16
 
+typedef struct s_ray	t_ray;
+typedef struct s_hit	t_hit;
 typedef	float	(*t_intersectfun)(const t_object *object, const t_ray *ray, t_hit *hit);
+
+typedef struct s_ray {
+	t_fvec	origin;
+	t_fvec	direction;
+}	t_ray;
+
+typedef struct s_hit {
+	t_ray		ray;
+	float		distance;
+	t_fvec		hit;
+	t_object	*object;
+	t_fvec		normal;
+	size_t		screen_x;
+	size_t		screen_y;
+	t_fvec		bary;
+	float		refl;
+}	t_hit;
 
 typedef struct s_tri_intersect
 {

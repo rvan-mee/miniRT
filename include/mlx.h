@@ -22,8 +22,9 @@ bool	create_mlx(t_minirt *data);
 
 void	reload_scene(t_minirt *data, enum keys key);
 void	move_cam(t_minirt *data, enum keys key);
-void	print_camera_atributes(t_minirt *data, enum keys key);
 void	rotate_cam(t_minirt *data, enum keys key);
 void	change_exposure(t_minirt *data, enum keys key);
+void	change_fov(t_minirt *data, enum keys key);
+void	print_camera_attributes(t_minirt *data, enum keys key);
 
 #endif

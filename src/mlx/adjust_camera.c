@@ -79,7 +79,23 @@ void	change_exposure(t_minirt *data, enum keys key)
 	reset_work(data);
 }
 
-void	print_camera_atributes(t_minirt *data, enum keys key)
+void	change_fov(t_minirt *data, enum keys key)
+{
+	const bool	increase_fov = key == MLX_KEY_RIGHT_BRACKET;
+	t_camera	 *cam;
+	float		amount;
+
+	cam = &data->scene.camera.camera;
+	amount = M_PI / 36;
+	if (!increase_fov)
+		amount = -amount;
+	cam->fov += amount;
+	printf("Changed camera fov to %i\n", (int) (cam->fov * 180 / M_PI));
+	calc_ray_info(cam);
+	reset_work(data);
+}
+
+void	print_camera_attributes(t_minirt *data, enum keys key)
 {
 	const t_object	*cam_pos = &data->scene.camera; 
 	const t_camera	*cam = &data->scene.camera.camera;
@@ -88,5 +104,5 @@ void	print_camera_atributes(t_minirt *data, enum keys key)
 	printf("C\t%f,%f,%f\t%f,%f,%f\t%d\n", \
 	cam_pos->coords[0], cam_pos->coords[1], cam_pos->coords[2], \
 	cam->rotated[0], cam->rotated[1], cam->rotated[2], \
-	(int)(cam->fov * (float)(180.0 / M_PI)));
+	(int)(cam->fov * 180.0 / M_PI));
 }

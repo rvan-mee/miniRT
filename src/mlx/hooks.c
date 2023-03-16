@@ -38,7 +38,9 @@ static void	(*g_hook_func[MLX_KEY_MENU + 1])(t_minirt *, enum keys) = {\
 	[MLX_KEY_RIGHT] = rotate_cam,						\
 	[MLX_KEY_Z] = change_exposure,						\
 	[MLX_KEY_X] = change_exposure,						\
-	[MLX_KEY_C] = print_camera_atributes,				\
+	[MLX_KEY_C] = print_camera_attributes,				\
+	[MLX_KEY_LEFT_BRACKET] = change_fov,				\
+	[MLX_KEY_RIGHT_BRACKET] = change_fov,				\
 };
 
 void	keyhook(mlx_key_data_t keydata, t_minirt *data)

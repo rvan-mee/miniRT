@@ -34,6 +34,8 @@ typedef enum e_object_type {
 	MTL,
 	USEMTL,
 	EXPOSURE,
+	OBJFILE,
+	USEMESH,
 	END
 }	t_obj_type;
 
@@ -103,13 +105,11 @@ typedef struct s_triangle {
 }	t_triangle;
 
 typedef struct s_face {
-	bool		is_triangle;
 	t_fvec		vert[3];
 	bool		has_normal;
 	t_fvec		normals[3];
-	bool		has_texture;
+	bool		has_texture; // todo: unused? get_texture_face
 	t_fvec		uvw[3];
-	t_mtl		texture;
 	t_fvec		v0v1;
 	t_fvec		v0v2;
 }	t_face;
@@ -148,7 +148,10 @@ typedef struct s_object {
 		t_mtl				material;
 	};
 	t_obj_type	type;
-	t_mtl		*mat;
+	union {
+		t_mtl	*mat;
+		size_t	mat_idx;
+	};
 	bool		has_mat;
 }	t_object;
 
@@ -166,6 +169,8 @@ typedef struct s_scene {
 }	t_scene;
 
 void	get_scene_scale(t_scene *scene);
+void	destroy_scene(t_scene *scene);
+void	destroy_mtl(t_mtl *mtl, void *ign);
 
 static inline
 bool	is_flag(t_mtl *mtl, t_mtl_flag flags)

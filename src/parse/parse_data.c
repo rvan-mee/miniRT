@@ -12,38 +12,30 @@
 
 #include <parse.h>
 #include <libft.h>
+#include <parse_obj.h>
 
-#define ARR_COUNT	6
+#define ARR_COUNT	7
 
 static const size_t	g_arrparams[ARR_COUNT][3] = {\
 	{offsetof(t_conf_data, lights), 4, sizeof(t_object)},				\
 	{offsetof(t_conf_data, materials), 32, sizeof(t_mtl)},				\
 	{offsetof(t_conf_data, objects), 256, sizeof(t_object)},			\
-	{offsetof(t_conf_data, vertices), 256, sizeof(t_fvec)},				\
-	{offsetof(t_conf_data, vertex_normals), 256, sizeof(t_fvec)},		\
-	{offsetof(t_conf_data, vertex_textures), 256, sizeof(t_fvec)}
+	{offsetof(t_conf_data, v), 256, sizeof(t_fvec)},					\
+	{offsetof(t_conf_data, vn), 256, sizeof(t_fvec)},					\
+	{offsetof(t_conf_data, vt), 256, sizeof(t_fvec)},					\
+	{offsetof(t_conf_data, meshes), 4, sizeof(t_mesh)},					\
 };
 
 bool	cleanup_parse(void *anything, t_conf_data *data)
 {
-	t_mtl	*mtl;
-	size_t	i;
-
 	free(anything);
-	i = 0;
-	while (i < data->materials.length)
-	{
-		mtl = dynarr_get(&data->materials, i++);
-		free(mtl->map_Ka.data);
-		free(mtl->map_Kd.data);
-		free(mtl->map_Ks.data);
-		free(mtl->name);
-	}
+	dynarr_foreach(&data->materials, (t_foreach) destroy_mtl, NULL);
 	dynarr_delete(&data->lights);
 	dynarr_delete(&data->objects);
-	dynarr_delete(&data->vertices);
-	dynarr_delete(&data->vertex_textures);
-	dynarr_delete(&data->vertex_normals);
+	dynarr_delete(&data->v);
+	dynarr_delete(&data->vt);
+	dynarr_delete(&data->vn);
+	dynarr_delete(&data->meshes);
 	dynarr_delete(&data->materials);
 	return (false);
 }
@@ -66,6 +58,22 @@ bool	init_parse(t_conf_data *data, int32_t fd)
 	return (true);
 }
 
+// If we do this while parsing, the pointers will be invalidated whenever the
+// array grows.
+static void	set_mtl_pointers(t_object *obj, t_conf_data *data)
+{
+	if (!obj->has_mat)
+		return ;
+	obj->mat = dynarr_get(&data->materials, obj->mat_idx);
+}
+
+static void	destroy_mesh(t_mesh *mesh, void *ign)
+{
+	(void) ign;
+	free(mesh->name);
+	free(mesh->faces);
+}
+
 // This function does really set the scene
 void	set_scene(t_scene *scene, t_conf_data *data)
 {
@@ -75,7 +83,10 @@ void	set_scene(t_scene *scene, t_conf_data *data)
 	scene->objects_len = data->objects.length;
 	scene->materials = data->materials.arr;
 	scene->materials_len = data->materials.length;
-	dynarr_delete(&data->vertex_textures);
-	dynarr_delete(&data->vertex_normals);
-	dynarr_delete(&data->vertices);
+	dynarr_delete(&data->vt);
+	dynarr_delete(&data->vn);
+	dynarr_delete(&data->v);
+	dynarr_foreach(&data->objects, (t_foreach) set_mtl_pointers, data);
+	dynarr_foreach(&data->meshes, (t_foreach) destroy_mesh, NULL);
+	dynarr_delete(&data->meshes);
 }

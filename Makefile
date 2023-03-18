@@ -34,6 +34,7 @@ SRCS := main.c										\
 		parse/parse_object.c						\
 		parse/parse_utils.c							\
 		parse/parse_data.c							\
+		parse/destroy_scene.c						\
 		parse/objects/parse_ambient.c				\
 		parse/objects/parse_camera.c				\
 		parse/objects/parse_cylinder.c				\
@@ -66,6 +67,11 @@ SRCS := main.c										\
 		parse/mtl/parse_mtl_name.c					\
 		parse/mtl/parse_newmtl.c					\
 		parse/mtl/parse_usemtl.c					\
+		parse/obj/parse_objfile.c					\
+		parse/obj/parse_usemesh.c					\
+		parse/obj/meshdata.c						\
+		parse/obj/mesh.c							\
+		parse/obj/add_mesh.c						\
 		\
 		math/product.c								\
 		math/matrix.c								\

@@ -23,13 +23,13 @@ static t_parse_error	set_current_mtl(char *name, t_conf_data *conf)
 	mtl_arr = conf->materials.arr;
 	while (i < conf->materials.length)
 	{
-		if (ft_strncmp(name, mtl_arr[i].name, name_len + 1) == 0)
+		if (mtl_arr[i].name && !ft_strncmp(name, mtl_arr[i].name, name_len + 1))
 		{
 			conf->has_mtl = true;
-			conf->curr_mtl = &mtl_arr[i];
+			conf->curr_mtl = i;
 			return (free(name), SUCCESS);
 		}
-		i++;
+		++i;
 	}
 	conf->has_mtl = false;
 	free(name);

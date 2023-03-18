@@ -28,6 +28,8 @@ static t_parse_error	(*g_parsefun[])(char **, t_object *, t_conf_data *) = {\
 	[MTL] = parse_newmtl,										\
 	[USEMTL] = parse_usemtl,									\
 	[EXPOSURE] = parse_exposure,								\
+	[OBJFILE] = parse_objfile,									\
+	[USEMESH] = parse_usemesh,									\
 };
 
 static const char		*g_ids[] = {\
@@ -46,6 +48,8 @@ static const char		*g_ids[] = {\
 	[MTL] = "newmtl",				\
 	[USEMTL] = "usemtl",			\
 	[EXPOSURE] = "exposure",		\
+	[OBJFILE] = "objfile",			\
+	[USEMESH] = "usemesh"			\
 };
 
 static t_obj_type	get_obj_type(char *line, t_object *object, size_t *id_len)
@@ -84,7 +88,7 @@ bool	parse_object(char *line, t_object *object, t_conf_data *conf)
 		return (parse_line_error(start_line, OBJECT, conf->curr_line));
 	object->type = type;
 	object->has_mat = conf->has_mtl;
-	object->mat = conf->curr_mtl;
+	object->mat_idx = conf->curr_mtl;
 	skip_spaces(&line);
 	err = g_parsefun[type](&line, object, conf);
 	if (err != SUCCESS)

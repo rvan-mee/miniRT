@@ -13,7 +13,13 @@
 #include <mlx.h>
 #include <minirt.h>
 
-void	quit_working(t_minirt *data);
+void	quit_working(t_threading *thread);
+static void	close_hook(t_threading **threadp)
+{
+	if (*threadp)
+		quit_working(*threadp);
+}
+
 bool	create_mlx(t_minirt	*data)
 {
 	data->mlx = mlx_init(data->width, data->height, "miniRT", false);
@@ -26,6 +32,6 @@ bool	create_mlx(t_minirt	*data)
 		return (false);
 	mlx_key_hook(data->mlx, (mlx_keyfunc)keyhook, data);
 	mlx_mouse_hook(data->mlx, (mlx_mousefunc)mouse_hook, data);
-	mlx_close_hook(data->mlx, (mlx_closefunc)quit_working, data);
+	mlx_close_hook(data->mlx, (mlx_closefunc) close_hook, &data->thread);
 	return (true);
 }

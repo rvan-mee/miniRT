@@ -49,24 +49,9 @@ bool	init_render_data(t_minirt *data)
 
 static int	cleanup(t_minirt *data, int status)
 {
-	size_t	i;
-
 	if (data->mlx)
 		mlx_terminate(data->mlx);
-	i = 0;
-	while (i < data->scene->materials_len)
-	{
-		free(data->scene->materials[i].map_Ka.data);
-		free(data->scene->materials[i].map_Kd.data);
-		free(data->scene->materials[i].map_Ks.data);
-		free(data->scene->materials[i].name);
-		i++;
-	}
-	free(data->scene->materials);
-	free(data->scene->lights);
-	free(data->scene->objects);
-	free(data->scene->bvh.clusters);
-	free(data->scene);
+	destroy_scene(data->scene);
 	return (status);
 }
 

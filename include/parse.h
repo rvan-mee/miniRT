@@ -57,37 +57,22 @@ typedef enum e_parse_error {
 	BMP_ERR,
 	NON_EXIST,
 	CONTINUE,
-	EXPOS
+	EXPOS,
+	INV_OBJ,
+	INV_SCALE
 }	t_parse_error;
-
-typedef enum e_parse_mtl {
-	MTL_UNINIT,
-	MTL_AMBIENT,
-	MTL_DIFFUSE,
-	MTL_SPECULAR,
-	MTL_EMISSIVE,
-	MTL_ILLUMINATION,
-	MTL_REFLECTION,
-	MTL_TRANSPARENCY1,
-	MTL_TRANSPARENCY2,
-	MTL_DENSITY,
-	MTL_TRFILTER,
-	MTL_MAP_KD,
-	MTL_MAP_KA,
-	MTL_MAP_KS,
-	MTL_END
-}	t_parse_mtl;
 
 typedef struct s_conf_data
 {
 	t_dynarr	lights;
 	t_dynarr	objects;
-	t_dynarr	vertices;
-	t_dynarr	vertex_textures;
-	t_dynarr	vertex_normals;
+	t_dynarr	v;
+	t_dynarr	vt;
+	t_dynarr	vn;
 	t_dynarr	materials;
+	t_dynarr	meshes;
 	bool		has_mtl;
-	t_mtl		*curr_mtl;
+	size_t		curr_mtl;
 	size_t		curr_line;
 	int32_t		fd;
 	float		exposure;
@@ -109,6 +94,8 @@ t_parse_error	parse_usemtl(char **linep, t_object *object, t_conf_data *conf);
 t_parse_error	parse_newmtl(char **linep, t_object *object, t_conf_data *conf);
 t_parse_error	parse_exposure(char **linep, t_object *object, t_conf_data *conf);
 t_parse_error	parse_mtl_name(char **linep, char **name);
+t_parse_error	parse_objfile(char **linep, t_object *object, t_conf_data *conf);
+t_parse_error	parse_usemesh(char **linep, t_object *object, t_conf_data *conf);
 bool			parse_rgb(char **linep, t_fvec *colour);
 bool			parse_line_error(const char *line, t_parse_error err, size_t line_c);
 void			skip_spaces(char **linep);

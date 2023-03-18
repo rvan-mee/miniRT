@@ -28,9 +28,9 @@ static bool	init_struct(t_minirt *data)
 {
 	data->thread = ft_calloc(1, sizeof(t_threading));
 	if (data->thread == NULL || \
-		pthread_cond_init(&data->thread->done_cond, NULL) ||
-		pthread_cond_init(&data->thread->stop_cond, NULL) ||
-		pthread_mutex_init(&data->thread->quit_lock, NULL) ||
+		pthread_cond_init(&data->thread->done_cond, NULL) || \
+		pthread_cond_init(&data->thread->stop_cond, NULL) || \
+		pthread_mutex_init(&data->thread->quit_lock, NULL) || \
 		pthread_mutex_init(&data->thread->job_lock, NULL))
 		return (destroy_struct(data));
 	return (true);
@@ -72,9 +72,6 @@ static bool	create_threads(t_minirt *data, t_threading *thread)
 
 bool	init_work_threads(t_minirt *data)
 {
-	data->thread = ft_calloc(1, sizeof(t_threading));
-	if (data->thread == NULL)
-		return (false);
 	wipe_image(data);
 	if (!init_struct(data))
 		return (false);

@@ -35,7 +35,7 @@
 #define VN_ERROR		"does not contain a valid vertex normal\n"
 #define MATCH_ERROR		"does not have the same elements across all parameters\n"
 #define MTL_ERROR		"does not contain valid material properties\n"
-#define NAME_ERROR		"does not contain valid material name\n"
+#define NAME_ERROR		"does not contain valid name\n"
 #define DUP_ERROR		"has a duplicate material name\n"
 #define ALLOC_ERROR		"failed to allocate memory\n"
 #define KA_ERROR		"\nthis material contains an invalid ambient colour\n"
@@ -60,6 +60,8 @@ invalid optical density value\n"
 invalid transmission filter colour\n"
 #define EXPOSURE_ERROR	"\nthis material contains an \
 invalid exposure value\n"
+#define INV_OBJ_ERR		"this object type is not allowed in .obj files\n"
+#define SCALE_ERR		"this object does not have a valid scale\n"
 
 static const char	*g_err_message[] = {\
 	[OBJECT] = OBJECT_ERROR,		\
@@ -96,7 +98,9 @@ static const char	*g_err_message[] = {\
 	[EXTENTION] = EXTENSION_ERROR,	\
 	[BMP_ERR] = BMP_ERROR,			\
 	[NON_EXIST] = EXIST_ERROR,		\
-	[EXPOS] = EXPOSURE_ERROR,
+	[EXPOS] = EXPOSURE_ERROR,		\
+	[INV_OBJ] = INV_OBJ_ERR,		\
+	[INV_SCALE] = SCALE_ERR			\
 };
 
 bool	parse_line_error(const char *line, t_parse_error err, size_t line_c)

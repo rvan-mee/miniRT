@@ -39,8 +39,8 @@ static bool	parse_normal(char **linep, t_face_indices *index, t_conf_data *conf)
 	index->has_normal = true;
 	new_index = ft_atoi(line) - 1;
 	if (new_index < 0)
-		new_index += conf->vertices.length + 1;
-	if (new_index < 0 || (size_t)new_index > conf->vertex_normals.length)
+		new_index += conf->v.length + 1;
+	if (new_index < 0 || (size_t)new_index > conf->vn.length)
 		return (false);
 	line++;
 	skip_digits(&line);
@@ -60,8 +60,8 @@ static bool	parse_vertex_texture(char **linep, \
 		return (false);
 	new_index = ft_atoi(line) - 1;
 	if (new_index < 0)
-		new_index += conf->vertices.length + 1;
-	if (new_index < 0 || (size_t)new_index > conf->vertex_textures.length)
+		new_index += conf->v.length + 1;
+	if (new_index < 0 || (size_t)new_index > conf->vt.length)
 		return (false);
 	index->vert_texture_index = new_index;
 	line++;
@@ -84,8 +84,8 @@ static bool	parse_vert_index(char **linep, \
 		return (false);
 	new_index = ft_atoi(line) - 1;
 	if (new_index < 0)
-		new_index += conf->vertices.length + 1;
-	if (new_index < 0 || (size_t)new_index > conf->vertices.length)
+		new_index += conf->v.length + 1;
+	if (new_index < 0 || (size_t)new_index > conf->v.length)
 		return (false);
 	index->vert_index = new_index;
 	line++;
@@ -137,9 +137,9 @@ static void	set_indices(
 	t_face_indices *index, \
 	int32_t vert)
 {
-	const t_fvec	*normals = conf->vertex_normals.arr;
-	const t_fvec	*vertices = conf->vertices.arr;
-	const t_fvec	*texture = conf->vertex_textures.arr;
+	const t_fvec	*normals = conf->vn.arr;
+	const t_fvec	*vertices = conf->v.arr;
+	const t_fvec	*texture = conf->vt.arr;
 
 	object->face.vert[vert] = vertices[index->vert_index];
 	if (index->has_normal)

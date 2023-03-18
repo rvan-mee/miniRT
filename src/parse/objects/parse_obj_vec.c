@@ -61,9 +61,9 @@ static const t_fvec	g_default_vec[] = {
 t_parse_error	parse_obj_vec(char **linep, t_object *object, t_conf_data *conf)
 {
 	const t_dynarr		*arrs[] = {
-		[VERTEX] = &conf->vertices,
-		[VT_TEXTURE] = &conf->vertex_textures,
-		[VT_NORMAL] = &conf->vertex_normals
+		[VERTEX] = &conf->v,
+		[VT_TEXTURE] = &conf->vt,
+		[VT_NORMAL] = &conf->vn
 	};
 	const t_obj_type	type = object->type;
 	uint8_t				value_count;

@@ -13,14 +13,18 @@
 #include <parse.h>
 #include <libft.h>
 
-static void	pre_calc(t_triangle *tr)
+static void	pre_calc(t_object *obj)
 {
+	const t_aabb	bounds = calc_bounds(obj);
+	t_triangle		*tr;
+
+	obj->coords = (bounds.min + bounds.max) / 2.f;
+	tr = &obj->triangle;
 	tr->v0v1 = tr->vert[1] - tr->vert[0];
 	tr->v0v2 = tr->vert[2] - tr->vert[0];
 }
-#include <math.h>
-t_parse_error	parse_triangle(char **linep, \
-								t_object *object, t_conf_data *conf)
+
+t_parse_err	parse_triangle(char **linep, t_object *object, t_conf_data *conf)
 {
 	char	*line;
 
@@ -37,10 +41,7 @@ t_parse_error	parse_triangle(char **linep, \
 		return (COORD);
 	if (!parse_rgb(&line, &object->colour))
 		return (COLOUR);
-	pre_calc(&object->triangle);
-	object->coords[0] = (fminf(fminf(object->triangle.vert[0][X], object->triangle.vert[1][X]), object->triangle.vert[2][X]) + fmaxf(fmaxf(object->triangle.vert[0][X], object->triangle.vert[1][X]), object->triangle.vert[2][X])) / 2;
-	object->coords[1] = (fminf(fminf(object->triangle.vert[0][Y], object->triangle.vert[1][Y]), object->triangle.vert[2][Y]) + fmaxf(fmaxf(object->triangle.vert[0][Y], object->triangle.vert[1][Y]), object->triangle.vert[2][Y])) / 2;
-	object->coords[2] = (fminf(fminf(object->triangle.vert[0][Z], object->triangle.vert[1][Z]), object->triangle.vert[2][Z]) + fmaxf(fmaxf(object->triangle.vert[0][Z], object->triangle.vert[1][Z]), object->triangle.vert[2][Z])) / 2;
+	pre_calc(object);
 	*linep = line;
 	return (SUCCESS);
 }

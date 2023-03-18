@@ -22,10 +22,7 @@ static void	pre_calc(t_cylinder *cyl)
 	cyl->top = top;
 }
 
-t_parse_error	parse_cylinder(
-	char **linep, \
-	t_object *object, \
-	t_conf_data *conf)
+t_parse_err	parse_cylinder(char **linep, t_object *object, t_conf_data *conf)
 {
 	char	*line;
 

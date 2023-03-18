@@ -12,11 +12,12 @@
 
 #include <parse.h>
 #include <float.h>
+#include <ft_math.h>
 
-t_parse_error	parse_exposure(char **linep, t_object *object, t_conf_data *conf)
+t_parse_err	parse_exposure(char **linep, t_object *object, t_conf_data *conf)
 {
 	(void) object;
-	if (!parse_float(linep, &conf->exposure, -FLT_MAX, FLT_MAX  -1)) // -FLT_MIN == 0.0 on codam macs??
+	if (!parse_float(linep, &conf->exposure, -FLT_MAX, -FLOAT_EPSILON))
 		return (EXPOS);
 	return (SUCCESS);
 }

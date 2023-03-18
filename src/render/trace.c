@@ -30,28 +30,13 @@ static bool	intersect_old(t_scene *scene, t_ray *ray, t_hit *hit)
 	return (hit_distance != FLT_MAX);
 }
 
-bool	trace(
-		t_scene *scene,
-		t_ray *ray,
-		const size_t screen[2],
-		t_dynarr *hits)
+bool	trace(t_scene *scene, t_ray *ray, t_hit *hit)
 {
-	t_hit	hit;
-
-	hit = (t_hit){
-		.ray = *ray,
-		.distance = FLT_MAX,
-		.screen_x = screen[X],
-		.screen_y = screen[Y]
-	};
-	if (USE_BVH)
-	{
-		if (!intersect_bvh(&scene->bvh, ray, &hit))
-			return (true);
-	}
-	else if (!intersect_old(scene, ray, &hit))
-		return (true);
-	hit.hit = hit.ray.origin + hit.ray.direction * hit.distance;
-	calculate_normal(&hit);
-	return (dynarr_addone(hits, &hit));
+	hit->distance = FLT_MAX;
+	if ((USE_BVH && !intersect_bvh(&scene->bvh, ray, hit)) || \
+		(!USE_BVH && !intersect_old(scene, ray, hit)))
+		return (false);
+	hit->hit = hit->ray.origin + hit->ray.direction * hit->distance;
+	calculate_normal(hit);
+	return (true);
 }

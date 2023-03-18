@@ -13,7 +13,7 @@
 #include <parse.h>
 #include <libft.h>
 
-static t_parse_error	set_current_mtl(char *name, t_conf_data *conf)
+static t_parse_err	set_current_mtl(char *name, t_conf_data *conf)
 {
 	const size_t	name_len = ft_strlen(name);
 	t_mtl			*mtl_arr;
@@ -36,10 +36,10 @@ static t_parse_error	set_current_mtl(char *name, t_conf_data *conf)
 	return (NON_EXIST);
 }
 
-t_parse_error	parse_usemtl(char **linep, t_object *object, t_conf_data *conf)
+t_parse_err	parse_usemtl(char **linep, t_object *object, t_conf_data *conf)
 {
-	t_parse_error	err;
-	char			*name;
+	t_parse_err	err;
+	char		*name;
 
 	(void) object;
 	err = parse_mtl_name(linep, &name);

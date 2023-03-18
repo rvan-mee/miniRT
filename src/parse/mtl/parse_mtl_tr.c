@@ -13,7 +13,7 @@
 #include <parse.h>
 #include <libft.h>
 
-t_parse_error	parse_mtl_tr(char *line, t_object *object)
+t_parse_err	parse_mtl_tr(char *line, t_object *object)
 {
 	float	transparency;
 	char	*end;

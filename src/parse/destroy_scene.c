@@ -17,9 +17,9 @@ void	destroy_mtl(t_mtl *mtl, void *ign)
 {
 	(void) ign;
 	free(mtl->name);
-	free(mtl->map_Ka.data);
-	free(mtl->map_Kd.data);
-	free(mtl->map_Ks.data);
+	free(mtl->ambient_tex.data);
+	free(mtl->diffuse_tex.data);
+	free(mtl->specular_tex.data);
 }
 
 void	destroy_scene(t_scene *scene)

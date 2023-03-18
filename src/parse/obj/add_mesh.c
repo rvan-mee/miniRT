@@ -78,7 +78,7 @@ bool	add_faces(const t_mesh *mesh, t_meshparams params, t_conf_data *conf)
 	return (true);
 }
 
-t_parse_error	add_mesh(t_meshparams params, t_conf_data *conf)
+t_parse_err	add_mesh(t_meshparams params, t_conf_data *conf)
 {
 	const t_mesh	*mesh;
 

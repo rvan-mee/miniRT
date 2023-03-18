@@ -104,7 +104,7 @@ static bool	parse_vert_index(char **linep, \
 	return (true);
 }
 
-static t_parse_error	parse_indices(
+static t_parse_err	parse_indices(
 	char **linep, \
 	t_face_indices *index, \
 	t_conf_data *conf, \
@@ -147,11 +147,22 @@ static void	set_indices(
 	if (index->has_texture)
 		object->face.uvw[vert] = texture[index->vert_texture_index];
 }
-#include <math.h>
-t_parse_error	parse_face(char **linep, t_object *object, t_conf_data *conf)
+
+static void	precalc(t_object *obj)
+{
+	const t_aabb	bounds = calc_bounds(obj);
+	t_face			*face;
+
+	face = &obj->face;
+	face->v0v1 = face->vert[B] - face->vert[A];
+	face->v0v2 = face->vert[C] - face->vert[A];
+	obj->coords = (bounds.min + bounds.max) / 2.f;
+}
+
+t_parse_err	parse_face(char **linep, t_object *object, t_conf_data *conf)
 {
 	t_face_indices	indices;
-	t_parse_error	err;
+	t_parse_err	err;
 	char			*line;
 	int32_t			vert;
 
@@ -170,11 +181,7 @@ t_parse_error	parse_face(char **linep, t_object *object, t_conf_data *conf)
 	}
 	object->face.has_normal = indices.has_normal;
 	object->face.has_texture = indices.has_texture;
-	object->face.v0v1 = object->face.vert[B] - object->face.vert[A];
-	object->face.v0v2 = object->face.vert[C] - object->face.vert[A];
-	object->coords[0] = (fminf(fminf(object->face.vert[0][X], object->face.vert[1][X]), object->face.vert[2][X]) + fmaxf(fmaxf(object->face.vert[0][X], object->face.vert[1][X]), object->face.vert[2][X])) / 2;
-	object->coords[1] = (fminf(fminf(object->face.vert[0][Y], object->face.vert[1][Y]), object->face.vert[2][Y]) + fmaxf(fmaxf(object->face.vert[0][Y], object->face.vert[1][Y]), object->face.vert[2][Y])) / 2;
-	object->coords[2] = (fminf(fminf(object->face.vert[0][Z], object->face.vert[1][Z]), object->face.vert[2][Z]) + fmaxf(fmaxf(object->face.vert[0][Z], object->face.vert[1][Z]), object->face.vert[2][Z])) / 2;
+	precalc(object);
 	*linep = line;
 	return (SUCCESS);
 }

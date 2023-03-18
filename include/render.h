@@ -18,11 +18,12 @@
 
 # define MISS INFINITY
 
-#define MAX_REFLECTION_DEPTH	16
+# define MAX_REFLECTION_DEPTH	16
 
 typedef struct s_ray	t_ray;
 typedef struct s_hit	t_hit;
-typedef	float	(*t_intersectfun)(const t_object *object, const t_ray *ray, t_hit *hit);
+typedef const t_ray		t_cray;
+typedef float			(*t_isectfun)(const t_object *, t_cray *, t_hit *);
 
 typedef struct s_ray {
 	t_fvec	origin;
@@ -65,26 +66,22 @@ typedef struct s_phong {
 	};
 }	t_phong;
 
-bool	trace(
-		t_scene *scene,
-		t_ray *ray,
-		const size_t screen[2],
-		t_dynarr *hits);
+bool	trace(t_scene *scene, t_ray *ray, t_hit *hit);
 
-bool	intersect_bvh(const t_bvh *bvh, const t_ray *ray, t_hit *hit);
-float	aabb_intersect(const t_aabb bounds, const t_ray *ray);
-float	intersect(const t_object *object, const t_ray *ray, t_hit *hit);
-float	intersect_plane(const t_object *object, const t_ray *ray, t_hit *hit);
-float	intersect_cylinder(const t_object *object, const t_ray *ray, t_hit *hit);
-float	intersect_sphere(const t_object *object, const t_ray *ray, t_hit *hit);
-float	intersect_triangle(const t_object *object, const t_ray *ray, t_hit *hit);
-float	intersect_face(const t_object *obj, const t_ray *ray, t_hit *hit);
+bool	intersect_bvh(const t_bvh *bvh, t_cray *ray, t_hit *hit);
+float	aabb_intersect(t_aabb bounds, t_cray *ray);
+float	intersect(const t_object *object, t_cray *ray, t_hit *hit);
+float	intersect_plane(const t_object *object, t_cray *ray, t_hit *hit);
+float	intersect_cylinder(const t_object *object, t_cray *ray, t_hit *hit);
+float	intersect_sphere(const t_object *object, t_cray *ray, t_hit *hit);
+float	intersect_triangle(const t_object *object, t_cray *ray, t_hit *hit);
+float	intersect_face(const t_object *obj, t_cray *ray, t_hit *hit);
 
 void	calculate_normal(t_hit *hit);
 t_ray	get_cam_ray(t_object *camera, size_t x, size_t y);
 
 void	start_render(t_minirt *data, void *func_data);
-t_fvec	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth);
+t_fvec	shade(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth);
 
 t_fvec	phong(t_scene *scene, t_phong args);
 t_fvec	fresnel(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth);

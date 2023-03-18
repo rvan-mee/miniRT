@@ -20,7 +20,7 @@ static void	pre_calc(t_sphere *sphere)
 	sphere->radius_sq = radius * radius;
 }
 
-t_parse_error	parse_sphere(char **linep, t_object *object, t_conf_data *conf)
+t_parse_err	parse_sphere(char **linep, t_object *object, t_conf_data *conf)
 {
 	char	*line;
 

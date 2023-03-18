@@ -18,7 +18,7 @@
 # include <stdint.h>
 
 typedef struct s_minirt	t_minirt;
-typedef void (*t_job)(t_minirt *, void *);
+typedef void			(*t_job)(t_minirt *, void *);
 
 typedef struct s_render_block
 {
@@ -49,27 +49,27 @@ typedef struct s_threading
 }	t_threading;
 
 // add_job_node.c
-bool	add_new_job_node(t_threading *thread, t_job func, void *job_param);
+bool		add_new_job_node(t_threading *thread, t_job func, void *job_param);
 
 //	create_render_lst.c
-bool	create_render_queue(t_threading *thread, size_t width, size_t height);
+bool		create_render_queue(t_threading *thread, size_t w, size_t h);
 
 //	work.c
-void	*work(void *param);
+void		*work(void *param);
 
 //	work_utils.c
-void	quit_working(t_threading *thread);
-void	stop_working(t_threading *thread, bool stop);
+void		quit_working(t_threading *thread);
+void		stop_working(t_threading *thread, bool stop);
 uint64_t	get_time_ms(void);
 
 //	reset_work.c
-void	wait_till_done(t_threading *data);
-void	wipe_image(t_minirt *data);
-void	clear_job_lst(t_threading *thread);
-bool	reset_work(t_minirt *data);
+void		wait_till_done(t_threading *data);
+void		wipe_image(t_minirt *data);
+void		clear_job_lst(t_threading *thread);
+bool		reset_work(t_minirt *data);
 
 //	threads.c
-bool	init_work_threads(t_minirt *data);
-void	join_threads(t_minirt *data);
+bool		init_work_threads(t_minirt *data);
+void		join_threads(t_minirt *data);
 
 #endif

@@ -13,7 +13,7 @@
 #include <parse.h>
 #include <libft.h>
 
-t_parse_error	parse_plane(char **linep, t_object *object, t_conf_data *conf)
+t_parse_err	parse_plane(char **linep, t_object *object, t_conf_data *conf)
 {
 	char	*line;
 

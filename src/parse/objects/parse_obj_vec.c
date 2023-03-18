@@ -14,9 +14,9 @@
 #include <libft.h>
 #include <ft_math.h>
 
-static const t_parse_error	g_errs[] = {\
-	[VERTEX] = VERT,				\
-	[VT_NORMAL] = NORMAL,			\
+static const t_parse_err	g_errs[] = {\
+	[VERTEX] = VERT,					\
+	[VT_NORMAL] = NORMAL,				\
 	[VT_TEXTURE] = VERT_TEXTURE
 };
 
@@ -58,7 +58,7 @@ static const t_fvec	g_default_vec[] = {
 	[VT_NORMAL] = {}			\
 };
 
-t_parse_error	parse_obj_vec(char **linep, t_object *object, t_conf_data *conf)
+t_parse_err	parse_obj_vec(char **linep, t_object *object, t_conf_data *conf)
 {
 	const t_dynarr		*arrs[] = {
 		[VERTEX] = &conf->v,

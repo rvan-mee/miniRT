@@ -15,7 +15,7 @@
 #include <ft_math.h>
 #include <texture.h>
 
-t_fvec	get_texture(t_object *object, t_hit *hit, t_bmp *texture)
+static t_fvec	get_texture(t_object *object, t_hit *hit, t_bmp *texture)
 {
 	static t_fvec	(*get_col_arr[])(t_hit *, t_bmp *) = {\
 		[SPHERE] = get_texture_sphere,		\
@@ -42,7 +42,7 @@ static t_fvec	reflect_ray(t_scene *scene, t_object *object, t_hit *hit, uint8_t 
 		return (colour);
 	r_hit.hit = r_hit.ray.origin + r_hit.ray.direction * r_hit.distance;
 	calculate_normal(&r_hit);
-	colour = get_hit_colour(scene, r_hit.object, &r_hit, depth + 1);
+	colour = shade(scene, r_hit.object, &r_hit, depth + 1);
 	return (colour * object->mat->specular);
 }
 
@@ -66,12 +66,12 @@ static t_fvec	use_material(t_scene *scene, t_object *object, t_hit *hit, uint8_t
 		.ns = object->mat->reflec
 	};
 	if (is_flag(object->mat, DIFFUSE_MAP))
-		p_args.kd *= get_texture(object, hit, &object->mat->map_Kd);
+		p_args.kd *= get_texture(object, hit, &object->mat->diffuse_tex);
 	if (is_flag(object->mat, SPECULAR_MAP))
-		p_args.ks *= get_texture(object, hit, &object->mat->map_Ks);
+		p_args.ks *= get_texture(object, hit, &object->mat->specular_tex);
 	colour = get_ambient(scene, object->mat->ambient);
 	if (is_flag(object->mat, AMBIENT_MAP))
-		colour *= get_texture(object, hit, &object->mat->map_Ka);
+		colour *= get_texture(object, hit, &object->mat->ambient_tex);
 	if (is_flag(object->mat, REFRACT_IDX))
 		return (fresnel(scene, object, hit, depth));
 	else
@@ -84,7 +84,7 @@ static t_fvec	use_material(t_scene *scene, t_object *object, t_hit *hit, uint8_t
 	return (colour);
 }
 
-t_fvec	get_hit_colour(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth)
+t_fvec	shade(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth)
 {
 	t_phong			p_args;
 	t_fvec			colour;

@@ -15,39 +15,39 @@
 #include <parse_mtl.h>
 #include <get_next_line.h>
 
-static t_parse_error	(*g_parse_mtl[])(char *, t_object *) = {\
-	[MTL_AMBIENT] = parse_mtl_ka,								\
-	[MTL_DIFFUSE] = parse_mtl_kd,								\
-	[MTL_SPECULAR] = parse_mtl_ks,								\
-	[MTL_EMISSIVE] = parse_mtl_ke,								\
-	[MTL_ILLUMINATION] = parse_mtl_illum,						\
-	[MTL_REFLECTION] = parse_mtl_ns,							\
-	[MTL_TRANSPARENCY1] = parse_mtl_d,							\
-	[MTL_TRANSPARENCY2] = parse_mtl_tr,							\
-	[MTL_DENSITY] = parse_mtl_ni,								\
-	[MTL_TRFILTER] = parse_mtl_tf,								\
-	[MTL_MAP_KD] = parse_mtl_map_kd,							\
-	[MTL_MAP_KS] = parse_mtl_map_ks,							\
-	[MTL_MAP_KA] = parse_mtl_map_ka,							\
+static t_parse_err	(*g_parse_mtl[])(char *, t_object *) = {\
+	[MTL_AMBIENT] = parse_mtl_ka,							\
+	[MTL_DIFFUSE] = parse_mtl_kd,							\
+	[MTL_SPECULAR] = parse_mtl_ks,							\
+	[MTL_EMISSIVE] = parse_mtl_ke,							\
+	[MTL_ILLUMINATION] = parse_mtl_illum,					\
+	[MTL_REFLECTION] = parse_mtl_ns,						\
+	[MTL_TRANSPARENCY1] = parse_mtl_d,						\
+	[MTL_TRANSPARENCY2] = parse_mtl_tr,						\
+	[MTL_DENSITY] = parse_mtl_ni,							\
+	[MTL_TRFILTER] = parse_mtl_tf,							\
+	[MTL_MAP_KD] = parse_mtl_map_kd,						\
+	[MTL_MAP_KS] = parse_mtl_map_ks,						\
+	[MTL_MAP_KA] = parse_mtl_map_ka,						\
 };
 
-static const char		*g_ids[] = {\
-	[MTL_AMBIENT] = "Ka",										\
-	[MTL_DIFFUSE] = "Kd",										\
-	[MTL_SPECULAR] = "Ks",										\
-	[MTL_EMISSIVE] = "Ke",										\
-	[MTL_ILLUMINATION] = "illum",								\
-	[MTL_REFLECTION] = "Ns",									\
-	[MTL_TRANSPARENCY1] = "d",									\
-	[MTL_TRANSPARENCY2] = "Tr",									\
-	[MTL_DENSITY] = "Ni",										\
-	[MTL_TRFILTER] = "Tf",										\
-	[MTL_MAP_KD] = "map_Kd",									\
-	[MTL_MAP_KA] = "map_Ka",									\
-	[MTL_MAP_KS] = "map_Ks",									\
+static const char	*g_ids[] = {\
+	[MTL_AMBIENT] = "Ka",									\
+	[MTL_DIFFUSE] = "Kd",									\
+	[MTL_SPECULAR] = "Ks",									\
+	[MTL_EMISSIVE] = "Ke",									\
+	[MTL_ILLUMINATION] = "illum",							\
+	[MTL_REFLECTION] = "Ns",								\
+	[MTL_TRANSPARENCY1] = "d",								\
+	[MTL_TRANSPARENCY2] = "Tr",								\
+	[MTL_DENSITY] = "Ni",									\
+	[MTL_TRFILTER] = "Tf",									\
+	[MTL_MAP_KD] = "map_Kd",								\
+	[MTL_MAP_KA] = "map_Ka",								\
+	[MTL_MAP_KS] = "map_Ks",								\
 };
 
-static t_parse_error	mtl_parse_func(char *line, t_object *object)
+static t_parse_err	mtl_parse_func(char *line, t_object *object)
 {
 	t_parse_mtl	type;
 	size_t		len;
@@ -66,7 +66,7 @@ static t_parse_error	mtl_parse_func(char *line, t_object *object)
 	return (SUCCESS);
 }
 
-static t_parse_error	check_dup(t_conf_data *data, char *name)
+static t_parse_err	check_dup(t_conf_data *data, char *name)
 {
 	const size_t	len = ft_strlen(name);
 	t_mtl			*mtl;
@@ -94,20 +94,20 @@ static bool	check_properties(t_mtl *mtl)
 	return (is_flag(mtl, req));
 }
 
-static t_parse_error	err_cleanup(t_mtl *mtl, t_parse_error err)
+static t_parse_err	err_cleanup(t_mtl *mtl, t_parse_err err)
 {
-	free(mtl->map_Ka.data);
-	free(mtl->map_Kd.data);
-	free(mtl->map_Ks.data);
+	free(mtl->ambient_tex.data);
+	free(mtl->diffuse_tex.data);
+	free(mtl->specular_tex.data);
 	free(mtl->name);
 	return (err);
 }
 
-t_parse_error	parse_newmtl(char **linep, t_object *object, t_conf_data *conf)
+t_parse_err	parse_newmtl(char **linep, t_object *object, t_conf_data *conf)
 {
-	t_parse_error	err;
-	char			*line;
-	t_mtl			*mtl;
+	t_parse_err	err;
+	char		*line;
+	t_mtl		*mtl;
 
 	mtl = &object->material;
 	err = parse_mtl_name(linep, &mtl->name);

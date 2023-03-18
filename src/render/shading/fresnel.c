@@ -65,7 +65,7 @@ static t_fvec	transmit_ray(t_scene *scene, t_object *object, t_hit *hit, uint8_t
 		rhit.hit = rhit.ray.origin + rhit.ray.direction * rhit.distance;
 		calculate_normal(&rhit);
 		// todo: Add transmission filter
-		return (get_hit_colour(scene, rhit.object, &rhit, depth + 1) * transmittance);
+		return (shade(scene, rhit.object, &rhit, depth + 1) * transmittance);
 	}
 	return (object->mat->diffuse);
 }
@@ -84,7 +84,7 @@ static t_fvec	reflect_ray(t_scene *scene, t_hit *hit, uint8_t depth)
 		return (colour);
 	r_hit.hit = r_hit.ray.origin + r_hit.ray.direction * r_hit.distance;
 	calculate_normal(&r_hit);
-	colour = get_hit_colour(scene, r_hit.object, &r_hit, depth + 1);
+	colour = shade(scene, r_hit.object, &r_hit, depth + 1);
 	return (colour);
 }
 

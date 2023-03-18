@@ -12,7 +12,7 @@
 
 #include <parse.h>
 
-t_parse_error	parse_mtl_tf(char *line, t_object *object)
+t_parse_err	parse_mtl_tf(char *line, t_object *object)
 {
 	if (is_flag(&object->material, TRANSMISSION_FILTER))
 		return (DUPLICATE);

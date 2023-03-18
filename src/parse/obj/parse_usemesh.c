@@ -28,7 +28,7 @@ static bool	get_name(char **linep, char **dst)
 	return (*dst != NULL);
 }
 
-t_parse_error	parse_params(char **linep, t_meshparams *dst)
+t_parse_err	parse_params(char **linep, t_meshparams *dst)
 {
 	if (!get_name(linep, &dst->name))
 		return (ALLOC);
@@ -50,10 +50,10 @@ t_parse_error	parse_params(char **linep, t_meshparams *dst)
 	return (SUCCESS);
 }
 
-t_parse_error	parse_usemesh(char **linep, t_object *object, t_conf_data *conf)
+t_parse_err	parse_usemesh(char **linep, t_object *object, t_conf_data *conf)
 {
 	t_meshparams	params;
-	t_parse_error	err;
+	t_parse_err		err;
 
 	(void) object;
 	err = parse_params(linep, &params);

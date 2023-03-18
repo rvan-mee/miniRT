@@ -15,7 +15,7 @@
 #include <libft.h>
 #include <get_next_line.h>
 
-static t_parse_error	parse_path(char **linep, char **dst)
+static t_parse_err	parse_path(char **linep, char **dst)
 {
 	char	*line;
 
@@ -30,7 +30,7 @@ static t_parse_error	parse_path(char **linep, char **dst)
 	return (SUCCESS);
 }
 
-static t_parse_error	parse_more(t_meshdat *dat)
+static t_parse_err	parse_more(t_meshdat *dat)
 {
 	char		*line;
 	t_object	obj;
@@ -54,11 +54,11 @@ static t_parse_error	parse_more(t_meshdat *dat)
 	return (CONTINUE);
 }
 
-t_parse_error	parse_objfile(char **linep, t_object *object, t_conf_data *conf)
+t_parse_err	parse_objfile(char **linep, t_object *object, t_conf_data *conf)
 {
-	t_parse_error	err;
-	t_meshdat		dat;
-	char			*path;
+	t_parse_err	err;
+	t_meshdat	dat;
+	char		*path;
 
 	(void) object;
 	err = parse_path(linep, &path);

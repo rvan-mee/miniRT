@@ -12,7 +12,7 @@
 
 #include <parse.h>
 
-t_parse_error	parse_mtl_ks(char *line, t_object *object)
+t_parse_err	parse_mtl_ks(char *line, t_object *object)
 {
 	t_fvec	rgb;
 

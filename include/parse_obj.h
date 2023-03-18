@@ -34,9 +34,9 @@ typedef struct s_meshparams {
 	float	scale;
 }	t_meshparams;
 
-bool			init_meshdata(char *path, t_meshdat *dst);
-bool			destroy_meshdata(t_meshdat *data, bool free_all, bool free_mtl);
-bool			create_mesh(t_meshdat *data, t_conf_data *conf);
-t_parse_error	add_mesh(t_meshparams params, t_conf_data *conf);
+bool		init_meshdata(char *path, t_meshdat *dst);
+bool		destroy_meshdata(t_meshdat *data, bool free_all, bool free_mtl);
+bool		create_mesh(t_meshdat *data, t_conf_data *conf);
+t_parse_err	add_mesh(t_meshparams params, t_conf_data *conf);
 
 #endif

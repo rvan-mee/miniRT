@@ -24,16 +24,18 @@
 # endif
 # define BLOCK_C	25 // don't set higher than 50
 
-#ifndef USE_BVH
-# define USE_BVH	1
-#endif
+# ifndef USE_BVH
+#  define USE_BVH	1
+# endif
 
-#ifndef USE_SMOOTH_SHADING
+# ifndef USE_SMOOTH_SHADING
 #  define USE_SMOOTH_SHADING 0
-#endif
+# endif
 
-typedef float	t_fvec __attribute__ ((vector_size (4 * sizeof(float))));
-typedef t_fvec	t_fmat[4];
+typedef float				t_fvec \
+__attribute__ ((vector_size (4 * sizeof(float))));
+
+typedef t_fvec				t_fmat[4];
 typedef struct s_minirt		t_minirt;
 typedef struct s_object		t_object;
 typedef struct s_scene		t_scene;

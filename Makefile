@@ -131,6 +131,9 @@ OBJP := $(addprefix $(OBJD), $(OBJS))
 INCD := include/
 INCS := minirt.h									\
 		parse.h										\
+		parse_obj.h									\
+		parse_mtl.h									\
+		scene.h										\
 		mlx.h										\
 		bmp.h										\
 		ft_math.h									\

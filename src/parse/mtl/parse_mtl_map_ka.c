@@ -11,19 +11,17 @@
 /* ************************************************************************** */
 
 #include <parse.h>
-#include <minirt.h>
-#include <bmp.h>
 #include <parse_mtl.h>
 
-t_parse_error	parse_mtl_map_ka(char *line, t_object *object)
+t_parse_err	parse_mtl_map_ka(char *line, t_object *object)
 {
-	t_parse_error	err;
-	t_bmp			tex;
+	t_parse_err	err;
+	t_bmp		tex;
 
 	err = parse_mtl_map(line, &tex);
 	if (err != SUCCESS)
 		return (err);
 	set_flag(&object->material, AMBIENT_MAP);
-	object->material.map_Ka = tex;
+	object->material.ambient_tex = tex;
 	return (CONTINUE);
 }

@@ -70,7 +70,7 @@ void	calc_ray_info(t_camera *cam)
 	cam->proj_vec += dz * cam->rotated;
 }
 
-t_parse_error	parse_camera(char **linep, t_object *object, t_conf_data *conf)
+t_parse_err	parse_camera(char **linep, t_object *object, t_conf_data *conf)
 {
 	t_camera	*cam;
 	char		*line;

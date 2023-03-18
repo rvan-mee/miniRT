@@ -15,10 +15,7 @@
 
 # include <scene.h>
 
-#define U 0
-#define V 1
-
-typedef struct s_bmp t_bmp;
+typedef struct s_bmp	t_bmp;
 
 typedef enum e_parse_error {
 	SUCCESS,
@@ -60,7 +57,7 @@ typedef enum e_parse_error {
 	EXPOS,
 	INV_OBJ,
 	INV_SCALE
-}	t_parse_error;
+}	t_parse_err;
 
 typedef struct s_conf_data
 {
@@ -78,36 +75,36 @@ typedef struct s_conf_data
 	float		exposure;
 }	t_conf_data;
 
-bool			parse_config_file(int32_t argc, char *argv[], t_scene **scene);
-bool			parse_scene(int32_t fd, t_scene *dst);
-bool			parse_object(char *line, t_object *object, t_conf_data *conf);
-t_parse_error	parse_ambient(char **linep, t_object *object, t_conf_data *conf);
-t_parse_error	parse_camera(char **linep, t_object *object, t_conf_data *conf);
-t_parse_error	parse_light(char **linep, t_object *object, t_conf_data *conf);
-t_parse_error	parse_sphere(char **linep, t_object *object, t_conf_data *conf);
-t_parse_error	parse_plane(char **linep, t_object *object, t_conf_data *conf);
-t_parse_error	parse_cylinder(char **linep, t_object *object, t_conf_data *conf);
-t_parse_error	parse_triangle(char **linep, t_object *object, t_conf_data *conf);
-t_parse_error	parse_obj_vec(char **linep, t_object *object, t_conf_data *conf);
-t_parse_error	parse_face(char **linep, t_object *object, t_conf_data *conf);
-t_parse_error	parse_usemtl(char **linep, t_object *object, t_conf_data *conf);
-t_parse_error	parse_newmtl(char **linep, t_object *object, t_conf_data *conf);
-t_parse_error	parse_exposure(char **linep, t_object *object, t_conf_data *conf);
-t_parse_error	parse_mtl_name(char **linep, char **name);
-t_parse_error	parse_objfile(char **linep, t_object *object, t_conf_data *conf);
-t_parse_error	parse_usemesh(char **linep, t_object *object, t_conf_data *conf);
-bool			parse_rgb(char **linep, t_fvec *colour);
-bool			parse_line_error(const char *line, t_parse_error err, size_t line_c);
-void			skip_spaces(char **linep);
-void			skip_digits(char **linep);
-bool			parse_vector(char **linep, t_fvec *vector, bool normalized);
-bool			parse_float(char **linep, float *dst, float min, float max);
-bool			parse_float_rgb(char **linep, t_fvec *rgb);
-bool			check_extension(const char *config_file, char *ext);
-bool			open_file(const char *path, int32_t *fd);
-bool			parse_bmp(char *path, t_bmp *dst);
-bool			init_parse(t_conf_data *data, int32_t fd);
-void			set_scene(t_scene *scene, t_conf_data *data);
-bool			cleanup_parse(void *anything, t_conf_data *data);
+bool		parse_config_file(int32_t argc, char *argv[], t_scene **scene);
+bool		parse_scene(int32_t fd, t_scene *dst);
+bool		parse_object(char *line, t_object *object, t_conf_data *conf);
+t_parse_err	parse_ambient(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_camera(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_light(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_sphere(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_plane(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_cylinder(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_triangle(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_obj_vec(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_face(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_usemtl(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_newmtl(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_exposure(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_mtl_name(char **linep, char **name);
+t_parse_err	parse_objfile(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_usemesh(char **linep, t_object *object, t_conf_data *conf);
+bool		parse_rgb(char **linep, t_fvec *colour);
+bool		parse_line_error(const char *line, t_parse_err err, size_t line_c);
+void		skip_spaces(char **linep);
+void		skip_digits(char **linep);
+bool		parse_vector(char **linep, t_fvec *vector, bool normalized);
+bool		parse_float(char **linep, float *dst, float min, float max);
+bool		parse_float_rgb(char **linep, t_fvec *rgb);
+bool		check_extension(const char *config_file, char *ext);
+bool		open_file(const char *path, int32_t *fd);
+bool		parse_bmp(char *path, t_bmp *dst);
+bool		init_parse(t_conf_data *data, int32_t fd);
+void		set_scene(t_scene *scene, t_conf_data *data);
+bool		cleanup_parse(void *anything, t_conf_data *data);
 
 #endif

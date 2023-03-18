@@ -103,7 +103,7 @@ static const char	*g_err_message[] = {\
 	[INV_SCALE] = SCALE_ERR			\
 };
 
-bool	parse_line_error(const char *line, t_parse_error err, size_t line_c)
+bool	parse_line_error(const char *line, t_parse_err err, size_t line_c)
 {
 	char	*newline;
 

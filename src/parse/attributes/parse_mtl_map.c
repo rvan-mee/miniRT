@@ -13,7 +13,7 @@
 #include <parse.h>
 #include <libft.h>
 
-t_parse_error	parse_mtl_map(char *line, t_bmp *bmp)
+t_parse_err	parse_mtl_map(char *line, t_bmp *bmp)
 {
 	char	*path;
 	size_t	i;

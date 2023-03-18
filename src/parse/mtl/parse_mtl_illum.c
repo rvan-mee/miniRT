@@ -31,7 +31,7 @@ static bool	parse_num(char **linep, int32_t *num)
 	return (true);
 }
 
-t_parse_error	parse_mtl_illum(char *line, t_object *object)
+t_parse_err	parse_mtl_illum(char *line, t_object *object)
 {
 	int32_t	illum;
 

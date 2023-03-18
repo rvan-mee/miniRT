@@ -64,14 +64,12 @@ void	mouse_hook(mouse_key_t type, action_t action, modifier_key_t mod, t_minirt 
 	if (action != MLX_PRESS)
 		return;
 	t_hit		hit;
-	t_dynarr	hits = {&hit, sizeof(t_hit), 1, 0};
 	int32_t		x, y;
 	mlx_get_mouse_pos(data->mlx, &x, &y);
-	size_t		screen[2] = {x, y};
-	t_ray		ray = get_cam_ray(&data->scene->camera, screen[X], screen[Y]);
-	if (trace(data->scene, &ray, screen, &hits))
+	t_ray		ray = get_cam_ray(&data->scene->camera, x, y);
+	if (trace(data->scene, &ray, &hit))
 	{
-		printf("hit at (%lu,%lu) ==> (%f, %f, %f) == objects[%lu]\n", screen[X], screen[Y],
+		printf("hit at (%d,%d) ==> (%f, %f, %f) == objects[%lu]\n", x, y,
 			   hit.hit[X], hit.hit[Y], hit.hit[Z], hit.object - data->scene->objects);
 	}
 }

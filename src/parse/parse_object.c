@@ -13,7 +13,7 @@
 #include <parse.h>
 #include <libft.h>
 
-static t_parse_error	(*g_parsefun[])(char **, t_object *, t_conf_data *) = {\
+static t_parse_err	(*g_parsefun[])(char **, t_object *, t_conf_data *) = {\
 	[AMBIENT] = parse_ambient,									\
 	[CAMERA] = parse_camera,									\
 	[LIGHT] = parse_light,										\
@@ -32,7 +32,7 @@ static t_parse_error	(*g_parsefun[])(char **, t_object *, t_conf_data *) = {\
 	[USEMESH] = parse_usemesh,									\
 };
 
-static const char		*g_ids[] = {\
+static const char	*g_ids[] = {\
 	[AMBIENT] = "A",				\
 	[CAMERA] = "C",					\
 	[LIGHT] = "L",					\
@@ -75,10 +75,10 @@ static t_obj_type	get_obj_type(char *line, t_object *object, size_t *id_len)
 
 bool	parse_object(char *line, t_object *object, t_conf_data *conf)
 {
-	const char		*start_line = line;
-	t_obj_type		type;
-	t_parse_error	err;
-	size_t			id_len;
+	const char	*start_line = line;
+	t_obj_type	type;
+	t_parse_err	err;
+	size_t		id_len;
 
 	type = get_obj_type(line, object, &id_len);
 	if (type == COMMENT)

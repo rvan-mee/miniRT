@@ -39,7 +39,7 @@ static uint32_t	encode_gamma(t_fvec rgb)
 			0xFF);
 }
 
-static bool	set_color(t_minirt *data, t_dynarr *hits)
+static void	set_color(t_minirt *data, t_dynarr *hits)
 {
 	size_t		i;
 	t_fvec		colour;
@@ -50,66 +50,67 @@ static bool	set_color(t_minirt *data, t_dynarr *hits)
 	i = hits->length;
 	while (i--)
 	{
-		colour = get_hit_colour(data->scene, hit[i].object, &hit[i], 0);
+		colour = shade(data->scene, hit[i].object, &hit[i], 0);
 		colour[0] = 1.0f - expf(colour[0] * data->scene->camera.camera.exposure);
 		colour[1] = 1.0f - expf(colour[1] * data->scene->camera.camera.exposure);
 		colour[2] = 1.0f - expf(colour[2] * data->scene->camera.camera.exposure);
 		srgb = encode_gamma(colour);
 		mlx_put_pixel(data->img, hit[i].screen_x, hit[i].screen_y, srgb);
 	}
+}
+
+static bool	trace_row(t_scene *scene, t_render *block, t_dynarr *hits, size_t y)
+{
+	t_hit	hit;
+
+	hit.screen_y =  y;
+	hit.screen_x = block->start_pixels[X];
+	while (hit.screen_x < block->end_pixels[X])
+	{
+		hit.ray = get_cam_ray(&scene->camera, hit.screen_x, hit.screen_y);
+		if (trace(scene, &hit.ray, &hit) && !dynarr_addone(hits, &hit))
+			return (false);
+		++hit.screen_x;
+	}
 	return (true);
 }
 
-static bool	render(t_minirt	*data, t_render *block, \
-					size_t width, size_t height)
+static bool	render(t_minirt	*data, t_render *block)
 {
+	const size_t	width = block->end_pixels[X] - block->start_pixels[X];
 	t_dynarr		hits;
-	size_t			screen[2];
-	size_t			x;
+	bool			status;
 	size_t			y;
-	t_ray			ray;
 
-	y = 0;
+	y = block->start_pixels[Y];
 	if (!dynarr_create(&hits, width, sizeof(t_hit)))
 		return (false);
-	while (y < height)
+	status = true;
+	while (y < block->end_pixels[Y])
 	{
-		x = 0;
-		screen[Y] = block->start_pixels[Y] + y;
-		while (x < width)
+		if (!trace_row(data->scene, block, &hits, y))
 		{
-			screen[X] = block->start_pixels[X] + x;
-			ray = get_cam_ray(&data->scene->camera, screen[X], screen[Y]);
-			if (!trace(data->scene, &ray, screen, &hits))
-				return (false); // TODO: dynarr_delete(&hits);
-			x++;
+			status = false;
+			break;
 		}
-		if (!set_color(data, &hits))
-			return (false); // TODO: dynarr_delete(&hits);
+		set_color(data, &hits);
 		hits.length = 0;
 		y++;
 	}
 	dynarr_delete(&hits);
-	return (true);
-}
-
-static void	free_data(t_minirt *data)
-{
-	quit_working(data->thread);
-	clear_job_lst(data->thread);
-	mlx_close_window(data->mlx);
+	return (status);
 }
 
 void	start_render(t_minirt *data, void *func_data)
 {
-	size_t		width;
-	size_t		height;
 	t_render	*block;
 
 	block = (t_render *)func_data;
-	width = block->end_pixels[X] - block->start_pixels[X];
-	height = block->end_pixels[Y] - block->start_pixels[Y];
-	if (!render(data, block, width, height))
-		free_data(data);
+	if (!render(data, block))
+	{
+		quit_working(data->thread);
+		clear_job_lst(data->thread);
+		mlx_close_window(data->mlx);
+	}
 	free(block);
 }

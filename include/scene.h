@@ -55,22 +55,39 @@ typedef enum e_mtl_flag {
 	SPECULAR_MAP = 4096
 }	t_mtl_flag;
 
-// http://paulbourke.net/dataformats/mtl/
+/**
+ * http://paulbourke.net/dataformats/mtl/
+ *
+ * ambient:		Ka - ambient colour of material
+ * diffuse:		Kd - diffuse colour
+ * specular:	Ks - specular colour
+ * emmis_col:	Ke - emissive colour
+ * illum:		illum - kind of illumination
+ * reflec:		Ns - specular shininess
+ * transp_d:	d - dissolve | tr is the inverse of d ( 1.0 - tr)
+ * transp_tr:	Tr - transparency | tr is the inverse of d ( 1.0 - tr)
+ * opt_dens:	Ni - optical density
+ * tra_filter:	Tf - transmission filter
+ * map_Kd:		diffuse colour texture
+ * map_Ka:		ambient colour texture
+ * map_Ks:		specular colour texture
+ * flags:		flags, signifying which attributes can be used
+ */
 typedef struct s_mtl {
-	char 		*name;
-	t_fvec		ambient; 		// Ka - ambient colour of material
-	t_fvec		diffuse; 		// Kd - diffuse colour
-	t_fvec		specular;		// Ks - specular colour
-	t_fvec		emmis_col; 		// Ke - emissive colour
-	int32_t		illum;   		// illum - lind of illumination
-	float		reflec;  		// Ns - specular shininess
-	float		transp_d;  		// d - dissolve | tr is the inverse of d ( 1.0 - tr)
-	float		transp_tr;  	// Tr - transparency | tr is the inverse of d ( 1.0 - tr)
-	float		opt_dens; 		// Ni - optical density
-	t_fvec		tra_filter; 	// Tf - Transmission filter
-	t_bmp		map_Kd;
-	t_bmp		map_Ka;
-	t_bmp		map_Ks;
+	char		*name;
+	t_fvec		ambient;
+	t_fvec		diffuse;
+	t_fvec		specular;
+	t_fvec		emmis_col;
+	int32_t		illum;
+	float		reflec;
+	float		transp_d;
+	float		transp_tr;
+	float		opt_dens;
+	t_fvec		tra_filter;
+	t_bmp		ambient_tex;
+	t_bmp		diffuse_tex;
+	t_bmp		specular_tex;
 	t_mtl_flag	flags;
 }	t_mtl;
 
@@ -108,7 +125,7 @@ typedef struct s_face {
 	t_fvec		vert[3];
 	bool		has_normal;
 	t_fvec		normals[3];
-	bool		has_texture; // todo: unused? get_texture_face
+	bool		has_texture;
 	t_fvec		uvw[3];
 	t_fvec		v0v1;
 	t_fvec		v0v2;

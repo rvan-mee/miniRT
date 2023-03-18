@@ -18,10 +18,10 @@ static bool	is_valid_char(char c)
 	return (ft_isalnum(c) || c == '_' || c == '-');
 }
 
-t_parse_error	parse_mtl_name(char **linep, char **name)
+t_parse_err	parse_mtl_name(char **linep, char **name)
 {
-	size_t		name_len;
-	char		*line;
+	size_t	name_len;
+	char	*line;
 
 	name_len = 0;
 	line = *linep;

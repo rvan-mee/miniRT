@@ -79,20 +79,19 @@ static void	normalize_size(t_mesh mesh)
 	});
 }
 
-bool	create_mesh(t_meshdat *data, t_conf_data *conf)
+t_parse_err	create_mesh(t_meshdat *data, t_conf_data *conf)
 {
 	t_mesh	mesh;
 
 	if (!dynarr_finalize(&data->conf.objects))
-		return (destroy_meshdata(data, true, true));
+		return (destroy_meshdata(data, FREE_BOTH, DYNARR));
 	if (!add_mtls(&data->conf, conf))
-		return (destroy_meshdata(data, true, true));
+		return (destroy_meshdata(data, FREE_BOTH, DYNARR));
 	mesh.name = data->name;
 	mesh.faces = data->conf.objects.arr;
 	mesh.length = data->conf.objects.length;
 	normalize_size(mesh);
 	if (!dynarr_addone(&conf->meshes, &mesh))
-		return (destroy_meshdata(data, true, false));
-	destroy_meshdata(data, false, false);
-	return (true);
+		return (destroy_meshdata(data, FREE_ALL, DYNARR));
+	return (destroy_meshdata(data, FREE_MIN, SUCCESS));
 }

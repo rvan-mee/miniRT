@@ -15,10 +15,10 @@
 #include <unistd.h>
 #include <libft.h>
 
-bool	destroy_meshdata(t_meshdat *data, bool free_all, bool free_mtl)
+t_parse_err	destroy_meshdata(t_meshdat *data, t_md_flags flags, t_parse_err err)
 {
 	close(data->conf.fd);
-	if (free_all)
+	if (flags & FREE_ALL)
 	{
 		free(data->name);
 		dynarr_delete(&data->conf.objects);
@@ -26,10 +26,10 @@ bool	destroy_meshdata(t_meshdat *data, bool free_all, bool free_mtl)
 	dynarr_delete(&data->conf.v);
 	dynarr_delete(&data->conf.vt);
 	dynarr_delete(&data->conf.vn);
-	if (free_mtl)
+	if (flags & FREE_MTL)
 		dynarr_foreach(&data->conf.materials, (t_foreach) destroy_mtl, NULL);
 	dynarr_delete(&data->conf.materials);
-	return (false);
+	return (err);
 }
 
 static bool	get_name(char *path, char **dst)
@@ -52,20 +52,20 @@ static bool	get_name(char *path, char **dst)
 	return (true);
 }
 
-// todo: error messages? idk bro
-bool	init_meshdata(char *path, t_meshdat *dst)
+t_parse_err	init_meshdata(char *path, t_meshdat *dst)
 {
 	ft_bzero(dst, sizeof(t_meshdat));
-	if (!check_extension(path, ".obj") || \
-		!open_file(path, &dst->conf.fd))
-		return (false);
+	if (!check_extension(path, ".obj"))
+		return (OBJ_EXT);
+	if (!open_file(path, &dst->conf.fd))
+		return (OBJ_NF);
 	if (!get_name(path, &dst->name))
-		return (destroy_meshdata(dst, false, false));
+		return (destroy_meshdata(dst, FREE_MIN, ALLOC));
 	if (!dynarr_create(&dst->conf.v, 256, sizeof(t_fvec)) || \
 		!dynarr_create(&dst->conf.vt, 256, sizeof(t_fvec)) || \
 		!dynarr_create(&dst->conf.vn, 256, sizeof(t_fvec)) || \
 		!dynarr_create(&dst->conf.objects, 256, sizeof(t_object)) || \
 		!dynarr_create(&dst->conf.materials, 8, sizeof(t_mtl)))
-		return (destroy_meshdata(dst, true, false));
-	return (true);
+		return (destroy_meshdata(dst, FREE_ALL, ALLOC));
+	return (SUCCESS);
 }

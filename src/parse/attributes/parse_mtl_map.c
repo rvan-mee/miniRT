@@ -23,12 +23,12 @@ t_parse_err	parse_mtl_map(char *line, t_bmp *bmp)
 	while (line[i] && !ft_isspace(line[i]))
 		i++;
 	if (i < 4)
-		return (EXTENTION);
+		return (MTL_EXT);
 	path = ft_substr(line, 0, i);
 	if (!path)
 		return (ALLOC);
 	if (!check_extension(path, ".bmp"))
-		return (free(path), EXTENTION);
+		return (free(path), MTL_EXT);
 	if (!parse_bmp(path, bmp))
 		return (free(path), BMP_ERR);
 	free(path);

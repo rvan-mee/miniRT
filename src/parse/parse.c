@@ -48,7 +48,9 @@ bool	parse_config_file(int32_t argc, char *argv[], t_scene **scene)
 	}
 	if (!check_extension(argv[1], ".rt") || !open_file(argv[1], &fd))
 		return (false);
-	success = alloc_scene(scene) && parse_scene(fd, *scene);
+	success = true;
+	if (!alloc_scene(scene) || !parse_scene(fd, *scene))
+		success = false;
 	close(fd);
 	if (!success)
 		return (false);

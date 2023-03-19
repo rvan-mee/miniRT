@@ -14,6 +14,14 @@
 # define PARSE_OBJ_H
 # include <parse.h>
 
+typedef enum e_parse_error	t_perr;
+typedef enum e_meshdata_destruction_options {
+	FREE_MIN = 0b00,
+	FREE_ALL = 0b01,
+	FREE_MTL = 0b10,
+	FREE_BOTH = 0b11
+}	t_md_flags;
+
 typedef struct s_meshdata {
 	char		*name;
 	t_conf_data	conf;
@@ -34,9 +42,9 @@ typedef struct s_meshparams {
 	float	scale;
 }	t_meshparams;
 
-bool		init_meshdata(char *path, t_meshdat *dst);
-bool		destroy_meshdata(t_meshdat *data, bool free_all, bool free_mtl);
-bool		create_mesh(t_meshdat *data, t_conf_data *conf);
-t_parse_err	add_mesh(t_meshparams params, t_conf_data *conf);
+t_perr	init_meshdata(char *path, t_meshdat *dst);
+t_perr	destroy_meshdata(t_meshdat *data, t_md_flags flags, t_parse_err err);
+t_perr	create_mesh(t_meshdat *data, t_conf_data *conf);
+t_perr	add_mesh(t_meshparams params, t_conf_data *conf);
 
 #endif

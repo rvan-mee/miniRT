@@ -64,9 +64,10 @@ t_parse_err	parse_objfile(char **linep, t_object *object, t_conf_data *conf)
 	err = parse_path(linep, &path);
 	if (err != SUCCESS)
 		return (err);
-	if (!init_meshdata(path, &dat))
-		return (free(path), DYNARR); // todo: error msg
+	err = init_meshdata(path, &dat);
 	free(path);
+	if (err != SUCCESS)
+		return (err);
 	dat.conf.has_mtl = conf->has_mtl;
 	if (conf->has_mtl)
 		dat.conf.curr_mtl = -1;
@@ -75,7 +76,5 @@ t_parse_err	parse_objfile(char **linep, t_object *object, t_conf_data *conf)
 		err = parse_more(&dat);
 	if (err != SUCCESS)
 		return (destroy_meshdata(&dat, true, true), err);
-	if (!create_mesh(&dat, conf))
-		return (DYNARR);
-	return (SUCCESS);
+	return (create_mesh(&dat, conf));
 }

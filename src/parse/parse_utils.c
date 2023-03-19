@@ -45,7 +45,8 @@
 #define NS_ERROR		"\nthis material contains an invalid specular value\n"
 #define D_ERROR			"\nthis material contains an invalid dissolve value\n"
 #define TR_ERROR		"\nthis material contains an invalid transparency value\n"
-#define EXTENSION_ERROR	"\nthis material contains an invalid texture extension\n"
+#define MTL_EXT_ERR		"\nthis material contains an invalid texture extension\n"
+#define OBJ_EXT_ERR		"\nthis object file does not have the right extension\n"
 #define BMP_ERROR		"\nerror whilst processing bmp file\n"
 #define DUPLICATE_ERROR	"\nthis material contains duplicate elements\n"
 #define DYNARR_ERROR	"failed to add to the dynamic array\n"
@@ -61,46 +62,49 @@ invalid transmission filter colour\n"
 #define EXPOSURE_ERROR	"\nthis material contains an \
 invalid exposure value\n"
 #define INV_OBJ_ERR		"this object type is not allowed in .obj files\n"
+#define OBJ_NF_ERR		".obj file not found\n"
 #define SCALE_ERR		"this object does not have a valid scale\n"
 
 static const char	*g_err_message[] = {\
-	[OBJECT] = OBJECT_ERROR,		\
-	[COORD] = COORD_ERROR,			\
-	[VECTOR] = VECTOR_ERROR,		\
-	[COLOUR] = COLOUR_ERROR,		\
-	[FORMAT] = FORMAT_ERROR,		\
-	[LRATIO] = LRATIO_ERROR,		\
-	[FOV] = FOV_ERROR,				\
-	[BRIGHT] = BRIGHT_ERROR,		\
-	[DIAMETER] = DIA_ERROR,			\
-	[OBJ_HEIGHT] = HEIGHT_ERROR,	\
-	[INDEX] = INDEX_ERROR,			\
-	[VERT] = VERT_ERROR,			\
-	[VERT_TEXTURE] = V_TX_ERROR,	\
-	[NORMAL] = VN_ERROR,			\
-	[DYNARR] = DYNARR_ERROR,		\
-	[MATCH] = MATCH_ERROR,			\
-	[MTL_ERR] = MTL_ERROR,			\
-	[NAME] = NAME_ERROR,			\
-	[DUP] = DUP_ERROR,				\
-	[ALLOC] = ALLOC_ERROR,			\
-	[KA] = KA_ERROR,				\
-	[KD] = KD_ERROR,				\
-	[KS] = KS_ERROR,				\
-	[KE] = KE_ERROR,				\
-	[ILLUM] = ILLUM_ERROR,			\
-	[NS] = NS_ERROR,				\
-	[D] = D_ERROR,					\
-	[TR] = TF_ERROR,				\
-	[NI] = NI_ERROR,				\
-	[TF] = TF_ERROR,				\
-	[DUPLICATE] = DUPLICATE_ERROR,	\
-	[EXTENTION] = EXTENSION_ERROR,	\
-	[BMP_ERR] = BMP_ERROR,			\
-	[NON_EXIST] = EXIST_ERROR,		\
-	[EXPOS] = EXPOSURE_ERROR,		\
-	[INV_OBJ] = INV_OBJ_ERR,		\
-	[INV_SCALE] = SCALE_ERR			\
+	[OBJECT] = OBJECT_ERROR,			\
+	[COORD] = COORD_ERROR,				\
+	[VECTOR] = VECTOR_ERROR,			\
+	[COLOUR] = COLOUR_ERROR,			\
+	[FORMAT] = FORMAT_ERROR,			\
+	[LRATIO] = LRATIO_ERROR,			\
+	[FOV] = FOV_ERROR,					\
+	[BRIGHT] = BRIGHT_ERROR,			\
+	[DIAMETER] = DIA_ERROR,				\
+	[OBJ_HEIGHT] = HEIGHT_ERROR,		\
+	[INDEX] = INDEX_ERROR,				\
+	[VERT] = VERT_ERROR,				\
+	[VERT_TEXTURE] = V_TX_ERROR,		\
+	[NORMAL] = VN_ERROR,				\
+	[DYNARR] = DYNARR_ERROR,			\
+	[MATCH] = MATCH_ERROR,				\
+	[MTL_ERR] = MTL_ERROR,				\
+	[NAME] = NAME_ERROR,				\
+	[DUP] = DUP_ERROR,					\
+	[ALLOC] = ALLOC_ERROR,				\
+	[KA] = KA_ERROR,					\
+	[KD] = KD_ERROR,					\
+	[KS] = KS_ERROR,					\
+	[KE] = KE_ERROR,					\
+	[ILLUM] = ILLUM_ERROR,				\
+	[NS] = NS_ERROR,					\
+	[D] = D_ERROR,						\
+	[TR] = TR_ERROR,					\
+	[NI] = NI_ERROR,					\
+	[TF] = TF_ERROR,					\
+	[DUPLICATE] = DUPLICATE_ERROR,		\
+	[MTL_EXT] = MTL_EXT_ERR,			\
+	[OBJ_EXT] = OBJ_EXT_ERR,			\
+	[BMP_ERR] = BMP_ERROR,				\
+	[NON_EXIST] = EXIST_ERROR,			\
+	[EXPOS] = EXPOSURE_ERROR,			\
+	[INV_OBJ] = INV_OBJ_ERR,			\
+	[OBJ_NF] = OBJ_NF_ERR,				\
+	[INV_SCALE] = SCALE_ERR				\
 };
 
 bool	parse_line_error(const char *line, t_parse_err err, size_t line_c)

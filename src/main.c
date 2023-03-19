@@ -51,7 +51,8 @@ static int	cleanup(t_minirt *data, int status)
 {
 	if (data->mlx)
 		mlx_terminate(data->mlx);
-	destroy_scene(data->scene);
+	if (data->scene)
+		destroy_scene(data->scene);
 	return (status);
 }
 

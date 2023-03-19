@@ -50,13 +50,15 @@ typedef enum e_parse_error {
 	TF,
 	DUPLICATE,
 	MATCH,
-	EXTENTION,
+	MTL_EXT,
+	OBJ_EXT,
 	BMP_ERR,
 	NON_EXIST,
 	CONTINUE,
 	EXPOS,
 	INV_OBJ,
-	INV_SCALE
+	OBJ_NF,
+	INV_SCALE,
 }	t_parse_err;
 
 typedef struct s_conf_data

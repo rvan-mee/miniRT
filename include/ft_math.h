@@ -33,8 +33,6 @@ t_fvec	mult_vec_mat(t_fvec vec, t_fmat mat);
 
 bool	solve_quadratic(t_quadratic *quadratic, float t[2]);
 
-int		compare_points(t_fvec a, t_fvec b, uint8_t axis);
-
 /**
  * Reflect about a normal
  *

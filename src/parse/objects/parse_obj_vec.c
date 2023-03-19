@@ -36,7 +36,7 @@ static uint8_t	parse_values(char **linep, t_fvec *dst)
 			return (0);
 		line = end;
 		if (*line == '\n' || !ft_isspace(*line))
-			break;
+			break ;
 		++line;
 		++count;
 	}
@@ -46,13 +46,13 @@ static uint8_t	parse_values(char **linep, t_fvec *dst)
 	return (count);
 }
 
-static const uint8_t	g_val_lims[][2] = {\
+static const uint8_t		g_val_lims[][2] = {\
 	[VERTEX] = {2, 3},		\
 	[VT_TEXTURE] = {0, 2},	\
 	[VT_NORMAL] = {2, 2}	\
 };
 
-static const t_fvec	g_default_vec[] = {
+static const t_fvec			g_default_vec[] = {\
 	[VERTEX] = {0, 0, 0, 1},	\
 	[VT_TEXTURE] = {},			\
 	[VT_NORMAL] = {}			\
@@ -60,10 +60,10 @@ static const t_fvec	g_default_vec[] = {
 
 t_parse_err	parse_obj_vec(char **linep, t_object *object, t_conf_data *conf)
 {
-	const t_dynarr		*arrs[] = {
-		[VERTEX] = &conf->v,
-		[VT_TEXTURE] = &conf->vt,
-		[VT_NORMAL] = &conf->vn
+	const t_dynarr		*arrs[] = {\
+		[VERTEX] = &conf->v,		\
+		[VT_TEXTURE] = &conf->vt,	\
+		[VT_NORMAL] = &conf->vn		\
 	};
 	const t_obj_type	type = object->type;
 	uint8_t				value_count;

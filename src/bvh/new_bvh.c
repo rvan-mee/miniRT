@@ -14,7 +14,9 @@
 #include <libft.h>
 #include <bvh.h>
 #include <stdio.h>
-#include <time.h>
+#include <inttypes.h>
+#define TIME_1	"Creating bvh took %"
+#define TIME_2	"ms\n"
 
 static inline uint32_t	get_alloc_req(uint32_t n)
 {
@@ -64,15 +66,17 @@ static bool	alloc_builder(t_bvhbuilder *b, uint32_t n)
 	return (true);
 }
 
+/*
 uint16_t	print_nodes(t_bvh *b, uint16_t depth, uint32_t node)
 {
 	static uint16_t	maxdepth = 0;
 
 	maxdepth = depth > maxdepth ? depth : maxdepth;
-	dprintf(1, "node %u (len=%u) %s (%f,%f,%f)-(%f,%f,%f)\n",
+	printf("node %u (len=%u) %s (%f,%f,%f)-(%f,%f,%f)\n",
 			node, b->clusters[node].len, b->clusters[node].leaf ? "(leaf)" : "",
-			b->clusters[node].aabb.min[X], b->clusters[node].aabb.min[Y], b->clusters[node].aabb.min[Z],
-			b->clusters[node].aabb.max[X], b->clusters[node].aabb.max[Y], b->clusters[node].aabb.max[Z]);
+			b->clusters[node].aabb.min[X], b->clusters[node].aabb.min[Y],
+			b->clusters[node].aabb.min[Z], b->clusters[node].aabb.max[X],
+			b->clusters[node].aabb.max[Y], b->clusters[node].aabb.max[Z]);
 	if (b->clusters[node].len == 1)
 		return (maxdepth);
 	for (uint16_t n = depth + 1; n > 0; n--)
@@ -85,16 +89,20 @@ uint16_t	print_nodes(t_bvh *b, uint16_t depth, uint32_t node)
 	print_nodes(b, depth + 1, b->clusters[node].r);
 	return (maxdepth);
 }
+	printf("maxdepth = %u\n", print_nodes(dst, 0, dst->root));
+ */
+
+uint64_t	get_time_ms(void);
 
 bool	new_bvh(t_object *objects, uint32_t length, t_bvh *dst)
 {
+	const uint64_t	start = get_time_ms();
 	t_bvhbuilder	builder;
 	uint32_t		final_len;
 	bool			success;
 
 	if (!USE_BVH)
 		return (true);
-	clock_t start = clock();
 	builder.prims = objects;
 	builder.length = length;
 	builder.node_idx = length;
@@ -109,7 +117,6 @@ bool	new_bvh(t_object *objects, uint32_t length, t_bvh *dst)
 		*dst = (t_bvh){objects, builder.clusters, builder.node_idx - 1, length};
 	}
 	free_builder(&builder, success);
-	// dprintf(1, "maxdepth = %u\n", print_nodes(dst, 0, dst->root));
-	dprintf(1, "Creating bvh took %lf!\n", (clock() - start) / (double) CLOCKS_PER_SEC);
+	printf(TIME_1 PRIu64 TIME_2, get_time_ms() - start);
 	return (success);
 }

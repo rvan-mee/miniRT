@@ -30,14 +30,14 @@ float	aabb_intersect(const t_aabb bounds, const t_ray *ray)
 		return (0);
 	t[0] = (bounds.min - ray->origin) / ray->direction;
 	t[1] = (bounds.max - ray->origin) / ray->direction;
-	minmax = (t_aabb){
-		.min = (t_fvec){
-			fminf(t[0][X], t[1][X]),
-			fminf(t[0][Y], t[1][Y]),
+	minmax = (t_aabb){\
+		.min = (t_fvec){\
+			fminf(t[0][X], t[1][X]), \
+			fminf(t[0][Y], t[1][Y]), \
 			fminf(t[0][Z], t[1][Z])},
-		.max = (t_fvec){
-			fmaxf(t[0][X], t[1][X]),
-			fmaxf(t[0][Y], t[1][Y]),
+		.max = (t_fvec){\
+			fmaxf(t[0][X], t[1][X]), \
+			fmaxf(t[0][Y], t[1][Y]), \
 			fmaxf(t[0][Z], t[1][Z])}
 	};
 	tlims[0] = fmaxf(fmaxf(minmax.min[X], minmax.min[Y]), minmax.min[Z]);

@@ -49,22 +49,29 @@ static void	cylinder_normal(t_hit *hit)
 
 static void	tr_f_normal(t_hit *hit)
 {
-	t_face		*face;
-	t_triangle	*tr;
+	t_face		*fa;
+	t_fvec		v0v1;
+	t_fvec		v0v2;
 
 	if (hit->object->type == TRIANGLE)
 	{
-		tr = &hit->object->triangle;
-		hit->normal = normalize_vector(cross_product(tr->v0v1, tr->v0v2));
+		v0v1 = hit->object->triangle.v0v1;
+		v0v2 = hit->object->triangle.v0v2;
+	}
+	else if (!USE_SMOOTH_SHADING || !hit->object->face.has_normal)
+	{
+		v0v1 = hit->object->face.v0v1;
+		v0v2 = hit->object->face.v0v2;
 	}
 	else
 	{
-		face = &hit->object->face;
-		if (USE_SMOOTH_SHADING && face->has_normal)
-			hit->normal = hit->bary[0] * face->normals[0] + hit->bary[1] * face->normals[1] + hit->bary[2] * face->normals[2];
-		else
-			hit->normal = normalize_vector(cross_product(face->v0v1, face->v0v2));
+		fa = &hit->object->face;
+		hit->normal = hit->bary[0] * fa->normals[0] \
+					+ hit->bary[1] * fa->normals[1] \
+					+ hit->bary[2] * fa->normals[2];
+		return ;
 	}
+	hit->normal = normalize_vector(cross_product(v0v1, v0v2));
 }
 
 void	calculate_normal(t_hit *hit)

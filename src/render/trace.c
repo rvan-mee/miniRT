@@ -23,7 +23,7 @@ static bool	intersect_old(t_scene *scene, t_ray *ray, t_hit *hit)
 	{
 		hit_distance = intersect(scene->objects + i, ray, hit);
 		if (hit_distance < 0 || hit_distance >= hit->distance)
-			continue;
+			continue ;
 		hit->distance = hit_distance;
 		hit->object = scene->objects + i;
 	}

@@ -14,6 +14,7 @@
 #include <minirt.h>
 
 void	quit_working(t_threading *thread);
+
 static void	close_hook(t_threading **threadp)
 {
 	if (*threadp)

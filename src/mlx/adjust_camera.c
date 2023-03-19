@@ -13,14 +13,13 @@
 #include <scene.h>
 #include <thread.h>
 #include <math.h>
-#include <libft.h>
 
 #define STEPS	0.05f
 
 void	move_cam(t_minirt *data, enum keys key)
 {
 	const float	step = STEPS * data->scene->scale;
-	t_object *cam;
+	t_object	*cam;
 
 	cam = &data->scene->camera;
 	if (key == MLX_KEY_W)
@@ -39,6 +38,7 @@ void	move_cam(t_minirt *data, enum keys key)
 }
 
 void	calc_ray_info(t_camera *cam);
+
 void	rotate_cam(t_minirt *data, enum keys key)
 {
 	float		amount;
@@ -53,7 +53,7 @@ void	rotate_cam(t_minirt *data, enum keys key)
 	if (axis)
 		if ((amount < 0 && cam->rotation[axis] == (float) -M_PI) || \
 			(amount > 0 && cam->rotation[axis] == (float) M_PI))
-			return;
+			return ;
 	cam->rotation[axis] += amount;
 	if (cam->rotation[axis] < -M_PI)
 		cam->rotation[axis] += (float)(2 * M_PI);
@@ -66,7 +66,7 @@ void	rotate_cam(t_minirt *data, enum keys key)
 void	change_exposure(t_minirt *data, enum keys key)
 {
 	const bool	increase_effect = key == MLX_KEY_X;
-	t_camera	 *cam;
+	t_camera	*cam;
 	float		amount;
 
 	cam = &data->scene->camera.camera;
@@ -82,7 +82,7 @@ void	change_exposure(t_minirt *data, enum keys key)
 void	change_fov(t_minirt *data, enum keys key)
 {
 	const bool	increase_fov = key == MLX_KEY_RIGHT_BRACKET;
-	t_camera	 *cam;
+	t_camera	*cam;
 	float		amount;
 
 	cam = &data->scene->camera.camera;
@@ -90,7 +90,7 @@ void	change_fov(t_minirt *data, enum keys key)
 	if (!increase_fov)
 		amount = -amount;
 	cam->fov += amount;
-	printf("Changed camera fov to %i\n", (int) (cam->fov * 180 / M_PI));
+	printf("Changed camera fov to %i\n", (int)(cam->fov * 180 / M_PI));
 	calc_ray_info(cam);
 	reset_work(data);
 }

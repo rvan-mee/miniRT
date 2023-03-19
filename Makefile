@@ -77,7 +77,6 @@ SRCS := main.c										\
 		math/matrix.c								\
 		math/quadratic.c							\
 		math/normalize_vector.c						\
-		math/vector_utils.c							\
 		math/reflect.c								\
 		\
 		render/render.c								\

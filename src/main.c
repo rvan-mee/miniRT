@@ -34,13 +34,11 @@ static void	init_data(t_minirt *data, int argc, char **argv)
 
 bool	init_render_data(t_minirt *data)
 {
-	t_scene	**scenep;
 	t_scene	*scene;
 
-	scenep = &data->scene;
-	if (!parse_config_file(data->argc, data->argv, scenep))
+	if (!parse_config_file(data->argc, data->argv, &data->scene))
 		return (false);
-	scene = *scenep;
+	scene = data->scene;
 	if (!new_bvh(scene->objects, scene->objects_len, &scene->bvh))
 		return (false);
 	get_scene_scale(scene);

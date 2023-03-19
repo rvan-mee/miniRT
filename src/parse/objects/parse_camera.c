@@ -56,11 +56,12 @@ static t_fvec	rotate(t_fvec old_rot, t_fvec axis, float angle)
  */
 void	calc_ray_info(t_camera *cam)
 {
-	const float	dz = (WIDTH / 2.f) / tanf(cam->fov / 2.f);
+	const float		dz = (WIDTH / 2.f) / tanf(cam->fov / 2.f);
+	const t_fvec	global_up = {0, 1, 0};
 
-	cam->rotated = rotate(cam->orientation, (t_fvec) {0, 1, 0}, cam->rotation[0]);
+	cam->rotated = rotate(cam->orientation, global_up, cam->rotation[0]);
 	cam->rotated = normalize_vector(cam->rotated);
-	cam->u = normalize_vector(cross_product((t_fvec) {0, 1, 0}, cam->rotated));
+	cam->u = normalize_vector(cross_product(global_up, cam->rotated));
 	cam->rotated = rotate(cam->rotated, cam->u, cam->rotation[1]);
 	cam->rotated = normalize_vector(cam->rotated);
 	cam->v = normalize_vector(cross_product(cam->rotated, cam->u));

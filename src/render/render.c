@@ -35,7 +35,7 @@ static uint32_t	encode_gamma(t_fvec rgb)
 	}
 	return (((uint32_t) fminf(rgb[0] * 0xFF, 255.f)) << 24 | \
 			((uint32_t) fminf(rgb[1] * 0xFF, 255.f)) << 16 | \
-			((uint32_t) fminf(rgb[2] * 0xFF, 255.f)) << 8 |
+			((uint32_t) fminf(rgb[2] * 0xFF, 255.f)) << 8 | \
 			0xFF);
 }
 
@@ -51,9 +51,9 @@ static void	set_color(t_minirt *data, t_dynarr *hits)
 	while (i--)
 	{
 		colour = shade(data->scene, hit[i].object, &hit[i], 0);
-		colour[0] = 1.0f - expf(colour[0] * data->scene->camera.camera.exposure);
-		colour[1] = 1.0f - expf(colour[1] * data->scene->camera.camera.exposure);
-		colour[2] = 1.0f - expf(colour[2] * data->scene->camera.camera.exposure);
+		colour[0] = 1.f - expf(colour[0] * data->scene->camera.camera.exposure);
+		colour[1] = 1.f - expf(colour[1] * data->scene->camera.camera.exposure);
+		colour[2] = 1.f - expf(colour[2] * data->scene->camera.camera.exposure);
 		srgb = encode_gamma(colour);
 		mlx_put_pixel(data->img, hit[i].screen_x, hit[i].screen_y, srgb);
 	}
@@ -63,7 +63,7 @@ static bool	trace_row(t_scene *scene, t_render *block, t_dynarr *hits, size_t y)
 {
 	t_hit	hit;
 
-	hit.screen_y =  y;
+	hit.screen_y = y;
 	hit.screen_x = block->start_pixels[X];
 	while (hit.screen_x < block->end_pixels[X])
 	{
@@ -91,7 +91,7 @@ static bool	render(t_minirt	*data, t_render *block)
 		if (!trace_row(data->scene, block, &hits, y))
 		{
 			status = false;
-			break;
+			break ;
 		}
 		set_color(data, &hits);
 		hits.length = 0;

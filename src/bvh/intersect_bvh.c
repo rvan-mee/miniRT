@@ -10,120 +10,65 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
 #include <render.h>
 
-// Queue
-#define Q	0
-// Pool
-#define P	1
-
-static void	link_nodes(t_prio *nodes, t_prio nodebuf[512])
+static t_prio	node(const uint32_t idx, const float dist)
 {
-	uint16_t	i;
-	t_prio		*cur;
-
-	i = 0;
-	cur = nodes;
-	while (i < 512)
-	{
-		cur->next = nodebuf + i;
-		cur = cur->next;
-		++i;
-	}
-	cur->next = NULL;
+	return ((t_prio){\
+		.node = idx,
+		.dist = dist,
+	});
 }
 
-static void	insert(
-		const uint32_t idx,
-		const float distance,
-		const bool is_prim,
-		t_prio nodes[2])
-{
-	t_prio	*insert_after;
-	t_prio	*node;
-	t_prio	*next;
-
-	if (nodes[P].next == NULL)
-	{
-		printf("exit in insert\n");
-		exit(-1);
-	}
-	insert_after = nodes + Q;
-	while (insert_after->next != NULL && insert_after->next->dist < distance)
-		insert_after = insert_after->next;
-	node = nodes[P].next;
-	nodes[P].next = node->next;
-	*node = (t_prio){idx, distance, insert_after->next};
-	insert_after->next = node;
-	if (!is_prim)
-		return ;
-	next = node->next;
-	node->next = NULL;
-	while (next)
-	{
-		node = next;
-		next = node->next;
-		node->next = nodes[P].next;
-		nodes[P].next = node;
-	}
-}
-
-static void	intersect_node(
-		const t_bvh *bvh,
-		const uint32_t idx,
-		const t_ray *ray,
-		t_prio nodes[2],
-		t_hit *hit)
+static
+void	intersect_node(t_cbvh *bvh, const uint32_t idx, t_hit *hit, t_queue *q)
 {
 	const t_cluster	*c = get_node(bvh, idx);
 	const bool		is_p = is_prim(bvh, idx);
 	float			distance;
 
 	if (is_p)
-		distance = intersect(bvh->prims + idx, ray, hit);
+		distance = intersect(bvh->prims + idx, &hit->ray, hit);
 	else
-		distance = aabb_intersect(c->aabb, ray);
+		distance = aabb_intersect(c->aabb, &hit->ray);
 	if (distance == MISS || distance < 0)
 		return ;
-	return (insert(idx, distance, is_p, nodes));
+	return (insert(q, node(idx, distance), is_p));
 }
 
-static inline void	intersect_next(
-		const t_bvh *bvh,
-		const t_ray *ray,
-		t_prio nodes[2],
-		t_hit *hit)
+static inline
+void	intersect_next(const t_bvh *bvh, t_hit *hit, t_queue *queue)
 {
 	t_prio	*cur;
 
-	cur = nodes[Q].next;
-	nodes[Q].next = cur->next;
+	cur = queue->queue.next;
+	queue->queue.next = cur->next;
 	if (!get_node(bvh, cur->node)->leaf || is_prim(bvh, get_l(bvh, cur->node)))
-		intersect_node(bvh, get_l(bvh, cur->node), ray, nodes, hit);
+		intersect_node(bvh, get_l(bvh, cur->node), hit, queue);
 	else
-		insert(get_l(bvh, cur->node), cur->dist, false, nodes);
+		insert(queue, node(get_l(bvh, cur->node), cur->dist), false);
 	if (!get_node(bvh, cur->node)->leaf || is_prim(bvh, get_r(bvh, cur->node)))
-		intersect_node(bvh, get_r(bvh, cur->node), ray, nodes, hit);
+		intersect_node(bvh, get_r(bvh, cur->node), hit, queue);
 	else
-		insert(get_r(bvh, cur->node), cur->dist, false, nodes);
-	cur->next = nodes[P].next;
-	nodes[P].next = cur;
+		insert(queue, node(get_r(bvh, cur->node), cur->dist), false);
+	cur->next = queue->pool.next;
+	queue->pool.next = cur;
 }
 
 bool	intersect_bvh(const t_bvh *bvh, const t_ray *ray, t_hit *hit)
 {
-	t_prio	nodes[2];
-	t_prio	nodebuf[512];
+	static __thread t_queue	queue;
 
-	link_nodes(nodes + P, nodebuf);
-	nodes[Q].next = NULL;
-	intersect_node(bvh, bvh->root, ray, nodes, hit);
-	while (nodes[Q].next != NULL && !is_prim(bvh, nodes[Q].next->node))
-		intersect_next(bvh, ray, nodes, hit);
-	if (nodes[Q].next == NULL)
+	if (queue.pool.next == NULL)
+		init_queue(&queue);
+	hit->ray = *ray;
+	intersect_node(bvh, bvh->root, hit, &queue);
+	while (queue.queue.next != NULL && !is_prim(bvh, queue.queue.next->node))
+		intersect_next(bvh, hit, &queue);
+	if (queue.queue.next == NULL)
 		return (false);
-	hit->distance = nodes[Q].next->dist;
-	hit->object = bvh->prims + nodes[Q].next->node;
+	hit->distance = queue.queue.next->dist;
+	hit->object = bvh->prims + queue.queue.next->node;
+	clear_queue(&queue);
 	return (true);
 }

@@ -106,6 +106,7 @@ SRCS := main.c										\
 		bvh/cluster.c								\
 		bvh/aac_merge.c								\
 		bvh/intersect_bvh.c							\
+		bvh/prio_queue.c							\
 		bvh/get_scene_scale.c						\
 		\
 		aabb/aabb_combine.c							\

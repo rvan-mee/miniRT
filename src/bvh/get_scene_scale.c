@@ -16,23 +16,26 @@
 
 void	get_scene_scale(t_scene *scene)
 {
-	const t_bvh		*bvh = &scene->bvh;
+	const t_bvh		*bvh;
 	const t_cluster	*cluster;
 	t_fvec			delta;
 
 	scene->scale = 1.0f;
+	if (!USE_BVH)
+		return ;
+	bvh = &scene->bvh;
 	cluster = bvh->clusters + bvh->root;
 	while (true)
 	{
 		delta = cluster->aabb.max - cluster->aabb.min;
 		if (delta[X] != FLT_MAX)
-			break;
+			break ;
 		if (cluster->len == 1)
-			return;
+			return ;
 		if (bvh->clusters[cluster->l].len > 1)
 			cluster = bvh->clusters + cluster->l;
 		else
 			cluster = bvh->clusters + cluster->r;
 	}
-	scene->scale = fmaxf(1.0f, sqrtf(powf(delta[X], 2.f) + powf(delta[Z], 2.f)));
+	scene->scale = fmaxf(1, sqrtf(delta[X] * delta[X] + delta[Z] * delta[Z]));
 }

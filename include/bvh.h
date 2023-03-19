@@ -21,11 +21,14 @@
 #  define EPSI	0.2
 #  define DELTA	4
 # endif
+# define QUEUE_LEN	512
 
 // An index into either t_bvh.clusters or t_bvh_b.clusters
 typedef uint32_t				t_nodeidx;
 // An index in the prim array
 typedef uint32_t				t_objidx;
+// I prefer shorter lines ty
+typedef const struct s_bvh		t_cbvh;
 
 typedef struct s_aabb {
 	t_fvec	min;
@@ -74,12 +77,18 @@ typedef struct s_bvh_b {
 	uint32_t	length;
 }	t_bvhbuilder;
 
-typedef struct s_priority_queue	t_prio;
-struct s_priority_queue {
+typedef struct s_priority_queue_node	t_prio;
+struct s_priority_queue_node {
 	t_nodeidx	node;
 	float		dist;
 	t_prio		*next;
 };
+
+typedef struct s_priority_queue {
+	t_prio	queue;
+	t_prio	pool;
+	t_prio	buf[QUEUE_LEN];
+}	t_queue;
 
 typedef struct s_bvh {
 	t_object	*prims;
@@ -157,6 +166,22 @@ float		sa(t_aabb aabb);
  * Calculate surface area of two combined bounding boxes
  */
 float		combo_sa(t_aabb a, t_aabb b);
+
+/**
+ * Initialize a priority queue. Links all nodes together
+ */
+void		init_queue(t_queue *queue);
+
+/**
+ * Completely clear a priority queue.
+ */
+void		clear_queue(t_queue *queue);
+
+/**
+ * Insert a node into a priority queue. If purge is true, purges nodes with
+ * bigger distance than node.
+ */
+void		insert(t_queue *queue, t_prio node, bool purge);
 
 static inline
 bool	is_prim(const t_bvh *bvh, const t_nodeidx idx)

@@ -78,6 +78,8 @@ SRCS := main.c										\
 		math/quadratic.c							\
 		math/normalize_vector.c						\
 		math/reflect.c								\
+		math/refract.c								\
+		math/exp.c									\
 		\
 		render/render.c								\
 		render/trace.c								\

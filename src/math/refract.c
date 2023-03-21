@@ -1,30 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_ray_bias.c                                     :+:    :+:            */
+/*   refract.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/03/13 16:39:52 by lsinke        #+#    #+#                 */
-/*   Updated: 2023/03/13 16:39:52 by lsinke        ########   odam.nl         */
+/*   Created: 2023/03/21 19:41:46 by lsinke        #+#    #+#                 */
+/*   Updated: 2023/03/21 19:41:46 by lsinke        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_math.h>
 #include <math.h>
-#include <render.h>
 
-float	get_ray_bias(t_fvec normal, t_fvec dir)
+t_fvec	refract(t_fvec in, t_fvec normal, float exiting, float entering)
 {
-	return (fmaxf(0.05f * (1.0f - fabsf(dot_product(normal, dir))), 0.005f));
-}
+	const float	cos_t = -dot_product(in, normal);
+	const float	mu = exiting / entering;
+	t_fvec		dir;
 
-t_ray	get_biased_ray(t_fvec origin, t_fvec direction, t_fvec normal)
-{
-	const float	bias = get_ray_bias(normal, direction);
-
-	return ((t_ray){
-		.origin = origin + direction * bias,
-		.direction = direction
-	});
+	dir = mu * in;
+	dir += normal * (mu * cos_t - sqrtf(1 - mu * mu * (1 - cos_t * cos_t)));
+	return (normalize_vector(dir));
 }

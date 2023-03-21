@@ -42,7 +42,7 @@ static t_fvec	reflect_ray(t_scene *scene, t_object *object, t_hit *hit, uint8_t 
 		return (colour);
 	r_hit.hit = r_hit.ray.origin + r_hit.ray.direction * r_hit.distance;
 	calculate_normal(&r_hit);
-	colour = shade(scene, r_hit.object, &r_hit, depth + 1);
+	colour = shade(scene, &r_hit, depth + 1);
 	return (colour * object->mat->specular);
 }
 
@@ -84,11 +84,13 @@ static t_fvec	use_material(t_scene *scene, t_object *object, t_hit *hit, uint8_t
 	return (colour);
 }
 
-t_fvec	shade(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth)
+t_fvec	shade(t_scene *scene, t_hit *hit, uint8_t depth)
 {
+	t_object		*object;
 	t_phong			p_args;
 	t_fvec			colour;
 
+	object = hit->object;
 	if (object->has_mat)
 		return (use_material(scene, object, hit, depth));
 	p_args = (t_phong){

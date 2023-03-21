@@ -81,11 +81,12 @@ void	calculate_normal(t_hit *hit);
 t_ray	get_cam_ray(t_object *camera, size_t x, size_t y);
 
 void	start_render(t_minirt *data, void *func_data);
-t_fvec	shade(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth);
+t_fvec	shade(t_scene *scene, t_hit *hit, uint8_t depth);
 
 t_fvec	phong(t_scene *scene, t_phong args);
 t_fvec	fresnel(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth);
 
 float	get_ray_bias(t_fvec normal, t_fvec dir);
+t_ray	get_biased_ray(t_fvec origin, t_fvec direction, t_fvec normal);
 
 #endif //RENDER_H

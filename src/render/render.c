@@ -49,7 +49,7 @@ static void	set_color(t_minirt *data, t_dynarr *hits)
 	i = hits->length;
 	while (i--)
 	{
-		colour = shade(data->scene, hit[i].object, &hit[i], 0);
+		colour = shade(data->scene, &hit[i], 0);
 		colour[0] = 1.f - expf(colour[0] * data->scene->camera.camera.exposure);
 		colour[1] = 1.f - expf(colour[1] * data->scene->camera.camera.exposure);
 		colour[2] = 1.f - expf(colour[2] * data->scene->camera.camera.exposure);

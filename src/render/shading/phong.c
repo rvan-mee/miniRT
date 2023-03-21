@@ -36,14 +36,11 @@ static void	create_shadow_ray(t_object *light, t_phong *args)
 {
 	const t_hit		*hit = args->cam_hit;
 	const t_fvec	light_rel = light->coords - args->cam_hit->hit;
-	t_ray			*ray;
-	float			bias;
+	t_ray			ray;
 
-	ray = &args->shadow_ray;
+	ray = get_biased_ray(hit->hit, normalize_vector(light_rel), hit->normal);
+	args->shadow_ray = ray;
 	args->light_dist_sq = dot_product(light_rel, light_rel);
-	ray->direction = normalize_vector(light_rel);
-	bias = get_ray_bias(hit->normal, hit->ray.direction);
-	ray->origin = hit->hit + ray->direction * bias;
 }
 
 t_fvec	phong(t_scene *scene, t_phong args)

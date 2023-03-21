@@ -31,61 +31,45 @@ static float	reflect_amount(float ri_1, float ri_2, t_hit *hit)
 	return (r_0 + (1.0f - r_0) * powf(1.0f - cos_t, 5.0f));
 }
 
-static t_fvec	refract(t_hit *hit, float mu)
+static float	get_transmittance(t_mtl *mat)
 {
-	const t_fvec	in = hit->ray.direction;
-	const t_fvec	norm = hit->normal;
-	const float		cos_t = -(dot_product(in, norm));
-	t_fvec			t;
-
-	t = mu * in;
-	t += norm * (mu * cos_t - sqrtf(1 - mu * mu * (1 - cos_t * cos_t)));
-	return (normalize_vector(t));
+	if (is_flag(mat, DISSOLVED))
+		return (1.0f - mat->transp_d);
+	else if (is_flag(mat, TRANSPARENT))
+		return (mat->transp_tr);
+	return (0.0f);
 }
 
-static t_fvec	transmit_ray(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth, float ri_2)
+static
+t_fvec	transmit_ray(t_scene *scene, t_hit *hit, uint8_t depth, float ri_2)
 {
-	t_hit	rhit;
-	float	transmittance;
-	float	bias;
+	const float	transmittance = get_transmittance(hit->object->mat);
+	t_hit		r_hit;
+	t_fvec		r_dir;
+	t_fvec		colour;
 
-	transmittance = 0;
-	if (is_flag(object->mat, DISSOLVED))
-		transmittance = 1.0f - object->mat->transp_d;
-	else if (is_flag(object->mat, TRANSPARENT))
-		transmittance = object->mat->transp_tr;
-	if (transmittance > 0)
-	{
-		rhit.ray.direction = refract(hit, hit->refl / ri_2);
-		bias = get_ray_bias(hit->normal, rhit.ray.direction);
-		rhit.ray.origin = hit->hit + rhit.ray.direction * bias;
-		rhit.refl = object->mat->opt_dens;
-		if (!intersect_bvh(&scene->bvh, &rhit.ray, &rhit))
-			return ((t_fvec){});
-		rhit.hit = rhit.ray.origin + rhit.ray.direction * rhit.distance;
-		calculate_normal(&rhit);
-		// todo: Add transmission filter
-		return (shade(scene, rhit.object, &rhit, depth + 1) * transmittance);
-	}
-	return (object->mat->diffuse);
+	if (transmittance <= 0)
+		return (hit->object->mat->diffuse);
+	r_dir = refract(hit->ray.direction, hit->normal, hit->refl, ri_2);
+	r_hit.ray = get_biased_ray(hit->hit, r_dir, hit->normal);
+	if (!trace(scene, &r_hit.ray, &r_hit))
+		return ((t_fvec){});
+	colour = shade(scene, &r_hit, depth + 1) * transmittance;
+	if (is_flag(hit->object->mat, TRANSMISSION_FILTER))
+		colour *= exp_fvec(-hit->object->mat->tra_filter * r_hit.distance);
+	return (colour);
 }
 
 static t_fvec	reflect_ray(t_scene *scene, t_hit *hit, uint8_t depth)
 {
 	t_hit	r_hit;
-	t_fvec	colour;
-	float	bias;
+	t_fvec	r_dir;
 
-	colour = (t_fvec) {};
-	r_hit.ray.direction = reflect(hit->ray.direction, hit->normal);
-	bias = get_ray_bias(hit->normal, r_hit.ray.direction);
-	r_hit.ray.origin = hit->hit + r_hit.ray.direction * bias;
-	if (!intersect_bvh(&scene->bvh, &r_hit.ray, &r_hit))
-		return (colour);
-	r_hit.hit = r_hit.ray.origin + r_hit.ray.direction * r_hit.distance;
-	calculate_normal(&r_hit);
-	colour = shade(scene, r_hit.object, &r_hit, depth + 1);
-	return (colour);
+	r_dir = reflect(hit->ray.direction, hit->normal);
+	r_hit.ray = get_biased_ray(hit->hit, r_dir, hit->normal);
+	if (!trace(scene, &r_hit.ray, &r_hit))
+		return ((t_fvec){});
+	return (shade(scene, &r_hit, depth + 1));
 }
 
 t_fvec	fresnel(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth)
@@ -95,13 +79,12 @@ t_fvec	fresnel(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth)
 	float		refl;
 	t_fvec		col;
 
-	//printf("hit->refl == %f\n", hit->refl);
 	if (hit->refl != 1.0f)
 		ri_2 = 1.0f;
 	else
 		ri_2 = mat->opt_dens;
 	refl = reflect_amount(hit->refl, ri_2, hit);
-	col = (1.0f - refl) * transmit_ray(scene, object, hit, depth, ri_2);
+	col = (1.0f - refl) * transmit_ray(scene, hit, depth, ri_2);
 	if (depth < MAX_REFLECTION_DEPTH)
 		col += refl * reflect_ray(scene, hit, depth);
 	return (col);

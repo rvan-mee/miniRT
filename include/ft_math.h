@@ -27,6 +27,7 @@ typedef struct s_quadratic
 t_fvec	normalize_vector(t_fvec vec);
 float	dot_product(t_fvec a, t_fvec b);
 t_fvec	cross_product(t_fvec a, t_fvec b);
+t_fvec	exp_fvec(t_fvec vec);
 
 void	identity_matrix(t_fmat matrix);
 t_fvec	mult_vec_mat(t_fvec vec, t_fmat mat);
@@ -43,5 +44,6 @@ bool	solve_quadratic(t_quadratic *quadratic, float t[2]);
  *   the in vector
  */
 t_fvec	reflect(t_fvec in, t_fvec normal);
+t_fvec	refract(t_fvec in, t_fvec normal, float exiting, float entering);
 
 #endif

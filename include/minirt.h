@@ -19,10 +19,6 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 
-# ifndef THREAD_C
-#  define THREAD_C	8 // amount of threads
-# endif
-
 # ifndef USE_BVH
 #  define USE_BVH	1
 # endif

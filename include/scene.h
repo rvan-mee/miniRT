@@ -36,6 +36,7 @@ typedef enum e_object_type {
 	EXPOSURE,
 	OBJFILE,
 	USEMESH,
+	MTLLIB,
 	END
 }	t_obj_type;
 

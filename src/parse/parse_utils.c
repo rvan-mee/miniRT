@@ -45,7 +45,8 @@
 #define NS_ERROR		"\nthis material contains an invalid specular value\n"
 #define D_ERROR			"\nthis material contains an invalid dissolve value\n"
 #define TR_ERROR		"\nthis material contains an invalid transparency value\n"
-#define MTL_EXT_ERR		"\nthis material contains an invalid texture extension\n"
+#define TEX_EXT_ERR		"\nthis material contains an invalid texture extension\n"
+#define MTL_EXT_ERR		"\nthis mtl file does not have the right extension\n"
 #define OBJ_EXT_ERR		"\nthis object file does not have the right extension\n"
 #define BMP_ERROR		"\nerror whilst processing bmp file\n"
 #define DUPLICATE_ERROR	"\nthis material contains duplicate elements\n"
@@ -62,7 +63,9 @@ invalid transmission filter colour\n"
 #define EXPOSURE_ERROR	"\nthis material contains an \
 invalid exposure value\n"
 #define INV_OBJ_ERR		"this object type is not allowed in .obj files\n"
+#define INV_MTL_ERR		"this object type is not allowed in .mtl files\n"
 #define OBJ_NF_ERR		".obj file not found\n"
+#define MTL_NF_ERR		".mtl file not found\n"
 #define SCALE_ERR		"this object does not have a valid scale\n"
 
 static const char	*g_err_message[] = {\
@@ -97,13 +100,16 @@ static const char	*g_err_message[] = {\
 	[NI] = NI_ERROR,					\
 	[TF] = TF_ERROR,					\
 	[DUPLICATE] = DUPLICATE_ERROR,		\
+	[TEX_EXT] = TEX_EXT_ERR,			\
 	[MTL_EXT] = MTL_EXT_ERR,			\
 	[OBJ_EXT] = OBJ_EXT_ERR,			\
 	[BMP_ERR] = BMP_ERROR,				\
 	[NON_EXIST] = EXIST_ERROR,			\
 	[EXPOS] = EXPOSURE_ERROR,			\
 	[INV_OBJ] = INV_OBJ_ERR,			\
+	[INV_MTL] = INV_MTL_ERR,			\
 	[OBJ_NF] = OBJ_NF_ERR,				\
+	[MTL_NF] = MTL_NF_ERR,				\
 	[INV_SCALE] = SCALE_ERR				\
 };
 

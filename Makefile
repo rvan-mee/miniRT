@@ -67,6 +67,7 @@ SRCS := main.c										\
 		parse/mtl/parse_mtl_name.c					\
 		parse/mtl/parse_newmtl.c					\
 		parse/mtl/parse_usemtl.c					\
+		parse/mtl/parse_mtlfile.c					\
 		parse/obj/parse_objfile.c					\
 		parse/obj/parse_usemesh.c					\
 		parse/obj/meshdata.c						\

@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   parse_objfile.c                                    :+:    :+:            */
+/*   parse_mtlfile.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/03/18 22:18:40 by lsinke        #+#    #+#                 */
-/*   Updated: 2023/03/18 22:18:40 by lsinke        ########   odam.nl         */
+/*   Created: 2023/03/21 23:35:35 by lsinke        #+#    #+#                 */
+/*   Updated: 2023/03/21 23:35:35 by lsinke        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <parse_obj.h>
-#include <stdlib.h>
+#include <parse.h>
 #include <libft.h>
 #include <get_next_line.h>
+#include <unistd.h>
 
 static t_parse_err	parse_path(char **linep, char **dst)
 {
@@ -29,51 +29,55 @@ static t_parse_err	parse_path(char **linep, char **dst)
 	return (SUCCESS);
 }
 
-static t_parse_err	parse_more(t_meshdat *dat)
+static t_parse_err	init_data(char *path, t_conf_data *conf)
+{
+	if (!check_extension(path, ".mtl"))
+		return (MTL_EXT);
+	else if (!open_file(path, &conf->fd))
+		return (MTL_NF);
+	conf->curr_line = 0;
+	return (SUCCESS);
+}
+
+static t_parse_err	parse_more(t_conf_data *conf)
 {
 	char		*line;
 	t_object	obj;
 
-	line = get_next_line(dat->conf.fd);
+	line = get_next_line(conf->fd);
 	if (line == NULL)
 		return (SUCCESS);
 	if (*line == '\n' || *line == '\0')
 		return (free(line), CONTINUE);
 	obj = (t_object){};
-	if (!parse_object(line, &obj, &dat->conf))
+	if (!parse_object(line, &obj, conf))
 		return (free(line), OBJECT);
 	free(line);
-	if (obj.type == COMMENT || obj.type == VERTEX || obj.type == VT_NORMAL || \
-		obj.type == VT_TEXTURE || obj.type == MTL || obj.type == USEMTL)
-		return (CONTINUE);
-	if (obj.type != FACE)
-		return (INV_OBJ);
-	if (!dynarr_addone(&dat->conf.objects, &obj))
-		return (DYNARR);
+	if (obj.type != COMMENT && obj.type != MTL)
+		return (INV_MTL);
 	return (CONTINUE);
 }
 
-t_parse_err	parse_objfile(char **linep, t_object *object, t_conf_data *conf)
+t_parse_err	parse_mtlfile(char **linep, t_object *object, t_conf_data *conf)
 {
-	t_parse_err	err;
-	t_meshdat	dat;
-	char		*path;
+	const int32_t	old_fd = conf->fd;
+	const size_t	old_lineno = conf->curr_line;
+	t_parse_err		err;
+	char			*path;
 
 	(void) object;
 	err = parse_path(linep, &path);
 	if (err != SUCCESS)
 		return (err);
-	err = init_meshdata(path, &dat);
+	err = init_data(path, conf);
 	free(path);
 	if (err != SUCCESS)
 		return (err);
-	dat.conf.has_mtl = conf->has_mtl;
-	if (conf->has_mtl)
-		dat.conf.curr_mtl = -1;
 	err = CONTINUE;
 	while (err == CONTINUE)
-		err = parse_more(&dat);
-	if (err != SUCCESS)
-		return (destroy_meshdata(&dat, true, true), err);
-	return (create_mesh(&dat, conf));
+		err = parse_more(conf);
+	close(conf->fd);
+	conf->curr_line = old_lineno;
+	conf->fd = old_fd;
+	return (err);
 }

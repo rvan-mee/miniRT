@@ -60,7 +60,8 @@ static bool \
 	store = NULL;
 	if (obj->type == COMMENT || obj->type == LIGHT || obj->type == VERTEX || \
 		obj->type == VT_TEXTURE || obj->type == VT_NORMAL || obj->type == MTL
-		|| obj->type == USEMTL || obj->type == OBJFILE || obj->type == USEMESH)
+		|| obj->type == USEMTL || obj->type == OBJFILE || obj->type == USEMESH
+		|| obj->type == MTLLIB)
 		return (true);
 	if (obj->type == EXPOSURE)
 		return (dst->camera.camera.exposure = conf->exposure, true);

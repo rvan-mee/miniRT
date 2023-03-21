@@ -20,15 +20,3 @@ pl  -10.0,0,10.0        	0,-1,0          50,50,50
 
 usemtl Projector
 pl	0,0,-20					0,0,1			255,255,255
-
-newmtl Glass
-	Kd	0 0 0.1
-	Ks	0.2 0.2 0.2
-	Ka	0 0 0
-	Ns	1
-	Ni	1.5
-	Tr	1
-
-
-usemtl Glass
-sp	0,1.9,-0.6		0.5		0,0,0

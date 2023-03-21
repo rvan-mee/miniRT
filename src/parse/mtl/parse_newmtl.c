@@ -123,7 +123,7 @@ t_parse_err	parse_newmtl(char **linep, t_object *object, t_conf_data *conf)
 		err = mtl_parse_func(line, object);
 		free(line);
 	}
-	if (err != SUCCESS)
+	if (err != SUCCESS && err != CONTINUE)
 		return (err_cleanup(mtl, err));
 	if (!dynarr_addone(&conf->materials, mtl))
 		return (err_cleanup(mtl, DYNARR));

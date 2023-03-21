@@ -1,0 +1,7 @@
+newmtl Glass
+	Kd	0 0 0.1
+	Ks	0.2 0.2 0.2
+	Ka	0 0 0
+	Ns	1
+	Ni	1.5
+	Tr	1

@@ -50,6 +50,7 @@ typedef enum e_parse_error {
 	TF,
 	DUPLICATE,
 	MATCH,
+	TEX_EXT,
 	MTL_EXT,
 	OBJ_EXT,
 	BMP_ERR,
@@ -57,7 +58,9 @@ typedef enum e_parse_error {
 	CONTINUE,
 	EXPOS,
 	INV_OBJ,
+	INV_MTL,
 	OBJ_NF,
+	MTL_NF,
 	INV_SCALE,
 }	t_parse_err;
 
@@ -95,6 +98,7 @@ t_parse_err	parse_exposure(char **linep, t_object *object, t_conf_data *conf);
 t_parse_err	parse_mtl_name(char **linep, char **name);
 t_parse_err	parse_objfile(char **linep, t_object *object, t_conf_data *conf);
 t_parse_err	parse_usemesh(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_mtlfile(char **linep, t_object *object, t_conf_data *conf);
 bool		parse_rgb(char **linep, t_fvec *colour);
 bool		parse_line_error(const char *line, t_parse_err err, size_t line_c);
 void		skip_spaces(char **linep);

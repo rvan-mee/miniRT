@@ -84,7 +84,9 @@ t_fvec	fresnel(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth)
 	else
 		ri_2 = mat->opt_dens;
 	refl = reflect_amount(hit->refl, ri_2, hit);
-	col = (1.0f - refl) * transmit_ray(scene, hit, depth, ri_2);
+	col = (t_fvec){};
+	if (depth < MAX_REFLECTION_DEPTH)
+		col += (1.0f - refl) * transmit_ray(scene, hit, depth, ri_2);
 	if (depth < MAX_REFLECTION_DEPTH)
 		col += refl * reflect_ray(scene, hit, depth);
 	return (col);

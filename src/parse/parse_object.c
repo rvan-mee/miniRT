@@ -30,6 +30,7 @@ static t_parse_err	(*g_parsefun[])(char **, t_object *, t_conf_data *) = {\
 	[EXPOSURE] = parse_exposure,								\
 	[OBJFILE] = parse_objfile,									\
 	[USEMESH] = parse_usemesh,									\
+	[MTLLIB] = parse_mtlfile,									\
 };
 
 static const char	*g_ids[] = {\
@@ -49,7 +50,8 @@ static const char	*g_ids[] = {\
 	[USEMTL] = "usemtl",			\
 	[EXPOSURE] = "exposure",		\
 	[OBJFILE] = "objfile",			\
-	[USEMESH] = "usemesh"			\
+	[USEMESH] = "usemesh",			\
+	[MTLLIB] = "mtllib"
 };
 
 static t_obj_type	get_obj_type(char *line, t_object *object, size_t *id_len)

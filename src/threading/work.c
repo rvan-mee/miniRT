@@ -65,9 +65,9 @@ void	*work(void *param)
 		if (current_job == NULL)
 		{
 			stop_working(data->thread, true);
-			continue;
+			continue ;
 		}
-		current_job->job(data, current_job->job_param);
+		current_job->job(data, &current_job->job_param);
 		free(current_job);
 	}
 	return (NULL);

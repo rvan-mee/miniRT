@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   create_render_lst.c                                      :+:    :+:            */
+/*   add_job_node.c                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
@@ -13,7 +13,7 @@
 #include <thread.h>
 #include <libft.h>
 
-bool	add_new_job_node(t_threading *thread, t_job func, void *job_param)
+bool	add_new_job_node(t_threading *thread, t_job func, t_render param)
 {
 	static t_jobs	*last_node;
 	t_jobs			*new_node;
@@ -22,7 +22,7 @@ bool	add_new_job_node(t_threading *thread, t_job func, void *job_param)
 	if (!new_node)
 		return (false);
 	new_node->job = func;
-	new_node->job_param = job_param;
+	new_node->job_param = param;
 	new_node->next_job = NULL;
 	if (thread->job_lst == NULL)
 		thread->job_lst = new_node;
@@ -44,7 +44,6 @@ void	clear_job_lst(t_threading *thread)
 	while (to_free)
 	{
 		to_free_next = to_free->next_job;
-		free(to_free->job_param);
 		free(to_free);
 		to_free = to_free_next;
 	}

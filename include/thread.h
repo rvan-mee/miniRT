@@ -19,17 +19,19 @@
 
 typedef struct s_minirt	t_minirt;
 typedef void			(*t_job)(t_minirt *, void *);
+typedef int32_t			t_ivec \
+__attribute__ ((vector_size (4 * sizeof(int32_t))));
+// thanks to norminette this is necessary
+typedef const t_ivec	t_civec;
 
-typedef struct s_render_block
-{
-	size_t	start_pixels[2];
-	size_t	end_pixels[2];
-	size_t	size[2];
+typedef struct s_render_block {
+	t_ivec	start;
+	t_ivec	size;
 }	t_render;
 
 typedef struct s_jobs {
 	void			(*job)(t_minirt *, void *);
-	void			*job_param;
+	t_render		job_param;
 	struct s_jobs	*next_job;
 }	t_jobs;
 
@@ -49,7 +51,7 @@ typedef struct s_threading
 }	t_threading;
 
 // add_job_node.c
-bool		add_new_job_node(t_threading *thread, t_job func, void *job_param);
+bool		add_new_job_node(t_threading *thread, t_job func, t_render param);
 
 //	create_render_lst.c
 bool		create_render_queue(t_threading *thread, size_t w, size_t h);

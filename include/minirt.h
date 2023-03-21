@@ -22,7 +22,6 @@
 # ifndef THREAD_C
 #  define THREAD_C	8 // amount of threads
 # endif
-# define BLOCK_C	25 // don't set higher than 50
 
 # ifndef USE_BVH
 #  define USE_BVH	1

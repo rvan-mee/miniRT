@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <render.h>
-#include <libft.h>
 #include <thread.h>
 
 #define GAMMA_A	1.055f
@@ -61,11 +60,12 @@ static void	set_color(t_minirt *data, t_dynarr *hits)
 
 static bool	trace_row(t_scene *scene, t_render *block, t_dynarr *hits, size_t y)
 {
-	t_hit	hit;
+	const size_t	end_x = block->start[X] + block->size[X];
+	t_hit			hit;
 
 	hit.screen_y = y;
-	hit.screen_x = block->start_pixels[X];
-	while (hit.screen_x < block->end_pixels[X])
+	hit.screen_x = block->start[X];
+	while (hit.screen_x < end_x)
 	{
 		hit.ray = get_cam_ray(&scene->camera, hit.screen_x, hit.screen_y);
 		if (trace(scene, &hit.ray, &hit) && !dynarr_addone(hits, &hit))
@@ -77,16 +77,16 @@ static bool	trace_row(t_scene *scene, t_render *block, t_dynarr *hits, size_t y)
 
 static bool	render(t_minirt	*data, t_render *block)
 {
-	const size_t	width = block->end_pixels[X] - block->start_pixels[X];
+	const int32_t	end_y = block->start[Y] + block->size[Y];
 	t_dynarr		hits;
 	bool			status;
-	size_t			y;
+	int32_t			y;
 
-	y = block->start_pixels[Y];
-	if (!dynarr_create(&hits, width, sizeof(t_hit)))
+	y = block->start[Y];
+	if (!dynarr_create(&hits, block->size[X], sizeof(t_hit)))
 		return (false);
 	status = true;
-	while (y < block->end_pixels[Y])
+	while (y < end_y)
 	{
 		if (!trace_row(data->scene, block, &hits, y))
 		{
@@ -112,5 +112,4 @@ void	start_render(t_minirt *data, void *func_data)
 		clear_job_lst(data->thread);
 		mlx_close_window(data->mlx);
 	}
-	free(block);
 }

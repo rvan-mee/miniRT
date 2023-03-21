@@ -24,11 +24,12 @@
 # define QUEUE_LEN	512
 
 // An index into either t_bvh.clusters or t_bvh_b.clusters
-typedef uint32_t				t_nodeidx;
+typedef uint32_t			t_nodeidx;
 // An index in the prim array
-typedef uint32_t				t_objidx;
+typedef uint32_t			t_objidx;
 // I prefer shorter lines ty
-typedef const struct s_bvh		t_cbvh;
+typedef const struct s_bvh	t_cbvh;
+typedef struct s_prio_node	t_prio;
 
 typedef struct s_aabb {
 	t_fvec	min;
@@ -77,8 +78,7 @@ typedef struct s_bvh_b {
 	uint32_t	length;
 }	t_bvhbuilder;
 
-typedef struct s_priority_queue_node	t_prio;
-struct s_priority_queue_node {
+struct s_prio_node {
 	t_nodeidx	node;
 	float		dist;
 	t_prio		*next;

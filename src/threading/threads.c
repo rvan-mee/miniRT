@@ -14,9 +14,9 @@
 #include <thread.h>
 #include <libft.h>
 
-# ifndef THREAD_C
-#  define THREAD_C 8 // amount of threads
-# endif
+#ifndef THREAD_C
+# define THREAD_C 8 // amount of threads
+#endif
 
 static bool	destroy_struct(t_minirt *data)
 {

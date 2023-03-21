@@ -13,6 +13,7 @@
 #include <texture.h>
 #include <ft_math.h>
 
+// Love norminette on line 27 column 56
 t_fvec	get_texture_sphere(t_hit *hit, t_bmp *texture)
 {
 	t_fvec	d;
@@ -23,7 +24,7 @@ t_fvec	get_texture_sphere(t_hit *hit, t_bmp *texture)
 	d[Y] = hit->object->coords[Y] - hit->hit[Y];
 	d[Z] = hit->object->coords[Z] - hit->hit[Z];
 	d = normalize_vector(d);
-	u = 0.5f + atan2f(d[X], d[Z]) / (float) (2 * M_PI) * -1;
+	u = 0.5f + atan2f(d[X], d[Z]) / (float)(M_PI * 2) *-1;
 	v = 0.5f + asinf(d[Y]) / (float) M_PI;
 	return (get_uv_colour(texture, u, v));
 }

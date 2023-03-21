@@ -108,6 +108,8 @@ bool		parse_float(char **linep, float *dst, float min, float max);
 bool		parse_float_rgb(char **linep, t_fvec *rgb);
 bool		check_extension(const char *config_file, char *ext);
 bool		open_file(const char *path, int32_t *fd);
+bool		read_file(int32_t fd, void *buf, size_t n_bytes);
+bool		write_file(int32_t fd, void *buf, size_t n_bytes);
 bool		parse_bmp(char *path, t_bmp *dst);
 bool		init_parse(t_conf_data *data, int32_t fd);
 void		set_scene(t_scene *scene, t_conf_data *data);

@@ -63,6 +63,8 @@ static t_ivec	spiral(size_t idx)
  *
  * The `extra' variable exists because skipping twice the radius is not always
  * enough (the radius would increase during the skip).
+ *
+ * love norminette on line 78 column 27
  */
 static bool	check_oob(t_ivec pos, size_t *ip, t_civec limits[2], bool axis)
 {
@@ -73,7 +75,7 @@ static bool	check_oob(t_ivec pos, size_t *ip, t_civec limits[2], bool axis)
 	if (pos[axis] < limits[axis][0])
 	{
 		extra = 0;
-		if (axis == Y && -pos[X] >= radius)
+		if (axis == Y && - pos[X] >= radius)
 			extra = 2;
 		else if (axis == X && pos[Y] >= radius)
 			extra = 1;

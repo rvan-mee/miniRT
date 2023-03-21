@@ -16,21 +16,6 @@
 
 #define HEADER_SIZE 54
 
-static bool	read_file(int32_t fd, void *buf, size_t n_bytes)
-{
-	ssize_t	readb;
-
-	while (n_bytes != 0)
-	{
-		readb = read(fd, buf, n_bytes);
-		if (readb <= 0)
-			return (false);
-		n_bytes -= readb;
-		buf += readb;
-	}
-	return (true);
-}
-
 static bool	read_bmp(int32_t fd, t_bmp *bmp)
 {
 	t_bmp_file_header	bmp_head;

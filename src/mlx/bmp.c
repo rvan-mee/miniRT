@@ -10,11 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minirt.h>
 #include <libft.h>
+#include <MLX42/MLX42.h>
 #include <bmp.h>
 #include <unistd.h>
 #include <fcntl.h>
+
+bool	write_file(int32_t fd, void *buf, size_t n_bytes);
 
 static int32_t	write_bmp_header(int32_t fd, t_bmp bmp_data)
 {
@@ -29,12 +31,7 @@ static int32_t	write_bmp_header(int32_t fd, t_bmp bmp_data)
 	header.color_planes = COLOR_PLANES_COUNT;
 	header.bits_per_pixel = bmp_data.pixel_size * 8;
 	header.image_size_bytes = bmp_data.data_size;
-	if (write(fd, &header, sizeof(t_bmp_file_header)) == -1)
-	{
-		perror("Writing to BMP file failed");
-		return (-1);
-	}
-	return (0);
+	return (write_file(fd, &header, sizeof(t_bmp_file_header)));
 }
 
 static int32_t	create_new_bmp_file(void)
@@ -53,7 +50,7 @@ static t_rgb	get_pixel_color(mlx_image_t *img, int32_t x, int32_t y)
 	t_rgb	color;
 	int8_t	*pixel_address;
 
-	pixel_address = (int8_t *)&img->pixels[(y * WIDTH + x) \
+	pixel_address = (int8_t *)&img->pixels[(y * img->width + x) \
 						* sizeof(int32_t)];
 	color.blue = *(pixel_address++);
 	color.green = *(pixel_address++);
@@ -63,17 +60,18 @@ static t_rgb	get_pixel_color(mlx_image_t *img, int32_t x, int32_t y)
 
 static void	write_color_data(mlx_image_t *img, int32_t fd, t_bmp data)
 {
-	t_rgb			colors;
-	uint32_t		x;
-	uint32_t		y;
-	size_t			i;
+	t_rgb	colors;
+	int32_t	x;
+	int32_t	y;
+	size_t	i;
 
 	i = 0;
-	y = HEIGHT - 1;
-	while (1)
+	y = data.height;
+	while (y > 0)
 	{
+		y--;
 		x = 0;
-		while (x < WIDTH)
+		while (x < data.width)
 		{
 			colors = get_pixel_color(img, x, y);
 			data.data[i++] = (unsigned char)colors.red;
@@ -81,16 +79,12 @@ static void	write_color_data(mlx_image_t *img, int32_t fd, t_bmp data)
 			data.data[i++] = (unsigned char)colors.blue;
 			x++;
 		}
-		if (y == 0)
-			break ;
-		y--;
 	}
-	if (write(fd, data.data, data.data_size) == -1)
-		perror("Writing to BMP file failed");
+	write_file(fd, data.data, data.data_size);
 	free(data.data);
 }
 
-void	create_bmp(mlx_image_t *img) // TODO: take width and height from t_minirt *data
+void	create_bmp(mlx_image_t *img)
 {
 	int32_t	fd;
 	t_bmp	data;
@@ -98,19 +92,19 @@ void	create_bmp(mlx_image_t *img) // TODO: take width and height from t_minirt *
 	fd = create_new_bmp_file();
 	if (fd == -1)
 		return ;
-	data.height = HEIGHT;
-	data.width = WIDTH;
+	data.height = (int32_t) img->height;
+	data.width = (int32_t) img->width;
 	data.pixel_size = RGB;
 	data.line_size = data.pixel_size * data.width;
 	data.line_size += data.line_size % 4;
 	data.data_size = data.line_size * data.height;
 	data.data = ft_calloc(data.data_size, sizeof(unsigned char));
-	if (!data.data || write_bmp_header(fd, data) == -1)
+	if (!data.data || !write_bmp_header(fd, data))
 	{
 		if (!data.data)
 			perror("Failed to allocate memory");
 		close(fd);
-		exit(EXIT_FAILURE);
+		return ;
 	}
 	write_color_data(img, fd, data);
 	close(fd);

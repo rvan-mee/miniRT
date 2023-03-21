@@ -15,10 +15,10 @@
 float	intersect(const t_object *object, const t_ray *ray, t_hit *hit)
 {
 	static t_isectfun	intersect_functions[] = {\
-        [PLANE] = intersect_plane, \
-        [CYLINDER] = intersect_cylinder, \
-        [SPHERE] = intersect_sphere, \
-        [TRIANGLE] = intersect_triangle, \
+		[PLANE] = intersect_plane, \
+		[CYLINDER] = intersect_cylinder, \
+		[SPHERE] = intersect_sphere, \
+		[TRIANGLE] = intersect_triangle, \
 		[FACE] = intersect_face
 	};
 

@@ -16,5 +16,5 @@ t_fvec	get_texture_plane(t_hit *hit, t_bmp *texture)
 {
 	(void) hit;
 	(void) texture;
-	return ((t_fvec) {1, 1, 1});
+	return ((t_fvec){1, 1, 1});
 }

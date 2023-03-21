@@ -58,11 +58,12 @@ t_fvec	phong(t_scene *scene, t_phong args)
 		light = scene->lights + i++;
 		create_shadow_ray(light, &args);
 		if (dot_product(args.shadow_ray.direction, args.cam_hit->normal) < 0)
-			continue;
-		args.brightness = light->light.brightness * scene->scale / args.light_dist_sq;
+			continue ;
+		args.brightness = light->light.brightness * scene->scale;
+		args.brightness /= args.light_dist_sq;
 		if (intersect_bvh(&scene->bvh, &args.shadow_ray, &shadow_hit)
 			&& shadow_hit.distance * shadow_hit.distance < args.light_dist_sq)
-			continue;
+			continue ;
 		colour += phong_light(light, args);
 	}
 	return (colour);

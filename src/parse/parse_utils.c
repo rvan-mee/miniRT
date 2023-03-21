@@ -53,7 +53,6 @@
 #define DYNARR_ERROR	"failed to add to the dynamic array\n"
 #define EXIST_ERROR		"\nthis material does not exist\n"
 #define ERR_EXTENSION	"Error\nWrong file extension: `%s'\n"
-#define ERR_OPEN		"Error\nFile failed to open: %s: %s\n"
 #define ILLUM_ERROR		"\nthis material contains an \
 invalid illumination value\n"
 #define NI_ERROR		"\nthis material contains an \
@@ -132,15 +131,6 @@ bool	check_extension(const char *path, char *ext)
 	if (ft_strncmp(&path[len_path - len_ext], ext, len_ext) == 0)
 		return (true);
 	dprintf(STDERR_FILENO, ERR_EXTENSION, path);
-	return (false);
-}
-
-bool	open_file(const char *path, int32_t *fd)
-{
-	*fd = open(path, O_RDONLY);
-	if (*fd != -1)
-		return (true);
-	dprintf(STDERR_FILENO, ERR_OPEN, path, strerror(errno));
 	return (false);
 }
 

@@ -33,6 +33,7 @@ SRCS := main.c										\
 		parse/parse_scene.c							\
 		parse/parse_object.c						\
 		parse/parse_utils.c							\
+		parse/file_utils.c							\
 		parse/parse_data.c							\
 		parse/destroy_scene.c						\
 		parse/objects/parse_ambient.c				\

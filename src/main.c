@@ -22,7 +22,7 @@ void	f(void)
 	system("leaks -q miniRT");
 }
 
-static void	init_data(t_minirt *data, int argc, char **argv)
+static bool	init_data(t_minirt *data, int argc, char **argv)
 {
 	*data = (t_minirt){
 		.argv = argv,
@@ -30,6 +30,9 @@ static void	init_data(t_minirt *data, int argc, char **argv)
 		.width = WIDTH,
 		.height = HEIGHT
 	};
+	if (argc == 3)
+		return (parse_resolution(data, argv[2]));
+	return (true);
 }
 
 bool	init_render_data(t_minirt *data)
@@ -39,6 +42,7 @@ bool	init_render_data(t_minirt *data)
 	if (!parse_config_file(data->argc, data->argv, &data->scene))
 		return (false);
 	scene = data->scene;
+	calc_ray_info(&scene->camera.camera, data->width, data->height);
 	if (!new_bvh(scene->objects, scene->objects_len, &scene->bvh))
 		return (false);
 	get_scene_scale(scene);
@@ -58,9 +62,9 @@ int	main(int argc, char *argv[])
 {
 	t_minirt	data;
 
-	init_data(&data, argc, argv);
 	atexit(f);
-	if (!init_render_data(&data) || \
+	if (!init_data(&data, argc, argv) || \
+		!init_render_data(&data) || \
 		!create_mlx(&data) || \
 		!init_work_threads(&data))
 		return (cleanup(&data, EXIT_FAILURE));

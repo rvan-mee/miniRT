@@ -37,8 +37,6 @@ void	move_cam(t_minirt *data, enum keys key)
 	reset_work(data);
 }
 
-void	calc_ray_info(t_camera *cam);
-
 void	rotate_cam(t_minirt *data, enum keys key)
 {
 	float		amount;
@@ -59,7 +57,7 @@ void	rotate_cam(t_minirt *data, enum keys key)
 		cam->rotation[axis] += (float)(2 * M_PI);
 	else if (cam->rotation[axis] > M_PI)
 		cam->rotation[axis] -= (float)(2 * M_PI);
-	calc_ray_info(cam);
+	calc_ray_info(cam, data->width, data->height);
 	reset_work(data);
 }
 
@@ -91,7 +89,7 @@ void	change_fov(t_minirt *data, enum keys key)
 		amount = -amount;
 	cam->fov += amount;
 	printf("Changed camera fov to %i\n", (int)(cam->fov * 180 / M_PI));
-	calc_ray_info(cam);
+	calc_ray_info(cam, data->width, data->height);
 	reset_work(data);
 }
 

@@ -189,6 +189,7 @@ typedef struct s_scene {
 void	get_scene_scale(t_scene *scene);
 void	destroy_scene(t_scene *scene);
 void	destroy_mtl(t_mtl *mtl, void *ign);
+void	calc_ray_info(t_camera *cam, size_t w, size_t h);
 
 static inline
 bool	is_flag(t_mtl *mtl, t_mtl_flag flags)

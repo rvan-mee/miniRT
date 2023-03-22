@@ -64,8 +64,7 @@ typedef enum e_parse_error {
 	INV_SCALE,
 }	t_parse_err;
 
-typedef struct s_conf_data
-{
+typedef struct s_conf_data {
 	t_dynarr	lights;
 	t_dynarr	objects;
 	t_dynarr	v;
@@ -80,6 +79,7 @@ typedef struct s_conf_data
 	float		exposure;
 }	t_conf_data;
 
+bool		parse_resolution(t_minirt *data, char *str);
 bool		parse_config_file(int32_t argc, char *argv[], t_scene **scene);
 bool		parse_scene(int32_t fd, t_scene *dst);
 bool		parse_object(char *line, t_object *object, t_conf_data *conf);

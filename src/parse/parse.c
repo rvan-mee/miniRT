@@ -41,7 +41,7 @@ bool	parse_config_file(int32_t argc, char *argv[], t_scene **scene)
 	int32_t			fd;
 	bool			success;
 
-	if (argc != 2)
+	if (argc < 2 || argc > 3)
 	{
 		dprintf(STDERR_FILENO, ERR_USAGE);
 		return (false);

@@ -54,9 +54,9 @@ static t_fvec	rotate(t_fvec old_rot, t_fvec axis, float angle)
  *
  * I'd add a link to the explanation here but norminette :^)
  */
-void	calc_ray_info(t_camera *cam)
+void	calc_ray_info(t_camera *cam, size_t w, size_t h)
 {
-	const float		dz = (WIDTH / 2.f) / tanf(cam->fov / 2.f);
+	const float		dz = ((float) w / 2.f) / tanf(cam->fov / 2.f);
 	const t_fvec	global_up = {0, 1, 0};
 
 	cam->rotated = rotate(cam->orientation, global_up, cam->rotation[0]);
@@ -66,8 +66,8 @@ void	calc_ray_info(t_camera *cam)
 	cam->rotated = normalize_vector(cam->rotated);
 	cam->v = normalize_vector(cross_product(cam->rotated, cam->u));
 	cam->proj_vec = (t_fvec){};
-	cam->proj_vec += -WIDTH / 2.0f * cam->u;
-	cam->proj_vec += HEIGHT / 2.0f * cam->v;
+	cam->proj_vec += (float) w / -2.0f * cam->u;
+	cam->proj_vec += (float) h / 2.0f * cam->v;
 	cam->proj_vec += dz * cam->rotated;
 }
 
@@ -87,7 +87,6 @@ t_parse_err	parse_camera(char **linep, t_object *object, t_conf_data *conf)
 		return (VECTOR);
 	if (!parse_fov(&line, &cam->fov))
 		return (FOV);
-	calc_ray_info(&object->camera);
 	cam->exposure = conf->exposure;
 	*linep = line;
 	return (SUCCESS);

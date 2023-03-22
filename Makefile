@@ -36,6 +36,7 @@ SRCS := main.c										\
 		parse/file_utils.c							\
 		parse/parse_data.c							\
 		parse/destroy_scene.c						\
+		parse/parse_resolution.c					\
 		parse/objects/parse_ambient.c				\
 		parse/objects/parse_camera.c				\
 		parse/objects/parse_cylinder.c				\

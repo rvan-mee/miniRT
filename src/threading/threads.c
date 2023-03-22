@@ -31,8 +31,9 @@ static bool	destroy_struct(t_minirt *data)
 static bool	init_struct(t_minirt *data)
 {
 	data->thread = ft_calloc(1, sizeof(t_threading));
-	if (data->thread == NULL || \
-		pthread_cond_init(&data->thread->done_cond, NULL) || \
+	if (data->thread == NULL)
+		return (false);
+	if (pthread_cond_init(&data->thread->done_cond, NULL) || \
 		pthread_cond_init(&data->thread->stop_cond, NULL) || \
 		pthread_mutex_init(&data->thread->quit_lock, NULL) || \
 		pthread_mutex_init(&data->thread->job_lock, NULL))

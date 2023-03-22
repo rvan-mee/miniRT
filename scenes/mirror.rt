@@ -1,8 +1,5 @@
 A   0.01         255,255,255
 C   0,0,-4       0,0,1               90
-# BUTT ON RED BALL WITH NEXT 2 ON
-# L   10,0,10     0.45                255,255,255
-# L   -10,0,10    0.45                255,255,255
 L   0,39,-32.5   1                 255,255,255
 
 exposure -2
@@ -16,13 +13,7 @@ newmtl Mirror
     Ns 100
     illum 3
 
-newmtl Gold
-    Ka 0.6 0.396078431 0.082352941
-    Kd 0.831372549 0.68627451 0.215686275
-    Ks 1 0.874509804 0
-    Ns 5
-    illum 3
-
+mtllib scenes/materials/Gold.mtl
 
 cy -30,-12,15 1,0,0 0.2 60 0,0,0
 

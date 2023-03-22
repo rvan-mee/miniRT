@@ -97,6 +97,7 @@ SRCS := main.c										\
 		render/shading/phong.c						\
 		render/shading/fresnel.c					\
 		render/shading/get_ray_bias.c				\
+		render/shading/reflect_ray.c				\
 		render/texture/get_uv_colour.c				\
 		render/texture/get_texture_sphere.c			\
 		render/texture/get_texture_plane.c			\

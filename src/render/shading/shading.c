@@ -35,6 +35,28 @@ static t_fvec	get_ambient(t_scene *scene, t_fvec ka)
 	return (colour * ka);
 }
 
+static t_phong	init_struct(t_object *obj, t_hit *hit)
+{
+	t_mtl	*mat;
+	t_phong	ret;
+
+	mat = obj->mat;
+	ret = (t_phong){
+		.cam_hit = hit,
+		.ka = mat->ambient,
+		.kd = mat->diffuse,
+		.ks = mat->specular,
+		.ns = mat->reflec
+	};
+	if (is_flag(mat, DIFFUSE_MAP))
+		ret.kd *= get_texture(obj, hit, &mat->diffuse_tex);
+	if (is_flag(mat, SPECULAR_MAP))
+		ret.ks *= get_texture(obj, hit, &mat->specular_tex);
+	if (is_flag(mat, AMBIENT_MAP))
+		ret.ka *= get_texture(obj, hit, &mat->ambient_tex);
+	return (ret);
+}
+
 static
 t_fvec	use_material(t_scene *scene, t_hit *hit, uint8_t depth)
 {
@@ -45,23 +67,13 @@ t_fvec	use_material(t_scene *scene, t_hit *hit, uint8_t depth)
 
 	object = hit->object;
 	mat = object->mat;
-	p_args = (t_phong){
-		.cam_hit = hit,
-		.kd = mat->diffuse,
-		.ks = mat->specular,
-		.ns = mat->reflec
-	};
-	if (is_flag(mat, DIFFUSE_MAP))
-		p_args.kd *= get_texture(object, hit, &mat->diffuse_tex);
-	if (is_flag(mat, SPECULAR_MAP))
-		p_args.ks *= get_texture(object, hit, &mat->specular_tex);
-	colour = get_ambient(scene, mat->ambient);
-	if (is_flag(mat, AMBIENT_MAP))
-		colour *= get_texture(object, hit, &mat->ambient_tex);
+	p_args = init_struct(hit->object, hit);
+	colour = get_ambient(scene, p_args.ka);
+	colour += phong(scene, p_args);
 	if (is_flag(mat, REFRACT_IDX))
-		return (fresnel(scene, object, hit, depth));
-	else // todo: look at this
-		colour += phong(scene, p_args);
+		colour += fresnel(scene, p_args.ks, hit, depth);
+	else if (mat->illum == 3 && depth < MAX_REFLECTION_DEPTH)
+		colour += reflect_ray(scene, hit, depth) * p_args.ks;
 	return (colour);
 }
 

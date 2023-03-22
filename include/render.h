@@ -55,6 +55,7 @@ typedef struct s_tri_intersect
 typedef struct s_phong {
 	struct {
 		t_hit	*cam_hit;
+		t_fvec	ka;
 		t_fvec	kd;
 		t_fvec	ks;
 		float	ns;
@@ -84,9 +85,10 @@ void	start_render(t_minirt *data, void *func_data);
 t_fvec	shade(t_scene *scene, t_hit *hit, uint8_t depth);
 
 t_fvec	phong(t_scene *scene, t_phong args);
-t_fvec	fresnel(t_scene *scene, t_object *object, t_hit *hit, uint8_t depth);
+t_fvec	fresnel(t_scene *scene, t_fvec ks, t_hit *hit, uint8_t depth);
 
 float	get_ray_bias(t_fvec normal, t_fvec dir);
 t_ray	get_biased_ray(t_fvec origin, t_fvec direction, t_fvec normal);
+t_fvec	reflect_ray(t_scene *scene, t_hit *hit, uint8_t depth);
 
 #endif //RENDER_H

@@ -74,6 +74,8 @@ t_fvec	use_material(t_scene *scene, t_hit *hit, uint8_t depth)
 		colour += fresnel(scene, p_args.ks, hit, depth);
 	else if (mat->illum == 3 && depth < MAX_REFLECTION_DEPTH)
 		colour += reflect_ray(scene, hit, depth) * p_args.ks;
+	if (is_flag(mat, EMMISIVE_C))
+		colour += mat->emmis_col;
 	return (colour);
 }
 

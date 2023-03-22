@@ -102,7 +102,6 @@ t_parse_err	parse_mtlfile(char **linep, t_object *object, t_conf_data *conf);
 bool		parse_rgb(char **linep, t_fvec *colour);
 bool		parse_line_error(const char *line, t_parse_err err, size_t line_c);
 void		skip_spaces(char **linep);
-void		skip_digits(char **linep);
 bool		parse_vector(char **linep, t_fvec *vector, bool normalized);
 bool		parse_float(char **linep, float *dst, float min, float max);
 bool		parse_float_rgb(char **linep, t_fvec *rgb);
@@ -114,5 +113,6 @@ bool		parse_bmp(char *path, t_bmp *dst);
 bool		init_parse(t_conf_data *data, int32_t fd);
 void		set_scene(t_scene *scene, t_conf_data *data);
 bool		cleanup_parse(void *anything, t_conf_data *data);
+t_parse_err	get_line(t_conf_data *data, char **dst);
 
 #endif

@@ -43,10 +43,11 @@ static t_parse_err	parse_more(t_conf_data *conf)
 {
 	char		*line;
 	t_object	obj;
+	t_parse_err	err;
 
-	line = get_next_line(conf->fd);
-	if (line == NULL)
-		return (SUCCESS);
+	err = get_line(conf, &line);
+	if (err != CONTINUE)
+		return (err);
 	if (*line == '\n' || *line == '\0')
 		return (free(line), CONTINUE);
 	obj = (t_object){};

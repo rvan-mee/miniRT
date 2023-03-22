@@ -13,7 +13,6 @@
 #include <parse_obj.h>
 #include <stdlib.h>
 #include <libft.h>
-#include <get_next_line.h>
 
 static t_parse_err	parse_path(char **linep, char **dst)
 {
@@ -33,10 +32,11 @@ static t_parse_err	parse_more(t_meshdat *dat)
 {
 	char		*line;
 	t_object	obj;
+	t_parse_err	err;
 
-	line = get_next_line(dat->conf.fd);
-	if (line == NULL)
-		return (SUCCESS);
+	err = get_line(&dat->conf, &line);
+	if (err != CONTINUE)
+		return (err);
 	if (*line == '\n' || *line == '\0')
 		return (free(line), CONTINUE);
 	obj = (t_object){};

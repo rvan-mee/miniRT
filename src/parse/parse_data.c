@@ -29,7 +29,8 @@ static const size_t	g_arrparams[ARR_COUNT][3] = {\
 bool	cleanup_parse(void *anything, t_conf_data *data)
 {
 	free(anything);
-	dynarr_foreach(&data->materials, (t_foreach) destroy_mtl, NULL);
+	if (data->materials.arr)
+		dynarr_foreach(&data->materials, (t_foreach) destroy_mtl, NULL);
 	dynarr_delete(&data->lights);
 	dynarr_delete(&data->objects);
 	dynarr_delete(&data->v);

@@ -13,7 +13,6 @@
 #include <parse.h>
 #include <libft.h>
 #include <parse_mtl.h>
-#include <get_next_line.h>
 
 static t_parse_err	(*g_parse_mtl[])(char *, t_object *) = {\
 	[MTL_AMBIENT] = parse_mtl_ka,							\
@@ -116,14 +115,14 @@ t_parse_err	parse_newmtl(char **linep, t_object *object, t_conf_data *conf)
 	err = check_dup(conf, mtl->name);
 	while (err == CONTINUE)
 	{
-		line = get_next_line(conf->fd);
-		if (!line)
+		err = get_line(conf, &line);
+		if (err != CONTINUE)
 			break ;
 		conf->curr_line++;
 		err = mtl_parse_func(line, object);
 		free(line);
 	}
-	if (err != SUCCESS && err != CONTINUE)
+	if (err != SUCCESS)
 		return (err_cleanup(mtl, err));
 	if (!dynarr_addone(&conf->materials, mtl))
 		return (err_cleanup(mtl, DYNARR));

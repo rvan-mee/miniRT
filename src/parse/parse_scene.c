@@ -12,7 +12,6 @@
 
 #include <parse.h>
 #include <get_next_line.h>
-#include <errno.h>
 #include <unistd.h>
 
 #define DUPLICATE_ERROR		"Error\nThere can only be one %s!\n"
@@ -35,9 +34,9 @@ static const char	*g_type_strs[] = {\
 	[END] = "end",
 };
 
-static bool	check_error(t_scene *dst, t_conf_data *data)
+static bool	check_error(t_scene *dst, t_conf_data *data, bool gnl_error)
 {
-	if (errno != 0)
+	if (gnl_error)
 		perror("Error during parsing");
 	else if (data->lights.length == 0)
 		dprintf(STDERR_FILENO, NOT_ENOUGH_ERROR, "lights");
@@ -49,11 +48,10 @@ static bool	check_error(t_scene *dst, t_conf_data *data)
 		dprintf(STDERR_FILENO, NOT_ENOUGH_ERROR, "camera");
 	else
 		return (true);
-	return (false);
+	return (cleanup_parse(NULL, data));
 }
 
-static bool \
-	store_object(t_object *obj, t_scene *dst, t_conf_data *conf)
+static bool	store_object(t_object *obj, t_scene *dst, t_conf_data *conf)
 {
 	t_object	*store;
 
@@ -80,17 +78,16 @@ static bool \
 	return (false);
 }
 
-static bool \
-	read_objects(int32_t fd, t_scene *dst, t_conf_data *conf)
+static bool	read_objects(int32_t fd, t_scene *dst, t_conf_data *conf)
 {
+	size_t		line_len;
 	char		*line;
 	t_object	object;
 
 	while (true)
 	{
-		errno = 0;
-		line = get_next_line(fd);
-		if (line == NULL)
+		line_len = get_next_line(fd, &line);
+		if (line_len == SIZE_MAX || line_len == 0)
 			break ;
 		conf->curr_line++;
 		object = (t_object){};
@@ -100,16 +97,20 @@ static bool \
 				return (cleanup_parse(line, conf));
 		free(line);
 	}
-	return (check_error(dst, conf));
+	return (check_error(dst, conf, line_len == SIZE_MAX));
 }
 
 bool	parse_scene(int32_t fd, t_scene *dst)
 {
 	t_conf_data		data;
+	bool			succ;
 
-	init_parse(&data, fd);
-	if (!read_objects(fd, dst, &data))
-		return (false);
-	set_scene(dst, &data);
-	return (true);
+	succ = true;
+	if (!init_parse(&data, fd) || \
+		!read_objects(fd, dst, &data))
+		succ = false;
+	else
+		set_scene(dst, &data);
+	cleanup_gnl();
+	return (succ);
 }

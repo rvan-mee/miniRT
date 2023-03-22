@@ -15,8 +15,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
-#include <errno.h>
-#include <fcntl.h>
+#include <get_next_line.h>
 
 #define PARSE_ERROR		"Error\nLine %zu: `%s' %s"
 #define OBJECT_ERROR	"does not contain a valid object\n"
@@ -143,11 +142,14 @@ void	skip_spaces(char **linep)
 	*linep = (char *) line;
 }
 
-void	skip_digits(char **linep)
+t_parse_err	get_line(t_conf_data *data, char **dst)
 {
-	const char	*line = *linep;
+	size_t	len;
 
-	while (ft_isdigit(*line))
-		line++;
-	*linep = (char *) line;
+	len = get_next_line(data->fd, dst);
+	if (len == 0)
+		return (SUCCESS);
+	if (len == SIZE_MAX)
+		return (ALLOC);
+	return (CONTINUE);
 }

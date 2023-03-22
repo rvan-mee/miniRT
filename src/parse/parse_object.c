@@ -60,7 +60,7 @@ static const char	*g_ids[] = {\
 static int32_t	compare_ids(const t_obj_type *a, const t_obj_type *b, void *ign)
 {
 	(void) ign;
-	return (ft_strncmp(g_ids[*a], g_ids[*b], SIZE_MAX));
+	return (ft_strncmp(g_ids[*b], g_ids[*a], SIZE_MAX));
 }
 
 static void	init_search_data(t_obj_type sorted[], size_t lens[])
@@ -100,9 +100,9 @@ size_t	bsearch_type(char *line, const t_obj_type sorted[], const size_t lens[])
 	{
 		idx = (l + r) / 2;
 		cmp = ft_strncmp(g_ids[sorted[idx]], line, lens[idx]);
-		if (cmp < 0)
+		if (cmp > 0)
 			l = idx + 1;
-		else if (cmp > 0)
+		else if (cmp < 0)
 			r = idx - 1;
 		else
 			return (idx);

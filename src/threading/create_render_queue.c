@@ -66,10 +66,10 @@ static t_ivec	spiral(size_t idx)
  *
  * love norminette on line 78 column 27
  */
-static bool	check_oob(t_ivec pos, size_t *ip, t_civec limits[2], bool axis)
+static bool	check_oob(t_civec pos, size_t *ip, t_civec limits[2], uint8_t axis)
 {
-	int32_t		extra;
-	int32_t		radius;
+	int32_t	extra;
+	int32_t	radius;
 
 	radius = pos[2];
 	if (pos[axis] < limits[axis][0])

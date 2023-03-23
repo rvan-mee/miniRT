@@ -19,6 +19,8 @@
 # define MISS INFINITY
 
 # define MAX_REFLECTION_DEPTH	16
+// Max stack (depth 16) is about 18k with O3, 25k with O0
+// the default max stack on cluster macs is 8MB - we could go deeper!
 
 typedef struct s_ray	t_ray;
 typedef struct s_hit	t_hit;

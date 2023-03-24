@@ -13,6 +13,7 @@
 #include <parse.h>
 #include <libft.h>
 #include <ft_math.h>
+#include <math.h>
 
 static const t_parse_err	g_errs[] = {\
 	[VERTEX] = VERT,					\
@@ -58,6 +59,21 @@ static const t_fvec			g_default_vec[] = {\
 	[VT_NORMAL] = {}			\
 };
 
+static t_fvec	wrap_texture(t_fvec uvw)
+{
+	uint8_t	index;
+
+	index = 0;
+	while (index < 3)
+	{
+		uvw[index] = fmodf(uvw[index], 1.0f);
+		if (uvw[index] < 0.0f)
+			uvw[index] += 1.0f;
+		++index;
+	}
+	return (uvw);
+}
+
 t_parse_err	parse_obj_vec(char **linep, t_object *object, t_conf_data *conf)
 {
 	const t_dynarr		*arrs[] = {\
@@ -75,10 +91,8 @@ t_parse_err	parse_obj_vec(char **linep, t_object *object, t_conf_data *conf)
 		return (g_errs[object->type]);
 	if (object->type == VT_NORMAL)
 		dst = normalize_vector(dst);
-	if (object->type == VT_TEXTURE)
-		if (dst[0] < 0 || dst[0] > 1 || dst[1] < 0 || \
-			dst[1] > 1 || dst[2] < 0 || dst[2] > 1)
-			return (VERT_TEXTURE);
+	else if (object->type == VT_TEXTURE)
+		dst = wrap_texture(dst);
 	if (!dynarr_addone((t_dynarr *) arrs[type], &dst))
 		return (DYNARR);
 	return (SUCCESS);

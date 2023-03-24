@@ -37,6 +37,9 @@ typedef enum e_object_type {
 	OBJFILE,
 	USEMESH,
 	MTLLIB,
+	OBJ_GROUP,
+	OBJ_OBJ,
+	OBJ_SMOOTH,
 	END
 }	t_obj_type;
 

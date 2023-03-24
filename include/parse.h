@@ -73,6 +73,7 @@ typedef struct s_conf_data {
 	t_dynarr	materials;
 	t_dynarr	meshes;
 	bool		has_mtl;
+	bool		smoothing;
 	size_t		curr_mtl;
 	size_t		curr_line;
 	int32_t		fd;
@@ -99,6 +100,7 @@ t_parse_err	parse_mtl_name(char **linep, char **name);
 t_parse_err	parse_objfile(char **linep, t_object *object, t_conf_data *conf);
 t_parse_err	parse_usemesh(char **linep, t_object *object, t_conf_data *conf);
 t_parse_err	parse_mtlfile(char **linep, t_object *object, t_conf_data *conf);
+t_parse_err	parse_smoothing(char **linep, t_object *object, t_conf_data *conf);
 bool		parse_rgb(char **linep, t_fvec *colour);
 bool		parse_line_error(const char *line, t_parse_err err, size_t line_c);
 void		skip_spaces(char **linep);
@@ -114,5 +116,7 @@ bool		init_parse(t_conf_data *data, int32_t fd);
 void		set_scene(t_scene *scene, t_conf_data *data);
 bool		cleanup_parse(void *anything, t_conf_data *data);
 t_parse_err	get_line(t_conf_data *data, char **dst);
+
+bool		is_ignored_type(t_obj_type type);
 
 #endif

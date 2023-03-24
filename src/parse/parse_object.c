@@ -14,26 +14,27 @@
 #include <libft.h>
 #include <sort.h>
 
-#define ID_COUNT	18
+#define ID_COUNT	21
 
 static t_parse_err	(*g_parsefun[])(char **, t_object *, t_conf_data *) = {\
-	[AMBIENT] = parse_ambient,									\
-	[CAMERA] = parse_camera,									\
-	[LIGHT] = parse_light,										\
-	[SPHERE] = parse_sphere,									\
-	[PLANE] = parse_plane,										\
-	[CYLINDER] = parse_cylinder,								\
-	[TRIANGLE] = parse_triangle,								\
-	[VERTEX] = parse_obj_vec,									\
-	[VT_TEXTURE] = parse_obj_vec,								\
-	[VT_NORMAL] = parse_obj_vec,								\
-	[FACE] = parse_face,										\
-	[MTL] = parse_newmtl,										\
-	[USEMTL] = parse_usemtl,									\
-	[EXPOSURE] = parse_exposure,								\
-	[OBJFILE] = parse_objfile,									\
-	[USEMESH] = parse_usemesh,									\
-	[MTLLIB] = parse_mtlfile,									\
+	[AMBIENT] = parse_ambient,		\
+	[CAMERA] = parse_camera,		\
+	[LIGHT] = parse_light,			\
+	[SPHERE] = parse_sphere,		\
+	[PLANE] = parse_plane,			\
+	[CYLINDER] = parse_cylinder,	\
+	[TRIANGLE] = parse_triangle,	\
+	[VERTEX] = parse_obj_vec,		\
+	[VT_TEXTURE] = parse_obj_vec,	\
+	[VT_NORMAL] = parse_obj_vec,	\
+	[FACE] = parse_face,			\
+	[MTL] = parse_newmtl,			\
+	[USEMTL] = parse_usemtl,		\
+	[EXPOSURE] = parse_exposure,	\
+	[OBJFILE] = parse_objfile,		\
+	[USEMESH] = parse_usemesh,		\
+	[MTLLIB] = parse_mtlfile,		\
+	[OBJ_SMOOTH] = parse_smoothing,	\
 };
 
 static const char	*g_ids[] = {\
@@ -54,7 +55,10 @@ static const char	*g_ids[] = {\
 	[EXPOSURE] = "exposure",		\
 	[OBJFILE] = "objfile",			\
 	[USEMESH] = "usemesh",			\
-	[MTLLIB] = "mtllib"
+	[MTLLIB] = "mtllib",			\
+	[OBJ_GROUP] = "g",				\
+	[OBJ_SMOOTH] = "s",				\
+	[OBJ_OBJ] = "o",				\
 };
 
 static int32_t	compare_ids(const t_obj_type *a, const t_obj_type *b, void *ign)
@@ -96,21 +100,21 @@ size_t	bsearch_type(char *line, const t_obj_type sorted[], const size_t lens[])
 
 	l = 0;
 	r = ID_COUNT - 1;
-	while (l <= r)
+	while (l < r)
 	{
 		idx = (l + r) / 2;
 		cmp = ft_strncmp(g_ids[sorted[idx]], line, lens[idx]);
 		if (cmp > 0)
 			l = idx + 1;
-		else if (cmp < 0)
-			r = idx - 1;
 		else
-			return (idx);
+			r = idx;
 	}
-	return (SIZE_MAX);
+	if (ft_strncmp(g_ids[sorted[l]], line, lens[l]))
+		return (SIZE_MAX);
+	return (l);
 }
 
-static t_obj_type	get_obj_type(char *line, t_object *object, size_t *id_len)
+static t_obj_type	get_obj_type(char *line, size_t *id_len)
 {
 	static t_obj_type	sorted[ID_COUNT] = {-1};
 	static size_t		lens[ID_COUNT];
@@ -124,30 +128,26 @@ static t_obj_type	get_obj_type(char *line, t_object *object, size_t *id_len)
 		return (END);
 	*id_len = lens[index];
 	type = sorted[index];
-	if (type == COMMENT)
-		object->type = COMMENT;
 	return (type);
 }
 
 bool	parse_object(char *line, t_object *object, t_conf_data *conf)
 {
 	const char	*start_line = line;
-	t_obj_type	type;
 	t_parse_err	err;
 	size_t		id_len;
 
 	id_len = 0;
-	type = get_obj_type(line, object, &id_len);
-	if (type == COMMENT)
-		return (true);
-	line += id_len;
-	if (type == END || !ft_isspace(*line))
-		return (parse_line_error(start_line, OBJECT, conf->curr_line));
-	object->type = type;
+	object->type = get_obj_type(line, &id_len);
 	object->has_mat = conf->has_mtl;
 	object->mat_idx = conf->curr_mtl;
+	if (is_ignored_type(object->type))
+		return (true);
+	line += id_len;
+	if (object->type == END || !ft_isspace(*line))
+		return (parse_line_error(start_line, OBJECT, conf->curr_line));
 	skip_spaces(&line);
-	err = g_parsefun[type](&line, object, conf);
+	err = g_parsefun[object->type](&line, object, conf);
 	if (err != SUCCESS)
 		return (parse_line_error(start_line, err, conf->curr_line));
 	skip_spaces(&line);

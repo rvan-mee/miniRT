@@ -72,6 +72,7 @@ SRCS := main.c										\
 		parse/mtl/parse_mtlfile.c					\
 		parse/obj/parse_objfile.c					\
 		parse/obj/parse_usemesh.c					\
+		parse/obj/parse_smoothing.c					\
 		parse/obj/meshdata.c						\
 		parse/obj/mesh.c							\
 		parse/obj/add_mesh.c						\
@@ -187,7 +188,7 @@ else
 	CORE_COUNT = $(shell grep '^processor' /proc/cpuinfo | wc -l)
 endif
 
-DEFINES := -D THREAD_C=$(CORE_COUNT)
+DEFINES := -DTHREAD_C=$(CORE_COUNT) $(OPTIONS)
 #		RANDOM THINGS
 COMPILE := @$(CC) $(INCLUDE) $(CFLAGS) $(DEFINES)
 

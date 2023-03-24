@@ -151,5 +151,11 @@ t_parse_err	get_line(t_conf_data *data, char **dst)
 		return (SUCCESS);
 	if (len == SIZE_MAX)
 		return (ALLOC);
+	data->curr_line++;
 	return (CONTINUE);
+}
+
+bool	is_ignored_type(t_obj_type type)
+{
+	return (type == COMMENT || type == OBJ_GROUP || type == OBJ_OBJ);
 }

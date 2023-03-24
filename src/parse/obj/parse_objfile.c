@@ -28,6 +28,21 @@ static t_parse_err	parse_path(char **linep, char **dst)
 	return (SUCCESS);
 }
 
+static bool	is_valid_type(t_obj_type type)
+{
+	return (type == FACE ||
+			type == COMMENT ||
+			type == VERTEX ||
+			type == VT_NORMAL ||
+			type == VT_TEXTURE ||
+			type == MTL ||
+			type == USEMTL ||
+			type == MTLLIB ||
+			type == OBJ_GROUP ||
+			type == OBJ_OBJ ||
+			type == OBJ_SMOOTH);
+}
+
 static t_parse_err	parse_more(t_meshdat *dat)
 {
 	char		*line;
@@ -43,12 +58,9 @@ static t_parse_err	parse_more(t_meshdat *dat)
 	if (!parse_object(line, &obj, &dat->conf))
 		return (free(line), OBJECT);
 	free(line);
-	if (obj.type == COMMENT || obj.type == VERTEX || obj.type == VT_NORMAL || \
-		obj.type == VT_TEXTURE || obj.type == MTL || obj.type == USEMTL)
-		return (CONTINUE);
-	if (obj.type != FACE)
+	if (!is_valid_type(obj.type))
 		return (INV_OBJ);
-	if (!dynarr_addone(&dat->conf.objects, &obj))
+	if (obj.type == FACE && !dynarr_addone(&dat->conf.objects, &obj))
 		return (DYNARR);
 	return (CONTINUE);
 }
@@ -73,7 +85,8 @@ t_parse_err	parse_objfile(char **linep, t_object *object, t_conf_data *conf)
 	err = CONTINUE;
 	while (err == CONTINUE)
 		err = parse_more(&dat);
-	if (err != SUCCESS)
-		return (destroy_meshdata(&dat, true, true), err);
-	return (create_mesh(&dat, conf));
+	if (err == SUCCESS)
+		return (create_mesh(&dat, conf));
+	destroy_meshdata(&dat, true, true);
+	return (err);
 }

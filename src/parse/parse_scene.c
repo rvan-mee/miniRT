@@ -34,6 +34,23 @@ static const char	*g_type_strs[] = {\
 	[END] = "end",
 };
 
+// Does this object handle storage by itself?
+static const bool	g_selfstorage[END] = {
+	[COMMENT] = true,		\
+	[LIGHT] = true,			\
+	[VERTEX] = true,		\
+	[VT_TEXTURE] = true,	\
+	[VT_NORMAL] = true,		\
+	[MTL] = true,			\
+	[USEMTL] = true,		\
+	[OBJFILE] = true,		\
+	[USEMESH] = true,		\
+	[MTLLIB] = true, 		\
+	[OBJ_GROUP] = true,		\
+	[OBJ_OBJ] = true,		\
+	[OBJ_SMOOTH] = true,	\
+};
+
 static bool	check_error(t_scene *dst, t_conf_data *data, bool gnl_error)
 {
 	if (gnl_error)
@@ -56,10 +73,7 @@ static bool	store_object(t_object *obj, t_scene *dst, t_conf_data *conf)
 	t_object	*store;
 
 	store = NULL;
-	if (obj->type == COMMENT || obj->type == LIGHT || obj->type == VERTEX || \
-		obj->type == VT_TEXTURE || obj->type == VT_NORMAL || obj->type == MTL
-		|| obj->type == USEMTL || obj->type == OBJFILE || obj->type == USEMESH
-		|| obj->type == MTLLIB)
+	if (g_selfstorage[obj->type])
 		return (true);
 	if (obj->type == EXPOSURE)
 		return (dst->camera.camera.exposure = conf->exposure, true);

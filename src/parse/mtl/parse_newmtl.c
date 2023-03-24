@@ -51,6 +51,10 @@ static t_parse_err	mtl_parse_func(char *line, t_object *object)
 	t_parse_mtl	type;
 	size_t		len;
 
+	if (*line == '\0' || *line == '\n')
+		return (SUCCESS);
+	if (*line == '#')
+		return (CONTINUE);
 	skip_spaces(&line);
 	type = MTL_UNINIT;
 	while (++type != MTL_END)
@@ -118,7 +122,6 @@ t_parse_err	parse_newmtl(char **linep, t_object *object, t_conf_data *conf)
 		err = get_line(conf, &line);
 		if (err != CONTINUE)
 			break ;
-		conf->curr_line++;
 		err = mtl_parse_func(line, object);
 		free(line);
 	}

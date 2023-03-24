@@ -79,7 +79,7 @@ t_parse_err	set_idxs(t_face *face, int32_t idxs[3][3], t_conf_data *conf)
 	face->has_texture = (idxs[0][1] || idxs[1][1] || idxs[2][1]);
 	if (face->has_texture && (!idxs[0][1] || !idxs[1][1] || !idxs[2][1]))
 		return (VERT_TEXTURE);
-	face->has_normal = (idxs[0][2] || idxs[1][2] || idxs[2][2]);
+	face->has_normal = conf->smoothing && (idxs[0][2] || idxs[1][2] || idxs[2][2]);
 	if (face->has_normal && (!idxs[0][2] || !idxs[1][2] || !idxs[2][2]))
 		return (NORMAL);
 	i = 3;

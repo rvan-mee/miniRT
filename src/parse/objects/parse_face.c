@@ -52,7 +52,7 @@ static t_parse_err	parse_is(char **linep, int32_t dst[3], const size_t len[3])
 	{
 		dst[i] = ft_atoi(*linep);
 		if (dst[i] < 0)
-			dst[i] += (int32_t) len[i];
+			dst[i] += (int32_t) len[i] + 1;
 		if (dst[i] < 0 || dst[i] > (int32_t) len[i])
 			return (g_errs[i]);
 		skip_int(linep);

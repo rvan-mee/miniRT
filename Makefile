@@ -193,6 +193,8 @@ DEFINES := -DTHREAD_C=$(CORE_COUNT) $(OPTIONS)
 COMPILE := @$(CC) $(INCLUDE) $(CFLAGS) $(DEFINES)
 
 RES_ARCHIVE = resources.tar.gz
+RES_PARTS = resources.tar.gz.part-aa		\
+			resources.tar.gz.part-ab
 
 RESOURCES = scenes/models/bmw.obj			\
 			scenes/materials/bmw.mtl		\
@@ -254,7 +256,7 @@ TEST_P := $(addprefix $(TEST_DIR), $(TESTS))
 # RECIPES
 all: $(NAME) $(TEST_LIB)
 
-$(NAME): $(LIBS) $(OBJP) get_resources
+$(NAME): $(LIBS) $(OBJP) $(RESOURCES)
 	@echo "Compiling main executable!"
 	$(COMPILE) $(OBJP) $(LIBS) $(LINKER_FLAGS) -o $(NAME)
 
@@ -280,8 +282,6 @@ fclean:
 	@$(MAKE) clean
 	@$(MAKE) -C $(LIBFT_D) fclean
 	@$(MAKE) -C $(MLX42_D) fclean
-	@rm -f $(RESOURCES)
-	@rm -f $(RES_ARCHIVE)
 
 re: fclean
 	@$(MAKE)
@@ -293,17 +293,22 @@ $(TEST_LIB): $(TEST_LIB_OBJS)
 cleantest:
 	@rm -f $(TEST_LIB)
 
-$(RES_ARCHIVE):
-	@cat "$(RES_ARCHIVE).part"* > $(RES_ARCHIVE)
+$(RESOURCES) &: $(RES_PARTS)
+	@test -f $(RES_ARCHIVE) || (cat "$(RES_ARCHIVE).part"* > $(RES_ARCHIVE))
+	@echo "Decompressing $(@) from $(RES_ARCHIVE)"
+	@tar xzvmf $(RES_ARCHIVE)
+	@rm -f $(RES_ARCHIVE)
 
-get_resources: $(RES_ARCHIVE)
-	@echo "Decompressing resources from $(RES_ARCHIVE)"
-	@tar xzvf $(RES_ARCHIVE)
+get_resources: $(RESOURCES)
+
+clean_resoures:
+	@rm -f $(RESOURCES)
 
 store_resources:
 	@echo "Compressing resources into $(RES_ARCHIVE)"
 	@tar czvf $(RES_ARCHIVE) $(RESOURCES)
-	@echo "Splitting $(RESOURCES) into 100MB chunks"
+	@echo "Splitting $(RES_ARCHIVE) into 100MB chunks"
 	@split -b 100m $(RES_ARCHIVE) "$(RES_ARCHIVE).part-"
+	@rm -f $(RES_ARCHIVE)
 
-.PHONY: all clean fclean re cleantest get_resources store_resources
+.PHONY: all clean fclean re cleantest get_resources clean_resources store_resources

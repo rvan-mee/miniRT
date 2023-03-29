@@ -70,10 +70,13 @@ t_fvec	use_material(t_scene *scene, t_hit *hit, uint8_t depth)
 	p_args = init_struct(hit->object, hit);
 	colour = get_ambient(scene, p_args.ka);
 	colour += phong(scene, p_args);
-	if (is_flag(mat, REFRACT_IDX))
-		colour += fresnel(scene, p_args.ks, hit, depth);
-	else if (mat->illum == 3 && depth < MAX_REFLECTION_DEPTH)
-		colour += reflect_ray(scene, hit, depth) * p_args.ks;
+	if (depth < MAX_REFLECTION_DEPTH)
+	{
+		if (is_flag(mat, REFRACT_IDX))
+			colour += fresnel(scene, p_args.ks, hit, depth);
+		else if (mat->illum == 3)
+			colour += reflect_ray(scene, hit, depth) * p_args.ks;
+	}
 	if (is_flag(mat, EMMISIVE_C))
 		colour += mat->emmis_col;
 	return (colour);

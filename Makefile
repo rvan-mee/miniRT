@@ -193,6 +193,7 @@ DEFINES := -DTHREAD_C=$(CORE_COUNT) $(OPTIONS)
 COMPILE := @$(CC) $(INCLUDE) $(CFLAGS) $(DEFINES)
 
 RES_ARCHIVE = resources.tar.gz
+
 RESOURCES = scenes/models/bmw.obj			\
 			scenes/materials/bmw.mtl		\
 			\
@@ -280,6 +281,7 @@ fclean:
 	@$(MAKE) -C $(LIBFT_D) fclean
 	@$(MAKE) -C $(MLX42_D) fclean
 	@rm -f $(RESOURCES)
+	@rm -f $(RES_ARCHIVE)
 
 re: fclean
 	@$(MAKE)
@@ -291,6 +293,9 @@ $(TEST_LIB): $(TEST_LIB_OBJS)
 cleantest:
 	@rm -f $(TEST_LIB)
 
+$(RES_ARCHIVE):
+	@cat "$(RES_ARCHIVE).part"* > $(RES_ARCHIVE)
+
 get_resources: $(RES_ARCHIVE)
 	@echo "Decompressing resources from $(RES_ARCHIVE)"
 	@tar xzvf $(RES_ARCHIVE)
@@ -298,5 +303,7 @@ get_resources: $(RES_ARCHIVE)
 store_resources:
 	@echo "Compressing resources into $(RES_ARCHIVE)"
 	@tar czvf $(RES_ARCHIVE) $(RESOURCES)
+	@echo "Splitting $(RESOURCES) into 100MB chunks"
+	@split -b 100m $(RES_ARCHIVE) "$(RES_ARCHIVE).part-"
 
 .PHONY: all clean fclean re cleantest get_resources store_resources

@@ -15,6 +15,8 @@
 
 t_parse_err	parse_smoothing(char **linep, t_object *object, t_conf_data *conf)
 {
+	int32_t	val;
+
 	(void) object;
 	if (ft_strncmp(*linep, "off", 3) == 0)
 	{
@@ -26,15 +28,12 @@ t_parse_err	parse_smoothing(char **linep, t_object *object, t_conf_data *conf)
 		conf->smoothing = true;
 		*linep += 2;
 	}
-	else if (**linep == '0')
+	else if (ft_isdigit(**linep))
 	{
-		conf->smoothing = false;
-		*linep += 1;
-	}
-	else if (**linep == '1')
-	{
-		conf->smoothing = true;
-		*linep += 1;
+		val = ft_atoi(*linep);
+		while (ft_isdigit(**linep))
+			*linep += 1;
+		conf->smoothing = (val != 0);
 	}
 	return (SUCCESS);
 }

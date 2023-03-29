@@ -192,6 +192,54 @@ DEFINES := -DTHREAD_C=$(CORE_COUNT) $(OPTIONS)
 #		RANDOM THINGS
 COMPILE := @$(CC) $(INCLUDE) $(CFLAGS) $(DEFINES)
 
+RES_ARCHIVE = resources.tar.gz
+RESOURCES = scenes/models/bmw.obj			\
+			scenes/materials/bmw.mtl		\
+			\
+			scenes/models/buddha.obj		\
+			scenes/materials/buddha.mtl		\
+			\
+			scenes/models/conference.obj	\
+			scenes/materials/conference.mtl	\
+			\
+			scenes/models/female02.obj		\
+			scenes/materials/female02.mtl	\
+			scenes/textures/female2.bmp		\
+			scenes/textures/female3.bmp		\
+			scenes/models/male02.obj		\
+			scenes/materials/male02.mtl		\
+			scenes/textures/male2.bmp		\
+			scenes/textures/male3.bmp		\
+			scenes/textures/hair.bmp		\
+			\
+			scenes/models/FireHydrantMesh.obj					\
+			scenes/materials/FireHydrantMesh.mtl				\
+			scenes/textures/fire_hydrant_Base_Color.bmp			\
+			scenes/textures/fire_hydrant_Metallic.bmp			\
+			scenes/textures/fire_hydrant_MetallicRoughness.bmp	\
+			scenes/textures/fire_hydrant_Mixed_AO.bmp			\
+			scenes/textures/fire_hydrant_Normal_OpenGL.bmp		\
+			scenes/textures/fire_hydrant_Roughness.bmp			\
+			\
+			scenes/models/hand.obj			\
+			scenes/materials/hand.mtl		\
+			scenes/textures/handDiffuse.bmp	\
+			\
+			scenes/models/raptor.obj	\
+			scenes/materials/Raptor.mtl	\
+			scenes/textures/raptor.bmp	\
+			\
+			scenes/models/san-miguel.obj	\
+			scenes/materials/san-miguel.mtl	\
+			\
+			scenes/models/sportsCar.obj		\
+			scenes/materials/sportsCar.mtl	\
+			\
+			scenes/models/sub.obj			\
+			scenes/textures/sub_texture.bmp	\
+			\
+			scenes/models/dragon.obj		\
+			scenes/materials/Ceramic.mtl
 
 # TEST
 
@@ -205,7 +253,7 @@ TEST_P := $(addprefix $(TEST_DIR), $(TESTS))
 # RECIPES
 all: $(NAME) $(TEST_LIB)
 
-$(NAME): $(LIBS) $(OBJP)
+$(NAME): $(LIBS) $(OBJP) get_resources
 	@echo "Compiling main executable!"
 	$(COMPILE) $(OBJP) $(LIBS) $(LINKER_FLAGS) -o $(NAME)
 
@@ -231,6 +279,7 @@ fclean:
 	@$(MAKE) clean
 	@$(MAKE) -C $(LIBFT_D) fclean
 	@$(MAKE) -C $(MLX42_D) fclean
+	@rm -f $(RESOURCES)
 
 re: fclean
 	@$(MAKE)
@@ -242,4 +291,12 @@ $(TEST_LIB): $(TEST_LIB_OBJS)
 cleantest:
 	@rm -f $(TEST_LIB)
 
-.PHONY: all clean fclean re cleantest
+get_resources: $(RES_ARCHIVE)
+	@echo "Decompressing resources from $(RES_ARCHIVE)"
+	@tar xzvf $(RES_ARCHIVE)
+
+store_resources:
+	@echo "Compressing resources into $(RES_ARCHIVE)"
+	@tar czvf $(RES_ARCHIVE) $(RESOURCES)
+
+.PHONY: all clean fclean re cleantest get_resources store_resources

@@ -1,7 +1,8 @@
 newmtl Glass
-	Kd	0 0 0.1
+	Kd	0 0 0
 	Ks	1 1 1
 	Ka	0 0 0
 	Ns	1000
 	Ni	1.5
 	Tr	1
+	Tf	0.01 0.01 0

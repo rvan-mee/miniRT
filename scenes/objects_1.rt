@@ -1,0 +1,29 @@
+A									0.0				255,0,0
+C	0.306249,1.408372,6.142938		-0.258819,0,-0.965926	85
+L	-4,5,4							0.7				255,128,0
+L	4,5,4							0.7				0,128,255
+L	-6,3,-2							0.2				255,0,0
+
+
+pl	0,-1,0			0,1,0							100,100,100
+
+objfile scenes/models/buddha.obj
+
+usemesh buddha	0,3.85,0		0,0,-1		0,-1,0							2
+usemesh buddha	-7,0.25,-1		-0.683013,-0.258819,-0.683013				0.70710678118,0,-0.70710678118		3
+
+objfile scenes/models/raptor.obj
+
+usemesh raptor 10,-1,7.5		-0.707107,0,0.707107		0,1,0			3
+
+objfile scenes/models/FireHydrantMesh.obj
+
+usemesh FireHydrantMesh -10,-1,8	0,0,-1					0,1,0			1
+
+objfile scenes/models/hand.obj
+
+L	2.5,25,25					0.7					50,100,200
+usemesh hand			0,30,20		0,0,-1					0,-1,0			20
+
+objfile scenes/models/bmw.obj
+usemesh bmw				-15,-1,0	0,0,-1					0,1,0			4

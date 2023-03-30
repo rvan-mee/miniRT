@@ -197,7 +197,7 @@ void	calc_ray_info(t_camera *cam, size_t w, size_t h);
 static inline
 bool	is_flag(t_mtl *mtl, t_mtl_flag flags)
 {
-	return ((mtl->flags & flags) != 0);
+	return (mtl && (mtl->flags & flags) != 0);
 }
 
 static inline

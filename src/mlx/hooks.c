@@ -13,6 +13,10 @@
 #include <thread.h>
 #include <mlx.h>
 #include <render.h>
+#define INFO_FORMAT "hit at x=%d,y=%d: objects[%lu]\n\t\
+					dist=%f\n\thit=(%f, %f, %f)\n\t\
+					normal=(%f, %f, %f)\n\tbary=(%f, %f, %f)\n\t\
+					refractive idx=%f/%f (exiting/entering)\n"
 
 static void	create_picture(t_minirt *data, enum keys key)
 {
@@ -58,18 +62,26 @@ void	keyhook(mlx_key_data_t keydata, t_minirt *data)
 	}
 }
 
-void	mouse_hook(mouse_key_t type, action_t action, modifier_key_t mod, t_minirt *data)
+void	mouse_hook(mouse_key_t t, action_t a, modifier_key_t m, t_minirt *data)
 {
-	(void) type, (void) mod;
-	if (action != MLX_PRESS)
-		return;
-	t_hit		hit;
-	int32_t		x, y;
-	mlx_get_mouse_pos(data->mlx, &x, &y);
-	t_ray		ray = get_cam_ray(&data->scene->camera, x, y);
-	if (trace(data->scene, &ray, &hit))
-	{
-		printf("hit at (%d,%d) ==> (%f, %f, %f) == objects[%lu]\n", x, y,
-			   hit.hit[X], hit.hit[Y], hit.hit[Z], hit.object - data->scene->objects);
-	}
+	int32_t	mouse[2];
+	t_hit	hit;
+	float	refl_idx;
+
+	(void ) t, (void) m;
+	if (a != MLX_PRESS)
+		return ;
+	mlx_get_mouse_pos(data->mlx, mouse + X, mouse + Y);
+	hit.ray = get_cam_ray(&data->scene->camera, mouse[X], mouse[Y]);
+	if (!trace(data->scene, &hit.ray, &hit))
+		return ;
+	if (hit.refl != 1.0f || !is_flag(hit.object->mat, REFRACT_IDX))
+		refl_idx = 1.0f;
+	else if (is_flag(hit.object->mat, REFRACT_IDX))
+		refl_idx = hit.object->mat->opt_dens;
+	printf(INFO_FORMAT, mouse[X], mouse[Y], hit.object - data->scene->objects,
+		hit.distance, hit.hit[X], hit.hit[Y], hit.hit[Z],
+		hit.normal[X], hit.normal[Y], hit.normal[Z],
+		hit.bary[X], hit.bary[Y], hit.bary[Z],
+		hit.refl, refl_idx);
 }

@@ -88,7 +88,7 @@ void	calculate_normal(t_hit *hit)
 	lut[hit->object->type](hit);
 	hit->refl = 1.0f;
 	if (dot_product(hit->ray.direction, hit->normal) <= 0)
-		return;
+		return ;
 	hit->normal = -hit->normal;
 	mat = hit->object->mat;
 	if (hit->object->type != PLANE && hit->object->has_mat && \

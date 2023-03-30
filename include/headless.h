@@ -17,7 +17,7 @@
 typedef struct s_fakeimg {
 	uint32_t	width;
 	uint32_t	height;
-	uint8_t*	pixels;
+	uint8_t		*pixels;
 }	t_fakeimg;
 
-#endif //HEADLESS_H
+#endif

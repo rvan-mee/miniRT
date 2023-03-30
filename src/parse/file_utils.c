@@ -10,13 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
 #include <fcntl.h>
-#include <stdint.h>
-#include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include <parse.h>
+#include <get_next_line.h>
 
 #define ERR_OPEN	"Error\nFile failed to open: %s: %s\n"
 #define ERR_READ	"Error\nReading from fd %d failed: %s\n"
@@ -65,4 +64,17 @@ bool	write_file(int32_t fd, void *buf, size_t n_bytes)
 		buf += wroteb;
 	}
 	return (true);
+}
+
+t_parse_err	get_line(t_conf_data *data, char **dst)
+{
+	size_t	len;
+
+	len = get_next_line(data->fd, dst);
+	if (len == 0)
+		return (SUCCESS);
+	if (len == SIZE_MAX)
+		return (ALLOC);
+	data->curr_line++;
+	return (CONTINUE);
 }

@@ -35,7 +35,7 @@ static const char	*g_type_strs[] = {\
 };
 
 // Does this object handle storage by itself?
-static const bool	g_selfstorage[END] = {
+static const bool	g_selfstorage[END] = {\
 	[COMMENT] = true,		\
 	[LIGHT] = true,			\
 	[VERTEX] = true,		\
@@ -45,7 +45,7 @@ static const bool	g_selfstorage[END] = {
 	[USEMTL] = true,		\
 	[OBJFILE] = true,		\
 	[USEMESH] = true,		\
-	[MTLLIB] = true, 		\
+	[MTLLIB] = true,		\
 	[OBJ_GROUP] = true,		\
 	[OBJ_OBJ] = true,		\
 	[OBJ_SMOOTH] = true,	\

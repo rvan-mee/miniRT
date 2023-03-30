@@ -30,17 +30,17 @@ static t_parse_err	parse_path(char **linep, char **dst)
 
 static bool	is_valid_type(t_obj_type type)
 {
-	return (type == FACE ||
-			type == COMMENT ||
-			type == VERTEX ||
-			type == VT_NORMAL ||
-			type == VT_TEXTURE ||
-			type == MTL ||
-			type == USEMTL ||
-			type == MTLLIB ||
-			type == OBJ_GROUP ||
-			type == OBJ_OBJ ||
-			type == OBJ_SMOOTH);
+	return (type == FACE
+		|| (type == COMMENT)
+		|| (type == VERTEX)
+		|| (type == VT_NORMAL)
+		|| (type == VT_TEXTURE)
+		|| (type == MTL)
+		|| (type == USEMTL)
+		|| (type == MTLLIB)
+		|| (type == OBJ_GROUP)
+		|| (type == OBJ_OBJ)
+		|| (type == OBJ_SMOOTH));
 }
 
 static t_parse_err	parse_more(t_meshdat *dat)

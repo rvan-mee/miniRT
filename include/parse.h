@@ -104,6 +104,7 @@ t_parse_err	parse_smoothing(char **linep, t_object *object, t_conf_data *conf);
 bool		parse_rgb(char **linep, t_fvec *colour);
 bool		parse_line_error(const char *line, t_parse_err err, size_t line_c);
 void		skip_spaces(char **linep);
+void		skip_int(char **linep);
 bool		parse_vector(char **linep, t_fvec *vector, bool normalized);
 bool		parse_float(char **linep, float *dst, float min, float max);
 bool		parse_float_rgb(char **linep, t_fvec *rgb);

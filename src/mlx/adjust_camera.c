@@ -18,9 +18,12 @@
 
 void	move_cam(t_minirt *data, enum keys key)
 {
-	const float	step = STEPS * data->scene->scale;
+	float		step;
 	t_object	*cam;
 
+	step = STEPS * data->scene->scale;
+	if (!mlx_is_key_down(data->mlx, MLX_KEY_LEFT_SHIFT))
+		step *= 5;
 	cam = &data->scene->camera;
 	if (key == MLX_KEY_W)
 		cam->coords += step * cam->camera.rotated;

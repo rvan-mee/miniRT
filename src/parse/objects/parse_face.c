@@ -17,6 +17,10 @@
 #define B 1
 #define C 2
 
+#define V_	0
+#define VT_	1
+#define VN_	2
+
 static void	precalc(t_object *obj)
 {
 	const t_aabb	bounds = calc_bounds(obj);
@@ -26,18 +30,6 @@ static void	precalc(t_object *obj)
 	face->v0v1 = face->vert[B] - face->vert[A];
 	face->v0v2 = face->vert[C] - face->vert[A];
 	obj->coords = (bounds.min + bounds.max) / 2.f;
-}
-
-static void	skip_int(char **linep)
-{
-	char	*line;
-
-	line = *linep;
-	if (*line == '-' || *line == '+')
-		++line;
-	while (ft_isdigit(*line))
-		++line;
-	*linep = line;
 }
 
 static const t_parse_err	g_errs[] = {VERT, VERT_TEXTURE, NORMAL};
@@ -66,6 +58,14 @@ static t_parse_err	parse_is(char **linep, int32_t dst[3], const size_t len[3])
 	return (SUCCESS);
 }
 
+static bool	check_idxs(int32_t idxs[3][3], uint8_t type, bool any_zero)
+{
+	if (any_zero)
+		return (!idxs[0][type] || !idxs[1][type] || !idxs[2][type]);
+	else
+		return (idxs[0][type] || idxs[1][type] || idxs[2][type]);
+}
+
 static
 t_parse_err	set_idxs(t_face *face, int32_t idxs[3][3], t_conf_data *conf)
 {
@@ -74,13 +74,13 @@ t_parse_err	set_idxs(t_face *face, int32_t idxs[3][3], t_conf_data *conf)
 	const t_fvec	*vn = conf->vn.arr;
 	uint8_t			i;
 
-	if (idxs[0][0] == 0 || idxs[1][0] == 0 || idxs[2][0] == 0)
+	if (check_idxs(idxs, V_, true))
 		return (VERT);
-	face->has_texture = (idxs[0][1] || idxs[1][1] || idxs[2][1]);
-	if (face->has_texture && (!idxs[0][1] || !idxs[1][1] || !idxs[2][1]))
+	face->has_texture = check_idxs(idxs, VT_, false);
+	if (face->has_texture && check_idxs(idxs, VT_, true))
 		return (VERT_TEXTURE);
-	face->has_normal = conf->smoothing && (idxs[0][2] || idxs[1][2] || idxs[2][2]);
-	if (face->has_normal && (!idxs[0][2] || !idxs[1][2] || !idxs[2][2]))
+	face->has_normal = (conf->smoothing && check_idxs(idxs, VN_, false));
+	if (face->has_normal && check_idxs(idxs, VN_, true))
 		return (NORMAL);
 	i = 3;
 	while (i--)

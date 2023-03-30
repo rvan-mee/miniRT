@@ -66,7 +66,7 @@ static t_fvec	wrap_texture(t_fvec uvw)
 	index = 0;
 	while (index < 3)
 	{
-		if (uvw[index] < 0.0f || uvw[index] < 1.0f)
+		if (uvw[index] < 0.0f || uvw[index] > 1.0f)
 		{
 			uvw[index] = fmodf(uvw[index], 1.0f);
 			if (uvw[index] < 0.0f)

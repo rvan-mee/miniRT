@@ -64,8 +64,11 @@ int	main(int argc, char *argv[])
 
 	atexit(f);
 	if (!init_data(&data, argc, argv) || \
-		!init_render_data(&data) || \
-		!create_mlx(&data) || \
+		!init_render_data(&data))
+		return (cleanup(&data, EXIT_FAILURE));
+	if (HEADLESS)
+		return (cleanup(&data, headless(&data)));
+	if (!create_mlx(&data) || \
 		!init_work_threads(&data))
 		return (cleanup(&data, EXIT_FAILURE));
 	mlx_loop(data.mlx);

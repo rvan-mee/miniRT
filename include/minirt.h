@@ -27,6 +27,10 @@
 #  define USE_SMOOTH_SHADING 0
 # endif
 
+# ifndef HEADLESS
+#  define HEADLESS	0
+# endif
+
 typedef float				t_fvec \
 __attribute__ ((vector_size (4 * sizeof(float))));
 
@@ -54,5 +58,6 @@ typedef struct s_minirt {
 }	t_minirt;
 
 bool	init_render_data(t_minirt *data);
+int		headless(t_minirt *data);
 
 #endif

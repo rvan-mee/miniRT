@@ -22,6 +22,7 @@ INCLUDE += -I $(INCD)
 # SOURCE FILES
 SRCD := src/
 SRCS := main.c										\
+		headless.c									\
 		\
 		mlx/create_mlx.c							\
 		mlx/hooks.c									\
@@ -147,7 +148,8 @@ INCS := minirt.h									\
 		render.h									\
 		bvh.h										\
 		texture.h									\
-		thread.h									
+		thread.h									\
+		headless.h
 INCP := $(addprefix $(INCD), $(INCS))
 
 HEADERS += $(INCP)

@@ -67,19 +67,22 @@ void	mouse_hook(mouse_key_t t, action_t a, modifier_key_t m, t_minirt *data)
 	int32_t	mouse[2];
 	t_hit	hit;
 	float	refl_idx;
+	t_scene	*scene;
 
 	(void ) t, (void) m;
 	if (a != MLX_PRESS)
 		return ;
+	scene = data->scene;
 	mlx_get_mouse_pos(data->mlx, mouse + X, mouse + Y);
-	hit.ray = get_cam_ray(&data->scene->camera, mouse[X], mouse[Y]);
-	if (!trace(data->scene, &hit.ray, &hit))
+	hit.ray = get_cam_ray(&scene->camera,
+						(float) mouse[X] + 0.5f, (float) mouse[Y] + 0.5f);
+	if (!trace(scene, &hit.ray, &hit))
 		return ;
-	if (hit.refl != 1.0f || !is_flag(hit.object->mat, REFRACT_IDX))
-		refl_idx = 1.0f;
-	else if (is_flag(hit.object->mat, REFRACT_IDX))
+	if (hit.refl == 1.0f && is_flag(hit.object->mat, REFRACT_IDX))
 		refl_idx = hit.object->mat->opt_dens;
-	printf(INFO_FORMAT, mouse[X], mouse[Y], hit.object - data->scene->objects,
+	else
+		refl_idx = 1.0f;
+	printf(INFO_FORMAT, mouse[X], mouse[Y], hit.object - scene->objects,
 		hit.distance, hit.hit[X], hit.hit[Y], hit.hit[Z],
 		hit.normal[X], hit.normal[Y], hit.normal[Z],
 		hit.bary[X], hit.bary[Y], hit.bary[Z],

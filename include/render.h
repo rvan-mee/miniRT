@@ -26,6 +26,10 @@ typedef struct s_ray	t_ray;
 typedef struct s_hit	t_hit;
 typedef const t_ray		t_cray;
 typedef float			(*t_isectfun)(const t_object *, t_cray *, t_hit *);
+typedef float			t_fvec2 \
+	__attribute__ ((vector_size(2 * sizeof(float))));
+typedef uint8_t			t_bvec \
+	__attribute__ ((vector_size(4 * sizeof(uint8_t))));
 
 typedef struct s_ray {
 	t_fvec	origin;
@@ -38,8 +42,6 @@ typedef struct s_hit {
 	t_fvec		hit;
 	t_object	*object;
 	t_fvec		normal;
-	size_t		screen_x;
-	size_t		screen_y;
 	t_fvec		bary;
 	float		refl;
 }	t_hit;
@@ -69,6 +71,11 @@ typedef struct s_phong {
 	};
 }	t_phong;
 
+typedef struct s_fresnel_data {
+	float	refl_ratio;
+	float	refr_index;
+}	t_fresnel;
+
 bool	trace(t_scene *scene, t_ray *ray, t_hit *hit);
 
 bool	intersect_bvh(const t_bvh *bvh, t_cray *ray, t_hit *hit);
@@ -81,7 +88,7 @@ float	intersect_triangle(const t_object *object, t_cray *ray, t_hit *hit);
 float	intersect_face(const t_object *obj, t_cray *ray, t_hit *hit);
 
 void	calculate_normal(t_hit *hit);
-t_ray	get_cam_ray(t_object *camera, size_t x, size_t y);
+t_ray	get_cam_ray(t_object *camera, float x, float y);
 
 void	start_render(t_minirt *data, void *func_data);
 t_fvec	shade(t_scene *scene, t_hit *hit, uint8_t depth);

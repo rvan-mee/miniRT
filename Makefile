@@ -304,6 +304,7 @@ $(RESOURCES) &: $(RES_PARTS)
 get_resources: $(RESOURCES)
 
 clean_resoures:
+	@rm -f $(RES_ARCHIVE)
 	@rm -f $(RESOURCES)
 
 store_resources:

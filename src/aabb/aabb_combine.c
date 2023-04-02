@@ -11,25 +11,20 @@
 /* ************************************************************************** */
 
 #include <bvh.h>
-#include <math.h>
+#include <ft_math.h>
 
-t_aabb	aabb_combine(const t_aabb a, const t_aabb b)
+inline t_aabb	aabb_combine(const t_aabb a, const t_aabb b)
 {
-	const t_fvec	amin = a.min;
-	const t_fvec	bmin = b.min;
-	const t_fvec	amax = a.max;
-	const t_fvec	bmax = b.max;
-
 	return ((t_aabb){
-		.min = {
-			fminf(amin[X], bmin[X]),
-			fminf(amin[Y], bmin[Y]),
-			fminf(amin[Z], bmin[Z])
-		},
-		.max = {
-			fmaxf(amax[X], bmax[X]),
-			fmaxf(amax[Y], bmax[Y]),
-			fmaxf(amax[Z], bmax[Z])
-		}
+		.min = min_vec(a.min, b.min),
+		.max = max_vec(a.max, b.max)
+	});
+}
+
+inline t_aabb	aabb_grow(const t_aabb bounds, const t_fvec point)
+{
+	return ((t_aabb){
+		.min = min_vec(bounds.min, point),
+		.max = max_vec(bounds.max, point)
 	});
 }

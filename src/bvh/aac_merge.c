@@ -130,8 +130,7 @@ uint32_t	merge_nodes(
 		b->clusters[b->node_idx] = (t_cluster){\
 			{b->nodes[comb[0]], b->nodes[comb[1]]},
 			aabb_combine(c[0]->aabb, c[1]->aabb),
-			c[0]->len + c[1]->len,
-			false
+			c[0]->len + c[1]->len
 		};
 		calc_area_after_merge(b, comb[0], start, len);
 		len -= 1;

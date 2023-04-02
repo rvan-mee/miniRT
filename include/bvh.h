@@ -51,7 +51,6 @@ typedef struct s_cluster {
 	};
 	t_aabb		aabb;
 	uint32_t	len;
-	bool		leaf;
 }	t_cluster;
 
 // Temporary info for all clusters, storing the closest node
@@ -71,8 +70,6 @@ typedef struct s_bvh_b {
 	t_morton	*keys;
 	t_nodeidx	*nodes;
 	float		**area;
-	float		*cost[2];
-	float		*aabb_sa;
 	t_minfo		*min_info;
 	t_nodeidx	node_idx;
 	uint32_t	length;
@@ -156,6 +153,11 @@ t_aabb		calc_bounds(t_object *obj);
  * Combine two axis aligned bounding boxes
  */
 t_aabb		aabb_combine(t_aabb a, t_aabb b);
+
+/**
+ * Grow a bounding box so point is contained within it
+ */
+t_aabb		aabb_grow(t_aabb bounds, t_fvec point);
 
 /**
  * Calculate surface area of a bounding box

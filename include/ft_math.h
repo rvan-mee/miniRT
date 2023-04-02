@@ -28,6 +28,10 @@ t_fvec	normalize_vector(t_fvec vec);
 float	dot_product(t_fvec a, t_fvec b);
 t_fvec	cross_product(t_fvec a, t_fvec b);
 t_fvec	exp_fvec(t_fvec vec);
+t_fvec	min_vec(t_fvec a, t_fvec b);
+t_fvec	max_vec(t_fvec a, t_fvec b);
+float	min_val(t_fvec v);
+float	max_val(t_fvec v);
 
 void	identity_matrix(t_fmat matrix);
 t_fvec	mult_vec_mat(t_fvec vec, t_fmat mat);
@@ -45,5 +49,23 @@ bool	solve_quadratic(t_quadratic *quadratic, float t[2]);
  */
 t_fvec	reflect(t_fvec in, t_fvec normal);
 t_fvec	refract(t_fvec in, t_fvec normal, float exiting, float entering);
+
+static inline
+float	rt_minf(float a, float b)
+{
+	if (a > b)
+		return (b);
+	else
+		return (a);
+}
+
+static inline
+float	rt_maxf(float a, float b)
+{
+	if (a < b)
+		return (b);
+	else
+		return (a);
+}
 
 #endif

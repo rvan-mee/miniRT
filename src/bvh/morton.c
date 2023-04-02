@@ -42,22 +42,12 @@ void	generate_codes(const t_bvhbuilder *b)
 {
 	t_aabb		bounds;
 	uint32_t	i;
-	uint8_t		j;
 
 	bounds.min = (t_fvec){INFINITY, INFINITY, INFINITY};
 	bounds.max = (t_fvec){-INFINITY, -INFINITY, -INFINITY};
 	i = 0;
 	while (i < b->length)
-	{
-		j = 0;
-		while (j < 3)
-		{
-			bounds.max[j] = fmaxf(bounds.max[j], b->prims[i].coords[j]);
-			bounds.min[j] = fminf(bounds.min[j], b->prims[i].coords[j]);
-			++j;
-		}
-		++i;
-	}
+		bounds = aabb_grow(bounds, b->prims[i++].coords);
 	i = 0;
 	while (i < b->length)
 		create_key(b, i++, bounds);

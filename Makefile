@@ -85,6 +85,7 @@ SRCS := main.c										\
 		math/reflect.c								\
 		math/refract.c								\
 		math/exp.c									\
+		math/minmax.c								\
 		\
 		render/render.c								\
 		render/trace.c								\

@@ -195,7 +195,7 @@ void	destroy_mtl(t_mtl *mtl, void *ign);
 void	calc_ray_info(t_camera *cam, size_t w, size_t h);
 
 static inline
-bool	is_flag(t_mtl *mtl, t_mtl_flag flags)
+bool	is_flag(const t_mtl *mtl, t_mtl_flag flags)
 {
 	return (mtl && (mtl->flags & flags) != 0);
 }

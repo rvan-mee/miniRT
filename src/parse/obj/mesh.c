@@ -13,7 +13,7 @@
 #include <parse_obj.h>
 #include <stdlib.h>
 #include <float.h>
-#include <math.h>
+#include <ft_math.h>
 
 static void	offset_mtl(t_object *object, void *delta)
 {
@@ -71,7 +71,7 @@ static void	normalize_size(t_mesh mesh)
 	while (i < mesh.length)
 		bounds = aabb_combine(bounds, calc_bounds(mesh.faces + i++));
 	size = bounds.max - bounds.min;
-	sizef = 1.0f / fminf(size[0], fminf(size[1], size[2]));
+	sizef = 1.0f / min_val(size);
 	normalize_faces(mesh, sizef, (t_fvec){
 		-(bounds.min[X] + (size[X] / 2)),
 		-(bounds.min[Y]),

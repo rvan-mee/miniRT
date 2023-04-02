@@ -43,14 +43,8 @@ void	intersect_next(const t_bvh *bvh, t_hit *hit, t_queue *queue)
 
 	cur = queue->queue.next;
 	queue->queue.next = cur->next;
-	if (!get_node(bvh, cur->node)->leaf || is_prim(bvh, get_l(bvh, cur->node)))
-		intersect_node(bvh, get_l(bvh, cur->node), hit, queue);
-	else
-		insert(queue, node(get_l(bvh, cur->node), cur->dist), false);
-	if (!get_node(bvh, cur->node)->leaf || is_prim(bvh, get_r(bvh, cur->node)))
-		intersect_node(bvh, get_r(bvh, cur->node), hit, queue);
-	else
-		insert(queue, node(get_r(bvh, cur->node), cur->dist), false);
+	intersect_node(bvh, get_l(bvh, cur->node), hit, queue);
+	intersect_node(bvh, get_r(bvh, cur->node), hit, queue);
 	cur->next = queue->pool.next;
 	queue->pool.next = cur;
 }
@@ -62,7 +56,7 @@ bool	intersect_bvh(const t_bvh *bvh, const t_ray *ray, t_hit *hit)
 	if (queue.pool.next == NULL)
 		init_queue(&queue);
 	hit->ray = *ray;
-	intersect_node(bvh, bvh->root, hit, &queue);
+	insert(&queue, node(bvh->root, 0.0f), false);
 	while (queue.queue.next != NULL && !is_prim(bvh, queue.queue.next->node))
 		intersect_next(bvh, hit, &queue);
 	if (queue.queue.next == NULL)

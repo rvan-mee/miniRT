@@ -52,9 +52,9 @@ static void	calc_leaf_areas(
 
 static uint32_t	create_leafs(
 		t_bvhbuilder *b,
-		uint32_t start,
-		uint32_t lo,
-		uint32_t hi)
+		const uint32_t start,
+		const uint32_t lo,
+		const uint32_t hi)
 {
 	const uint32_t	len = hi - lo + 1;
 	uint32_t		i;
@@ -77,7 +77,7 @@ static uint32_t	create_leafs(
 static void	merge_clusters(
 		const t_bvhbuilder *b,
 		const uint32_t start,
-		const uint32_t len[2])
+		const uint32_t len[3])
 {
 	uint32_t	i;
 	uint32_t	j;
@@ -89,7 +89,7 @@ static void	merge_clusters(
 	{
 		ci = b->clusters + b->nodes[i];
 		j = start + len[0];
-		while (j < start + len[0] + len[1])
+		while (j < start + len[2])
 		{
 			cj = b->clusters + b->nodes[j];
 			b->area[j][i] = combo_sa(ci->aabb, cj->aabb);

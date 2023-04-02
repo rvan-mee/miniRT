@@ -11,38 +11,20 @@
 /* ************************************************************************** */
 
 #include <render.h>
-
-static inline
-bool	contains(const t_aabb bounds, const t_fvec point)
-{
-	return (bounds.min[X] <= point[X] && bounds.max[X] >= point[X] && \
-			bounds.min[Y] <= point[Y] && bounds.max[Y] >= point[Y] && \
-			bounds.min[Z] <= point[Z] && bounds.max[Z] >= point[Z]);
-}
+#include <ft_math.h>
+#define MIN	0
+#define MAX	1
 
 float	aabb_intersect(const t_aabb bounds, const t_ray *ray)
 {
-	t_aabb	minmax;
 	t_fvec	t[2];
 	float	tlims[2];
 
-	if (contains(bounds, ray->origin))
-		return (0);
-	t[0] = (bounds.min - ray->origin) / ray->direction;
-	t[1] = (bounds.max - ray->origin) / ray->direction;
-	minmax = (t_aabb){\
-		.min = (t_fvec){\
-			fminf(t[0][X], t[1][X]), \
-			fminf(t[0][Y], t[1][Y]), \
-			fminf(t[0][Z], t[1][Z])},
-		.max = (t_fvec){\
-			fmaxf(t[0][X], t[1][X]), \
-			fmaxf(t[0][Y], t[1][Y]), \
-			fmaxf(t[0][Z], t[1][Z])}
-	};
-	tlims[0] = fmaxf(fmaxf(minmax.min[X], minmax.min[Y]), minmax.min[Z]);
-	tlims[1] = fminf(fminf(minmax.max[X], minmax.max[Y]), minmax.max[Z]);
-	if (tlims[0] > tlims[1])
+	t[MIN] = (bounds.min - ray->origin) / ray->direction;
+	t[MAX] = (bounds.max - ray->origin) / ray->direction;
+	tlims[MIN] = max_val(min_vec(t[MIN], t[MAX]));
+	tlims[MAX] = min_val(max_vec(t[MIN], t[MAX]));
+	if (tlims[MAX] < 0.0 || tlims[MAX] < tlims[MIN]) // todo: return (rt_minf(tlims[MAX], rt_maxf(tlims[MIN], 0.0f)); ?
 		return (MISS);
-	return (tlims[0]);
+	return (rt_maxf(tlims[MIN], 0.0f));
 }

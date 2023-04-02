@@ -31,9 +31,6 @@ static void	free_builder(t_bvhbuilder *b, bool success)
 	free(b->nodes);
 	free(b->keys);
 	free(b->area);
-	free(b->aabb_sa);
-	free(b->cost[0]);
-	free(b->cost[1]);
 	if (success)
 		return ;
 	free(b->clusters);
@@ -51,11 +48,7 @@ static bool	alloc_builder(t_bvhbuilder *b, uint32_t n)
 	b->min_info = ft_calloc(req, sizeof(t_minfo));
 	b->nodes = ft_calloc(2 * n, sizeof(uint32_t));
 	b->clusters = ft_calloc(2 * n, sizeof(t_cluster));
-	b->cost[0] = ft_calloc(2 * n, sizeof(float));
-	b->cost[1] = ft_calloc(2 * n, sizeof(float));
-	b->aabb_sa = ft_calloc(2 * n, sizeof(float));
-	if (!b->keys || !b->nodes || !b->area || !b->min_info || !b->clusters
-		|| !b->cost[0] || !b->cost[1] || !b->aabb_sa)
+	if (!b->keys || !b->nodes || !b->area || !b->min_info || !b->clusters)
 		return (free_builder(b, false), false);
 	i = 0;
 	while (i < req)

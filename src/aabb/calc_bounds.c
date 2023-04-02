@@ -11,10 +11,8 @@
 /* ************************************************************************** */
 
 #include <scene.h>
-#include <math.h>
+#include <ft_math.h>
 #include <float.h>
-
-#define DEBUG_MES	"calc_bounds called on object with no function?! %i\n"
 
 static t_aabb	sphere_bounds(t_object *obj)
 {
@@ -26,7 +24,7 @@ static t_aabb	sphere_bounds(t_object *obj)
 
 static t_aabb	inf_obj_bounds(t_object *obj)
 {
-	const float	half_flt_max = FLT_MAX / 2;
+	static const float	half_flt_max = FLT_MAX / 2;
 
 	(void) obj;
 	return ((t_aabb){
@@ -58,16 +56,8 @@ static t_aabb	triangle_bounds(t_object *obj)
 	else
 		vert = obj->face.vert;
 	return ((t_aabb){
-		.min = {
-			fminf(fminf(vert[0][X], vert[1][X]), vert[2][X]),
-			fminf(fminf(vert[0][Y], vert[1][Y]), vert[2][Y]),
-			fminf(fminf(vert[0][Z], vert[1][Z]), vert[2][Z]),
-		},
-		.max = {
-			fmaxf(fmaxf(vert[0][X], vert[1][X]), vert[2][X]),
-			fmaxf(fmaxf(vert[0][Y], vert[1][Y]), vert[2][Y]),
-			fmaxf(fmaxf(vert[0][Z], vert[1][Z]), vert[2][Z]),
-		}
+		.min = min_vec(vert[0], min_vec(vert[1], vert[2])),
+		.max = max_vec(vert[0], max_vec(vert[1], vert[2]))
 	});
 }
 
@@ -81,11 +71,5 @@ t_aabb	calc_bounds(t_object *obj)
 		[TRIANGLE] = triangle_bounds
 	};
 
-	if (lut[obj->type])
-		return (lut[obj->type](obj));
-	else
-	{
-		dprintf(2, DEBUG_MES, obj->type);
-		return (inf_obj_bounds(obj));
-	}
+	return (lut[obj->type](obj));
 }

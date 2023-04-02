@@ -247,15 +247,6 @@ RESOURCES = scenes/models/bmw.obj			\
 			scenes/models/dragon.obj		\
 			scenes/materials/Ceramic.mtl
 
-# TEST
-
-TEST_DIR := test/
-TEST_LIB := $(addprefix $(TEST_DIR), $(addsuffix _test.a, $(NAME)))
-TEST_LIB_OBJS := $(filter-out $(OBJD)main.o, $(OBJP))
-
-TESTS := parse.sh
-TEST_P := $(addprefix $(TEST_DIR), $(TESTS))
-
 # RECIPES
 all: $(NAME) $(TEST_LIB)
 
@@ -274,7 +265,7 @@ $(LIBFT_L):
 $(MLX42_L):
 	@$(MAKE) -C $(MLX42_D)
 
-clean: cleantest
+clean:
 	@rm -rf $(OBJD)
 	@echo "Done cleaning $(CURDIR)/$(OBJD)"
 	@$(MAKE) -C $(LIBFT_D) clean
@@ -288,13 +279,6 @@ fclean:
 
 re: fclean
 	@$(MAKE)
-
-$(TEST_LIB): $(TEST_LIB_OBJS)
-	@ar -cr $(TEST_LIB) $(TEST_LIB_OBJS)
-	@echo "Done creating archive $(TEST_LIB)"
-
-cleantest:
-	@rm -f $(TEST_LIB)
 
 $(RESOURCES) &: $(RES_PARTS)
 	@test -f $(RES_ARCHIVE) || (cat "$(RES_ARCHIVE).part"* > $(RES_ARCHIVE))
@@ -315,4 +299,4 @@ store_resources:
 	@split -b 100m $(RES_ARCHIVE) "$(RES_ARCHIVE).part-"
 	@rm -f $(RES_ARCHIVE)
 
-.PHONY: all clean fclean re cleantest get_resources clean_resources store_resources
+.PHONY: all clean fclean re get_resources clean_resources store_resources

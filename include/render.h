@@ -38,16 +38,15 @@ typedef struct s_ray {
 
 typedef struct s_hit {
 	t_ray		ray;
-	float		distance;
-	t_fvec		hit;
 	t_object	*object;
+	float		distance;
+	float		refl;
+	t_fvec		hit;
 	t_fvec		normal;
 	t_fvec		bary;
-	float		refl;
 }	t_hit;
 
-typedef struct s_tri_intersect
-{
+typedef struct s_tri_intersect {
 	t_fvec	tvec;
 	t_fvec	qvec;
 	float	inv_det;
@@ -57,18 +56,12 @@ typedef struct s_tri_intersect
 }	t_tri_intersect;
 
 typedef struct s_phong {
-	struct {
-		t_hit	*cam_hit;
-		t_fvec	ka;
-		t_fvec	kd;
-		t_fvec	ks;
-		float	ns;
-	};
-	struct {
-		t_ray	shadow_ray;
-		float	light_dist_sq;
-		float	brightness;
-	};
+	t_fvec	ka;
+	t_fvec	kd;
+	t_fvec	ks;
+	float	ns;
+	float	brightness;
+	t_hit	*cam_hit;
 }	t_phong;
 
 typedef struct s_fresnel_data {

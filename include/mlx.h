@@ -18,7 +18,6 @@
 typedef struct s_minirt	t_minirt;
 
 void	keyhook(mlx_key_data_t keydata, t_minirt *data);
-// todo: remove debug shit like this?
 void	mouse_hook(mouse_key_t t, action_t a, modifier_key_t m, t_minirt *data);
 bool	create_mlx(t_minirt *data);
 

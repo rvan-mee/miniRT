@@ -25,11 +25,10 @@ t_parse_err	parse_mtl_name(char **linep, char **name)
 
 	name_len = 0;
 	line = *linep;
-	skip_spaces(&line);
-	if (!is_valid_char(*line))
-		return (NAME);
 	while (is_valid_char(line[name_len]))
 		name_len++;
+	if (name_len == 0)
+		return (NAME);
 	*name = ft_substr(line, 0, name_len);
 	if (!*name)
 		return (ALLOC);

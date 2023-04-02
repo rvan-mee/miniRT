@@ -12,15 +12,15 @@
 
 #include <parse.h>
 
-t_parse_err	parse_mtl_ka(char *line, t_object *object)
+t_parse_err	parse_mtl_ka(char *line, t_mtl *mtl)
 {
 	t_fvec	rgb;
 
-	if (is_flag(&object->material, AMBIENT_C))
+	if (is_flag(mtl, AMBIENT_C))
 		return (DUPLICATE);
 	if (!parse_float_rgb(&line, &rgb))
 		return (KA);
-	set_flag(&object->material, AMBIENT_C);
-	object->material.ambient = rgb;
+	set_flag(mtl, AMBIENT_C);
+	mtl->ambient = rgb;
 	return (CONTINUE);
 }

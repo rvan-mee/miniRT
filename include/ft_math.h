@@ -17,8 +17,7 @@
 
 # define FLOAT_EPSILON	0.00000001f
 
-typedef struct s_quadratic
-{
+typedef struct s_quadratic {
 	float	a;
 	float	b;
 	float	c;

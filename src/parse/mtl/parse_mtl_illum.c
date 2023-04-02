@@ -31,19 +31,18 @@ static bool	parse_num(char **linep, int32_t *num)
 	return (true);
 }
 
-t_parse_err	parse_mtl_illum(char *line, t_object *object)
+t_parse_err	parse_mtl_illum(char *line, t_mtl *mtl)
 {
 	int32_t	illum;
 
-	if (is_flag(&object->material, ILLUM_MODE))
+	if (is_flag(mtl, ILLUM_MODE))
 		return (DUPLICATE);
-	skip_spaces(&line);
 	if (!parse_num(&line, &illum))
 		return (ILLUM);
 	skip_spaces(&line);
 	if (*line)
 		return (ILLUM);
-	set_flag(&object->material, ILLUM_MODE);
-	object->material.illum = illum;
+	set_flag(mtl, ILLUM_MODE);
+	mtl->illum = illum;
 	return (CONTINUE);
 }

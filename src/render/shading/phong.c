@@ -13,58 +13,51 @@
 #include <render.h>
 #include <ft_math.h>
 
-static t_fvec	phong_light(t_object *light, t_phong args)
+static
+t_fvec	phong_light(t_object *light, t_fvec dir, t_phong args)
 {
-	float	ratio;
-	t_fvec	colour;
-	t_fvec	light_r;
+	const t_hit	*hit = args.cam_hit;
+	float		ratio;
+	t_fvec		colour;
+	t_fvec		light_r;
 
-	colour = (t_fvec){};
-	ratio = dot_product(args.shadow_ray.direction, args.cam_hit->normal);
-	if (ratio <= 0)
-		return (colour);
-	colour += args.kd * light->colour * ratio * args.brightness;
-	light_r = reflect(-args.shadow_ray.direction, args.cam_hit->normal);
-	ratio = dot_product(light_r, -args.cam_hit->ray.direction);
+	ratio = dot_product(dir, hit->normal);
+	colour = args.kd * light->colour * ratio * args.brightness;
+	light_r = reflect(-dir, hit->normal);
+	ratio = dot_product(light_r, -hit->ray.direction);
 	if (ratio <= 0)
 		return (colour);
 	colour += args.ks * light->colour * powf(ratio, args.ns) * args.brightness;
 	return (colour);
 }
 
-static void	create_shadow_ray(t_object *light, t_phong *args)
+static
+t_fvec	in_shadow(t_scene *scene, t_object *light, t_phong cols)
 {
-	const t_hit		*hit = args->cam_hit;
-	const t_fvec	light_rel = light->coords - args->cam_hit->hit;
-	t_ray			ray;
+	const t_hit		*hit = cols.cam_hit;
+	const t_fvec	l_rel = light->coords - hit->hit;
+	const float		dist_sq = dot_product(l_rel, l_rel);
+	t_hit			s_hit;
 
-	ray = get_biased_ray(hit->hit, normalize_vector(light_rel), hit->normal);
-	args->shadow_ray = ray;
-	args->light_dist_sq = dot_product(light_rel, light_rel);
+	s_hit.ray.direction = normalize_vector(l_rel);
+	if (dot_product(s_hit.ray.direction, hit->normal) < 0)
+		return ((t_fvec){});
+	s_hit.ray = get_biased_ray(hit->hit, s_hit.ray.direction, hit->normal);
+	if (intersect_bvh(&scene->bvh, &s_hit.ray, &s_hit) && \
+		dist_sq > s_hit.distance * s_hit.distance)
+		return ((t_fvec){});
+	cols.brightness = light->light.brightness * scene->scale / dist_sq;
+	return (phong_light(light, s_hit.ray.direction, cols));
 }
 
 t_fvec	phong(t_scene *scene, t_phong args)
 {
-	t_object	*light;
-	size_t		i;
-	t_hit		shadow_hit;
-	t_fvec		colour;
+	t_fvec	colour;
+	size_t	i;
 
 	colour = (t_fvec){};
 	i = 0;
 	while (i < scene->lights_len)
-	{
-		shadow_hit = (t_hit){};
-		light = scene->lights + i++;
-		create_shadow_ray(light, &args);
-		if (dot_product(args.shadow_ray.direction, args.cam_hit->normal) < 0)
-			continue ;
-		args.brightness = light->light.brightness * scene->scale;
-		args.brightness /= args.light_dist_sq;
-		if (intersect_bvh(&scene->bvh, &args.shadow_ray, &shadow_hit)
-			&& shadow_hit.distance * shadow_hit.distance < args.light_dist_sq)
-			continue ;
-		colour += phong_light(light, args);
-	}
+		colour += in_shadow(scene, scene->lights + i++, args);
 	return (colour);
 }

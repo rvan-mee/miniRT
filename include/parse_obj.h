@@ -35,11 +35,11 @@ typedef struct s_mesh {
 
 typedef struct s_meshparams {
 	char	*name;
+	float	scale;
 	t_fvec	coords;
 	t_fvec	w;
 	t_fvec	v;
 	t_fvec	u;
-	float	scale;
 }	t_meshparams;
 
 t_perr	init_meshdata(char *path, t_meshdat *dst);

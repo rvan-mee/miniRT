@@ -13,24 +13,23 @@
 #include <parse.h>
 #include <libft.h>
 
-t_parse_err	parse_mtl_ns(char *line, t_object *object)
+t_parse_err	parse_mtl_ns(char *line, t_mtl *mtl)
 {
 	char	*end;
 	float	reflec;
 
-	if (is_flag(&object->material, SPECULAR_EXP))
+	if (is_flag(mtl, SPECULAR_EXP))
 		return (DUPLICATE);
-	skip_spaces(&line);
 	if (!ft_isdigit(*line))
 		return (ILLUM);
 	reflec = ft_strtof(line, &end);
-	if (line == end || !ft_isdigit(end[-1]))
+	if (line == end)
 		return (ILLUM);
 	line = end;
 	skip_spaces(&line);
 	if (*line)
 		return (ILLUM);
-	set_flag(&object->material, SPECULAR_EXP);
-	object->material.reflec = reflec;
+	set_flag(mtl, SPECULAR_EXP);
+	mtl->reflec = reflec;
 	return (CONTINUE);
 }

@@ -12,12 +12,12 @@
 
 #include <parse.h>
 
-t_parse_err	parse_mtl_tf(char *line, t_object *object)
+t_parse_err	parse_mtl_tf(char *line, t_mtl *mtl)
 {
-	if (is_flag(&object->material, TRANSMISSION_FILTER))
+	if (is_flag(mtl, TRANSMISSION_FILTER))
 		return (DUPLICATE);
-	if (!parse_float_rgb(&line, &object->material.tra_filter))
+	if (!parse_float_rgb(&line, &mtl->tra_filter))
 		return (KA);
-	set_flag(&object->material, TRANSMISSION_FILTER);
+	set_flag(mtl, TRANSMISSION_FILTER);
 	return (CONTINUE);
 }

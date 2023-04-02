@@ -19,7 +19,6 @@ t_parse_err	parse_mtl_map(char *line, t_bmp *bmp)
 	size_t	i;
 
 	i = 0;
-	skip_spaces(&line);
 	while (line[i] && !ft_isspace(line[i]))
 		i++;
 	if (i < 4)
@@ -32,5 +31,9 @@ t_parse_err	parse_mtl_map(char *line, t_bmp *bmp)
 	if (!parse_bmp(path, bmp))
 		return (free(path), BMP_ERR);
 	free(path);
+	line += i;
+	skip_spaces(&line);
+	if (*line)
+		return (OBJECT);
 	return (SUCCESS);
 }

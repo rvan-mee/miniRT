@@ -65,8 +65,8 @@ uint16_t	print_nodes(t_bvh *b, uint16_t depth, uint32_t node)
 	static uint16_t	maxdepth = 0;
 
 	maxdepth = depth > maxdepth ? depth : maxdepth;
-	printf("node %u (len=%u) %s (%f,%f,%f)-(%f,%f,%f)\n",
-			node, b->clusters[node].len, b->clusters[node].leaf ? "(leaf)" : "",
+	printf("node %u (len=%u) (%f,%f,%f)-(%f,%f,%f)\n",
+			node, b->clusters[node].len,
 			b->clusters[node].aabb.min[X], b->clusters[node].aabb.min[Y],
 			b->clusters[node].aabb.min[Z], b->clusters[node].aabb.max[X],
 			b->clusters[node].aabb.max[Y], b->clusters[node].aabb.max[Z]);

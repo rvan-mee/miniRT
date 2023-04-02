@@ -158,15 +158,14 @@ typedef struct s_object {
 	t_fvec		coords;
 	t_fvec		colour;
 	union {
-		t_ambient			ambient;
-		t_camera			camera;
-		t_light				light;
-		t_plane				plane;
-		t_sphere			sphere;
-		t_cylinder			cylinder;
-		t_triangle			triangle;
-		t_face				face;
-		t_mtl				material;
+		t_ambient	ambient;
+		t_camera	camera;
+		t_light		light;
+		t_plane		plane;
+		t_sphere	sphere;
+		t_cylinder	cylinder;
+		t_triangle	triangle;
+		t_face		face;
 	};
 	t_obj_type	type;
 	union {

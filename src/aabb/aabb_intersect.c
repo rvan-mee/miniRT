@@ -24,7 +24,7 @@ float	aabb_intersect(const t_aabb bounds, const t_ray *ray)
 	t[MAX] = (bounds.max - ray->origin) / ray->direction;
 	tlims[MIN] = max_val(min_vec(t[MIN], t[MAX]));
 	tlims[MAX] = min_val(max_vec(t[MIN], t[MAX]));
-	if (tlims[MAX] < 0.0 || tlims[MAX] < tlims[MIN]) // todo: return (rt_minf(tlims[MAX], rt_maxf(tlims[MIN], 0.0f)); ?
+	if (tlims[MAX] < 0.0 || tlims[MAX] < tlims[MIN])
 		return (MISS);
 	return (rt_maxf(tlims[MIN], 0.0f));
 }

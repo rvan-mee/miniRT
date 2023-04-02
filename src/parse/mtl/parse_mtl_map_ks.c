@@ -13,7 +13,7 @@
 #include <parse.h>
 #include <parse_mtl.h>
 
-t_parse_err	parse_mtl_map_ks(char *line, t_object *object)
+t_parse_err	parse_mtl_map_ks(char *line, t_mtl *mtl)
 {
 	t_parse_err	err;
 	t_bmp		tex;
@@ -21,7 +21,7 @@ t_parse_err	parse_mtl_map_ks(char *line, t_object *object)
 	err = parse_mtl_map(line, &tex);
 	if (err != SUCCESS)
 		return (err);
-	set_flag(&object->material, SPECULAR_MAP);
-	object->material.specular_tex = tex;
+	set_flag(mtl, SPECULAR_MAP);
+	mtl->specular_tex = tex;
 	return (CONTINUE);
 }

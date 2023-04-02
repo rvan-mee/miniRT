@@ -45,12 +45,10 @@ typedef struct s_morton {
 
 // A node in the hierarchy
 typedef struct s_cluster {
-	struct {
-		t_nodeidx	l;
-		t_nodeidx	r;
-	};
-	t_aabb		aabb;
+	t_nodeidx	l;
+	t_nodeidx	r;
 	uint32_t	len;
+	t_aabb		aabb;
 }	t_cluster;
 
 // Temporary info for all clusters, storing the closest node

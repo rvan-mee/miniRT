@@ -12,15 +12,15 @@
 
 #include <parse.h>
 
-t_parse_err	parse_mtl_kd(char *line, t_object *object)
+t_parse_err	parse_mtl_kd(char *line, t_mtl *mtl)
 {
 	t_fvec	rgb;
 
-	if (is_flag(&object->material, DIFFUSE_C))
+	if (is_flag(mtl, DIFFUSE_C))
 		return (DUPLICATE);
 	if (!parse_float_rgb(&line, &rgb))
 		return (KD);
-	set_flag(&object->material, DIFFUSE_C);
-	object->material.diffuse = rgb;
+	set_flag(mtl, DIFFUSE_C);
+	mtl->diffuse = rgb;
 	return (CONTINUE);
 }

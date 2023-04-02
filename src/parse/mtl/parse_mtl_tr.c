@@ -13,27 +13,30 @@
 #include <parse.h>
 #include <libft.h>
 
-t_parse_err	parse_mtl_tr(char *line, t_object *object)
+static bool	is_invalid_value(t_mtl *mtl, float tr)
+{
+	const bool	d = is_flag(mtl, TRANSPARENT);
+
+	return (tr < 0 || tr > 1 || (d && mtl->transp_d + tr != 1.0f));
+}
+
+t_parse_err	parse_mtl_tr(char *line, t_mtl *mtl)
 {
 	float	transparency;
 	char	*end;
-	bool	d;
 
-	d = is_flag(&object->material, DISSOLVED);
-	if (is_flag(&object->material, TRANSPARENT))
+	if (is_flag(mtl, TRANSPARENT))
 		return (DUPLICATE);
-	skip_spaces(&line);
 	if (!ft_isdigit(*line))
 		return (TR);
 	transparency = ft_strtof(line, &end);
-	if (line == end || !ft_isdigit(end[-1]))
+	if (line == end || is_invalid_value(mtl, transparency))
 		return (TR);
 	line = end;
 	skip_spaces(&line);
-	if (*line || transparency < 0 || transparency > 1 || \
-	(d && object->material.transp_d + transparency != 1))
+	if (*line)
 		return (TR);
-	object->material.transp_tr = transparency;
-	set_flag(&object->material, TRANSPARENT);
+	mtl->transp_tr = transparency;
+	set_flag(mtl, TRANSPARENT);
 	return (CONTINUE);
 }

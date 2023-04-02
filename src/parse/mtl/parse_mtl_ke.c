@@ -12,15 +12,15 @@
 
 #include <parse.h>
 
-t_parse_err	parse_mtl_ke(char *line, t_object *object)
+t_parse_err	parse_mtl_ke(char *line, t_mtl *mtl)
 {
 	t_fvec	rgb;
 
-	if (is_flag(&object->material, EMMISIVE_C))
+	if (is_flag(mtl, EMMISIVE_C))
 		return (DUPLICATE);
 	if (!parse_float_rgb(&line, &rgb))
 		return (KE);
-	set_flag(&object->material, EMMISIVE_C);
-	object->material.emmis_col = rgb;
+	set_flag(mtl, EMMISIVE_C);
+	mtl->emmis_col = rgb;
 	return (CONTINUE);
 }

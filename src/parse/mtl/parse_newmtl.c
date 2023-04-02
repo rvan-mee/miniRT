@@ -14,7 +14,7 @@
 #include <libft.h>
 #include <parse_mtl.h>
 
-static t_parse_err	(*g_parse_mtl[])(char *, t_object *) = {\
+static t_parse_err	(*g_parse_mtl[])(char *, t_mtl *) = {\
 	[MTL_AMBIENT] = parse_mtl_ka,							\
 	[MTL_DIFFUSE] = parse_mtl_kd,							\
 	[MTL_SPECULAR] = parse_mtl_ks,							\
@@ -46,7 +46,7 @@ static const char	*g_ids[] = {\
 	[MTL_MAP_KS] = "map_Ks",								\
 };
 
-static t_parse_err	mtl_parse_func(char *line, t_object *object)
+static t_parse_err	mtl_parse_func(char *line, t_mtl *mtl)
 {
 	t_parse_mtl	type;
 	size_t		len;
@@ -60,11 +60,11 @@ static t_parse_err	mtl_parse_func(char *line, t_object *object)
 	while (++type != MTL_END)
 	{
 		len = ft_strlen(g_ids[type]);
-		if (ft_strncmp(line, g_ids[type], len) == 0)
-		{
-			line += len;
-			return (g_parse_mtl[type](line, object));
-		}
+		if (ft_strncmp(line, g_ids[type], len) != 0)
+			continue ;
+		line += len;
+		skip_spaces(&line);
+		return (g_parse_mtl[type](line, mtl));
 	}
 	return (SUCCESS);
 }
@@ -110,26 +110,27 @@ t_parse_err	parse_newmtl(char **linep, t_object *object, t_conf_data *conf)
 {
 	t_parse_err	err;
 	char		*line;
-	t_mtl		*mtl;
+	t_mtl		mtl;
 
-	mtl = &object->material;
-	err = parse_mtl_name(linep, &mtl->name);
+	(void) object;
+	mtl = (t_mtl){};
+	err = parse_mtl_name(linep, &mtl.name);
 	if (err != SUCCESS)
 		return (err);
-	err = check_dup(conf, mtl->name);
+	err = check_dup(conf, mtl.name);
 	while (err == CONTINUE)
 	{
 		err = get_line(conf, &line);
 		if (err != CONTINUE)
 			break ;
-		err = mtl_parse_func(line, object);
+		err = mtl_parse_func(line, &mtl);
 		free(line);
 	}
 	if (err != SUCCESS)
-		return (err_cleanup(mtl, err));
-	if (!dynarr_addone(&conf->materials, mtl))
-		return (err_cleanup(mtl, DYNARR));
-	if (!check_properties(mtl))
-		return (err_cleanup(mtl, MTL_ERR));
+		return (err_cleanup(&mtl, err));
+	if (!dynarr_addone(&conf->materials, &mtl))
+		return (err_cleanup(&mtl, DYNARR));
+	if (!check_properties(&mtl))
+		return (err_cleanup(&mtl, MTL_ERR));
 	return (SUCCESS);
 }

@@ -31,19 +31,19 @@ typedef enum e_parse_mtl {
 	MTL_END
 }	t_parse_mtl;
 
-t_parse_err	parse_mtl_ka(char *line, t_object *object);
-t_parse_err	parse_mtl_ks(char *line, t_object *object);
-t_parse_err	parse_mtl_kd(char *line, t_object *object);
-t_parse_err	parse_mtl_ke(char *line, t_object *object);
-t_parse_err	parse_mtl_illum(char *line, t_object *object);
-t_parse_err	parse_mtl_ns(char *line, t_object *object);
-t_parse_err	parse_mtl_d(char *line, t_object *object);
-t_parse_err	parse_mtl_tr(char *line, t_object *object);
-t_parse_err	parse_mtl_ni(char *line, t_object *object);
-t_parse_err	parse_mtl_tf(char *line, t_object *object);
-t_parse_err	parse_mtl_map_ka(char *line, t_object *object);
-t_parse_err	parse_mtl_map_kd(char *line, t_object *object);
-t_parse_err	parse_mtl_map_ks(char *line, t_object *object);
+t_parse_err	parse_mtl_ka(char *line, t_mtl *mtl);
+t_parse_err	parse_mtl_ks(char *line, t_mtl *mtl);
+t_parse_err	parse_mtl_kd(char *line, t_mtl *mtl);
+t_parse_err	parse_mtl_ke(char *line, t_mtl *mtl);
+t_parse_err	parse_mtl_illum(char *line, t_mtl *mtl);
+t_parse_err	parse_mtl_ns(char *line, t_mtl *mtl);
+t_parse_err	parse_mtl_d(char *line, t_mtl *mtl);
+t_parse_err	parse_mtl_tr(char *line, t_mtl *mtl);
+t_parse_err	parse_mtl_ni(char *line, t_mtl *mtl);
+t_parse_err	parse_mtl_tf(char *line, t_mtl *mtl);
+t_parse_err	parse_mtl_map_ka(char *line, t_mtl *mtl);
+t_parse_err	parse_mtl_map_kd(char *line, t_mtl *mtl);
+t_parse_err	parse_mtl_map_ks(char *line, t_mtl *mtl);
 
 t_parse_err	parse_mtl_map(char *line, t_bmp *bmp);
 

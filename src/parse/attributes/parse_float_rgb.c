@@ -18,7 +18,6 @@ bool	parse_float_rgb(char **linep, t_fvec *rgb)
 	char	*line;
 
 	line = *linep;
-	skip_spaces(&line);
 	if (!parse_float(&line, &vals[0], 0, 1))
 		return (false);
 	skip_spaces(&line);

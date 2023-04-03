@@ -126,13 +126,13 @@ typedef struct s_triangle {
 }	t_triangle;
 
 typedef struct s_face {
-	t_fvec		vert[3];
-	bool		has_normal;
-	t_fvec		normals[3];
-	bool		has_texture;
-	t_fvec		uvw[3];
-	t_fvec		v0v1;
-	t_fvec		v0v2;
+	t_fvec	vert[3];
+	t_fvec	normals[3];
+	t_fvec	uvw[3];
+	t_fvec	v0v1;
+	t_fvec	v0v2;
+	bool	has_normal;
+	bool	has_texture;
 }	t_face;
 
 /**
@@ -167,12 +167,11 @@ typedef struct s_object {
 		t_triangle	triangle;
 		t_face		face;
 	};
-	t_obj_type	type;
 	union {
 		t_mtl	*mat;
 		size_t	mat_idx;
 	};
-	bool		has_mat;
+	t_obj_type	type;
 }	t_object;
 
 typedef struct s_scene {

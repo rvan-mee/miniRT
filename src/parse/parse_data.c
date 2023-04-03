@@ -63,9 +63,10 @@ bool	init_parse(t_conf_data *data, int32_t fd)
 // array grows.
 static void	set_mtl_pointers(t_object *obj, t_conf_data *data)
 {
-	if (!obj->has_mat)
-		return ;
-	obj->mat = dynarr_get(&data->materials, obj->mat_idx);
+	if (obj->mat_idx == SIZE_MAX)
+		obj->mat = NULL;
+	else
+		obj->mat = dynarr_get(&data->materials, obj->mat_idx - 1);
 }
 
 static void	destroy_mesh(t_mesh *mesh, void *ign)

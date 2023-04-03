@@ -25,13 +25,12 @@ static t_parse_err	set_current_mtl(char *name, t_conf_data *conf)
 	{
 		if (mtl_arr[i].name && !ft_strncmp(name, mtl_arr[i].name, name_len + 1))
 		{
-			conf->has_mtl = true;
-			conf->curr_mtl = i;
+			conf->curr_mtl = i + 1;
 			return (free(name), SUCCESS);
 		}
 		++i;
 	}
-	conf->has_mtl = false;
+	conf->curr_mtl = SIZE_MAX;
 	free(name);
 	return (NON_EXIST);
 }

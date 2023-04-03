@@ -79,9 +79,10 @@ t_parse_err	parse_objfile(char **linep, t_object *object, t_conf_data *conf)
 	free(path);
 	if (err != SUCCESS)
 		return (err);
-	dat.conf.has_mtl = conf->has_mtl;
-	if (conf->has_mtl)
-		dat.conf.curr_mtl = -1;
+	if (conf->curr_mtl != SIZE_MAX)
+		dat.conf.curr_mtl = 0;
+	else
+		dat.conf.curr_mtl = SIZE_MAX;
 	err = CONTINUE;
 	while (err == CONTINUE)
 		err = parse_more(&dat);

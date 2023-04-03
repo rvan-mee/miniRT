@@ -139,7 +139,6 @@ bool	parse_object(char *line, t_object *object, t_conf_data *conf)
 
 	id_len = 0;
 	object->type = get_obj_type(line, &id_len);
-	object->has_mat = conf->has_mtl;
 	object->mat_idx = conf->curr_mtl;
 	if (is_ignored_type(object->type))
 		return (true);

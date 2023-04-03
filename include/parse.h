@@ -72,7 +72,6 @@ typedef struct s_conf_data {
 	t_dynarr	vn;
 	t_dynarr	materials;
 	t_dynarr	meshes;
-	bool		has_mtl;
 	bool		smoothing;
 	size_t		curr_mtl;
 	size_t		curr_line;

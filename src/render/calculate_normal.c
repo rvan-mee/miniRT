@@ -91,7 +91,7 @@ void	calculate_normal(t_hit *hit)
 		return ;
 	hit->normal = -hit->normal;
 	mat = hit->object->mat;
-	if (hit->object->type != PLANE && hit->object->has_mat && \
+	if (hit->object->type != PLANE && hit->object->mat && \
 		is_flag((t_mtl *)mat, REFRACT_IDX) && mat->illum != 4)
 		hit->refl = mat->opt_dens;
 }

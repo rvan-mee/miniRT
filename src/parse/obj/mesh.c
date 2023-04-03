@@ -17,7 +17,7 @@
 
 static void	offset_mtl(t_object *object, void *delta)
 {
-	if (object->has_mat)
+	if (object->mat_idx != SIZE_MAX)
 		object->mat_idx += (size_t) delta;
 }
 

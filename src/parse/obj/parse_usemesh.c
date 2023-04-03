@@ -13,7 +13,6 @@
 #include <parse_obj.h>
 #include <libft.h>
 #include <ft_math.h>
-#include <math.h>
 
 static bool	get_name(char **linep, char **dst)
 {
@@ -41,7 +40,7 @@ t_parse_err	parse_params(char **linep, t_meshparams *dst)
 	skip_spaces(linep);
 	if (!parse_vector(linep, &dst->v, true))
 		return (free(dst->name), VECTOR);
-	if (fabsf(dot_product(dst->w, dst->v)) > FLOAT_EPSILON)
+	if (rt_absf(dot_product(dst->w, dst->v)) > FLOAT_EPSILON)
 		return (free(dst->name), VECTOR);
 	dst->u = normalize_vector(cross_product(dst->v, dst->w));
 	skip_spaces(linep);

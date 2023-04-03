@@ -67,4 +67,13 @@ float	rt_maxf(float a, float b)
 		return (a);
 }
 
+static inline
+float	rt_absf(float f)
+{
+	if (f < 0)
+		return (-f);
+	else
+		return (f);
+}
+
 #endif

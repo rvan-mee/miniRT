@@ -13,6 +13,7 @@
 #include <scene.h>
 #include <float.h>
 #include <math.h>
+#include <ft_math.h>
 
 void	get_scene_scale(t_scene *scene)
 {
@@ -37,5 +38,5 @@ void	get_scene_scale(t_scene *scene)
 		else
 			cluster = bvh->clusters + cluster->r;
 	}
-	scene->scale = fmaxf(1, sqrtf(delta[X] * delta[X] + delta[Z] * delta[Z]));
+	scene->scale = rt_maxf(1, sqrtf(delta[X] * delta[X] + delta[Z] * delta[Z]));
 }

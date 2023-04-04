@@ -75,7 +75,7 @@ typedef struct s_fresnel_data {
 bool	trace(t_scene *scene, t_ray *ray, t_hit *hit);
 
 bool	intersect_bvh(const t_bvh *bvh, t_cray *ray, t_hit *hit);
-float	aabb_intersect(t_aabb bounds, t_cray *ray);
+float	aabb_intersect(t_aabb bounds, t_cray *ray, t_fvec inv_dir);
 float	intersect(const t_object *object, t_cray *ray, t_hit *hit);
 float	intersect_plane(const t_object *object, t_cray *ray, t_hit *hit);
 float	intersect_cylinder(const t_object *object, t_cray *ray, t_hit *hit);

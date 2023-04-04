@@ -21,30 +21,37 @@ static t_prio	node(const uint32_t idx, const float dist)
 }
 
 static
-void	intersect_node(t_cbvh *bvh, const uint32_t idx, t_hit *hit, t_queue *q)
+float	intersect_node(t_cbvh *bvh, t_nodeidx idx, t_hit *hit, t_fvec inv_dir)
 {
 	const t_cluster	*c = get_node(bvh, idx);
 	const bool		is_p = is_prim(bvh, idx);
-	float			distance;
 
 	if (is_p)
-		distance = intersect(bvh->prims + idx, &hit->ray, hit);
+		return (intersect(bvh->prims + idx, &hit->ray, hit));
 	else
-		distance = aabb_intersect(c->aabb, &hit->ray);
-	if (distance == MISS || distance < 0)
-		return ;
-	return (insert(q, node(idx, distance), is_p));
+		return (aabb_intersect(c->aabb, &hit->ray, inv_dir));
 }
 
+// This function is a little less readable because of norminette
+// an extra param was needed for the inverse direction, so I couldn't insert
+// in the function above
 static inline
-void	intersect_next(const t_bvh *bvh, t_hit *hit, t_queue *queue)
+void	intersect_next(t_cbvh *bvh, t_hit *hit, t_queue *queue, t_fvec inv_dir)
 {
-	t_prio	*cur;
+	t_prio		*cur;
+	t_nodeidx	child;
+	float		dist;
 
 	cur = queue->queue.next;
 	queue->queue.next = cur->next;
-	intersect_node(bvh, get_l(bvh, cur->node), hit, queue);
-	intersect_node(bvh, get_r(bvh, cur->node), hit, queue);
+	child = get_l(bvh, cur->node);
+	dist = intersect_node(bvh, child, hit, inv_dir);
+	if (dist >= 0 && dist != INFINITY)
+		insert(queue, node(child, dist), is_prim(bvh, child));
+	child = get_r(bvh, cur->node);
+	dist = intersect_node(bvh, child, hit, inv_dir);
+	if (dist >= 0 && dist != INFINITY)
+		insert(queue, node(child, dist), is_prim(bvh, child));
 	cur->next = queue->pool.next;
 	queue->pool.next = cur;
 }
@@ -52,13 +59,15 @@ void	intersect_next(const t_bvh *bvh, t_hit *hit, t_queue *queue)
 bool	intersect_bvh(const t_bvh *bvh, const t_ray *ray, t_hit *hit)
 {
 	static __thread t_queue	queue;
+	t_fvec					inv_dir;
 
 	if (queue.pool.next == NULL)
 		init_queue(&queue);
 	hit->ray = *ray;
+	inv_dir = 1.0f / ray->direction;
 	insert(&queue, node(bvh->root, 0.0f), false);
 	while (queue.queue.next != NULL && !is_prim(bvh, queue.queue.next->node))
-		intersect_next(bvh, hit, &queue);
+		intersect_next(bvh, hit, &queue, inv_dir);
 	if (queue.queue.next == NULL)
 		return (false);
 	hit->distance = queue.queue.next->dist;

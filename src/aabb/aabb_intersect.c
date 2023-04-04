@@ -15,13 +15,13 @@
 #define MIN	0
 #define MAX	1
 
-float	aabb_intersect(const t_aabb bounds, const t_ray *ray)
+float	aabb_intersect(const t_aabb bounds, const t_ray *ray, t_fvec inv_dir)
 {
 	t_fvec	t[2];
 	float	tlims[2];
 
-	t[MIN] = (bounds.min - ray->origin) / ray->direction;
-	t[MAX] = (bounds.max - ray->origin) / ray->direction;
+	t[MIN] = (bounds.min - ray->origin) * inv_dir;
+	t[MAX] = (bounds.max - ray->origin) * inv_dir;
 	tlims[MIN] = max_val(min_vec(t[MIN], t[MAX]));
 	tlims[MAX] = min_val(max_vec(t[MIN], t[MAX]));
 	if (tlims[MAX] < 0.0 || tlims[MAX] < tlims[MIN])

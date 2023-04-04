@@ -85,6 +85,7 @@ t_fvec	transmit_ray(t_scene *scene, t_hit *hit, float contrib, t_fresnel f)
 	return ((1.0f - f.refl_ratio) * colour);
 }
 
+static const float	g_refl_cost = 1.0f / MAX_REFLECTION_DEPTH;
 t_fvec	fresnel(t_scene *scene, t_fvec ks, t_hit *hit, float contrib)
 {
 	const t_mtl	*mat = hit->object->mat;
@@ -99,6 +100,10 @@ t_fvec	fresnel(t_scene *scene, t_fvec ks, t_hit *hit, float contrib)
 	if (is_flag(mat, DISSOLVED | TRANSPARENT))
 		col += transmit_ray(scene, hit, contrib, f);
 	if (f.refl_ratio * contrib > CONTRIB_CUTOFF)
+	{
+		if (f.refl_ratio == 1.0f)
+			contrib -= g_refl_cost;
 		col += f.refl_ratio * reflect_ray(scene, hit, f.refl_ratio * contrib) * ks;
+	}
 	return (col);
 }

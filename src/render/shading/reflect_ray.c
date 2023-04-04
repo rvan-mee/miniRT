@@ -13,14 +13,15 @@
 #include <render.h>
 #include <ft_math.h>
 
-t_fvec	reflect_ray(t_scene *scene, t_hit *hit, uint8_t depth)
+t_fvec	reflect_ray(t_scene *scene, t_hit *hit, float contrib)
 {
 	t_hit	r_hit;
 	t_fvec	r_dir;
 
 	r_dir = reflect(hit->ray.direction, hit->normal);
 	r_hit.ray = get_biased_ray(hit->hit, r_dir, hit->normal);
+	r_hit.inside_ri = hit->inside_ri;
 	if (!trace(scene, &r_hit.ray, &r_hit))
 		return ((t_fvec){});
-	return (shade(scene, &r_hit, depth + 1));
+	return (shade(scene, &r_hit, contrib));
 }

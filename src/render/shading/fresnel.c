@@ -13,6 +13,7 @@
 #include <render.h>
 #include <ft_math.h>
 #include <math.h>
+#define CONTRIB_CUTOFF	0.005f
 
 // ri_1 is the refractive index of the material we're leaving, ri_2 entering
 static float	reflect_amount(float ri_1, float ri_2, t_hit *hit)
@@ -42,16 +43,17 @@ static float	get_transmittance(const t_mtl *mat)
 }
 
 static
-t_fvec	no_refract(t_scene *scene, t_hit *hit, uint8_t depth, float transm)
+t_fvec	no_refract(t_scene *scene, t_hit *hit, float contrib, float transm)
 {
 	t_mtl	*mat;
 	t_hit	r_hit;
 	t_fvec	colour;
 
 	r_hit.ray = get_biased_ray(hit->hit, hit->ray.direction, hit->normal);
+	r_hit.inside_ri = 1.0f;
 	if (!trace(scene, &r_hit.ray, &r_hit))
 		return ((t_fvec){});
-	colour = shade(scene, &r_hit, depth) * transm;
+	colour = shade(scene, &r_hit, contrib) * transm;
 	mat = hit->object->mat;
 	if (is_flag(mat, TRANSMISSION_FILTER))
 		colour *= exp_fvec(-mat->tra_filter);
@@ -59,7 +61,7 @@ t_fvec	no_refract(t_scene *scene, t_hit *hit, uint8_t depth, float transm)
 }
 
 static
-t_fvec	transmit_ray(t_scene *scene, t_hit *hit, uint8_t depth, t_fresnel f)
+t_fvec	transmit_ray(t_scene *scene, t_hit *hit, float contrib, t_fresnel f)
 {
 	const t_mtl	*mat = hit->object->mat;
 	const float	transm = get_transmittance(mat);
@@ -67,37 +69,36 @@ t_fvec	transmit_ray(t_scene *scene, t_hit *hit, uint8_t depth, t_fresnel f)
 	t_fvec		r_dir;
 	t_fvec		colour;
 
-	// todo: check this?
-	if (transm * (1.0f - f.refl_ratio) <= (float) depth / (10.f * MAX_REFLECTION_DEPTH))
+	contrib *= transm * (1.0f - f.refl_ratio);
+	if (contrib < CONTRIB_CUTOFF)
 		return ((t_fvec){});
 	if (mat->illum == 4)
-		return (no_refract(scene, hit, depth, transm));
-	r_dir = refract(hit->ray.direction, hit->normal, hit->refl, f.refr_index);
+		return ((1.0f - f.refl_ratio) * no_refract(scene, hit, contrib, transm));
+	r_dir = refract(hit->ray.direction, hit->normal, hit->inside_ri, f.refr_index);
 	r_hit.ray = get_biased_ray(hit->hit, r_dir, hit->normal);
+	r_hit.inside_ri = f.refr_index;
 	if (!trace(scene, &r_hit.ray, &r_hit))
 		return ((t_fvec){});
-	colour = shade(scene, &r_hit, depth + 1) * transm;
-	if (is_flag(mat, TRANSMISSION_FILTER))
-		colour *= exp_fvec(-mat->tra_filter * r_hit.distance * scene->scale);
-	return (colour);
+	colour = shade(scene, &r_hit, contrib) * transm;
+	if (hit->inside_ri != 1.0f && is_flag(mat, TRANSMISSION_FILTER))
+		colour *= exp_fvec(-mat->tra_filter * hit->distance * scene->scale);
+	return ((1.0f - f.refl_ratio) * colour);
 }
 
-t_fvec	fresnel(t_scene *scene, t_fvec ks, t_hit *hit, uint8_t depth)
+t_fvec	fresnel(t_scene *scene, t_fvec ks, t_hit *hit, float contrib)
 {
+	const t_mtl	*mat = hit->object->mat;
 	t_fresnel	f;
-	t_mtl		*mat;
 	t_fvec		col;
 
-	mat = hit->object->mat;
-	if (hit->refl != 1.0f)
-		f.refr_index = 1.0f;
-	else
+	f.refr_index = 1.0f;
+	if (hit->inside_ri == 1.0f)
 		f.refr_index = mat->opt_dens;
-	f.refl_ratio = reflect_amount(hit->refl, f.refr_index, hit);
+	f.refl_ratio = reflect_amount(hit->inside_ri, f.refr_index, hit);
 	col = (t_fvec){};
 	if (is_flag(mat, DISSOLVED | TRANSPARENT))
-		col += (1.0f - f.refl_ratio) * transmit_ray(scene, hit, depth, f);
-	if (powf(f.refl_ratio, (float) depth) > FLOAT_EPSILON)
-		col += f.refl_ratio * reflect_ray(scene, hit, depth) * ks;
+		col += transmit_ray(scene, hit, contrib, f);
+	if (f.refl_ratio * contrib > CONTRIB_CUTOFF)
+		col += f.refl_ratio * reflect_ray(scene, hit, f.refl_ratio * contrib) * ks;
 	return (col);
 }

@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minirt.h>
 #include <render.h>
 #include <texture.h>
 
@@ -57,8 +56,9 @@ static t_phong	init_struct(t_object *obj, t_hit *hit)
 	return (ret);
 }
 
+static const float	g_refl_cost = 1.0f / MAX_REFLECTION_DEPTH;
 static
-t_fvec	use_material(t_scene *scene, t_hit *hit, uint8_t depth)
+t_fvec	use_material(t_scene *scene, t_hit *hit, float contrib)
 {
 	t_object	*object;
 	t_mtl		*mat;
@@ -70,19 +70,16 @@ t_fvec	use_material(t_scene *scene, t_hit *hit, uint8_t depth)
 	p_args = init_struct(hit->object, hit);
 	colour = get_ambient(scene, p_args.ka);
 	colour += phong(scene, p_args);
-	if (depth < MAX_REFLECTION_DEPTH)
-	{
-		if (is_flag(mat, REFRACT_IDX))
-			colour += fresnel(scene, p_args.ks, hit, depth);
-		else if (mat->illum == 3)
-			colour += reflect_ray(scene, hit, depth) * p_args.ks;
-	}
+	if (is_flag(mat, REFRACT_IDX))
+		colour += fresnel(scene, p_args.ks, hit, contrib);
+	else if (mat->illum == 3 && contrib > 0)
+		colour += reflect_ray(scene, hit, contrib - g_refl_cost) * p_args.ks;
 	if (is_flag(mat, EMMISIVE_C))
 		colour += mat->emmis_col;
 	return (colour);
 }
 
-t_fvec	shade(t_scene *scene, t_hit *hit, uint8_t depth)
+t_fvec	shade(t_scene *scene, t_hit *hit, float contrib)
 {
 	t_object		*object;
 	t_phong			p_args;
@@ -90,7 +87,7 @@ t_fvec	shade(t_scene *scene, t_hit *hit, uint8_t depth)
 
 	object = hit->object;
 	if (object->mat)
-		return (use_material(scene, hit, depth));
+		return (use_material(scene, hit, contrib));
 	p_args = (t_phong){ // todo: also look at this!
 		.cam_hit = hit,
 		.kd = object->colour,

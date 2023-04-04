@@ -76,7 +76,7 @@ static void	tr_f_normal(t_hit *hit)
 
 void	calculate_normal(t_hit *hit)
 {
-	t_mtl		*mat;
+	const t_mtl	*mat = hit->object->mat;
 	static void	(*lut[])(t_hit *) = {
 	[SPHERE] = sphere_normal,
 	[PLANE] = plane_normal,
@@ -86,12 +86,11 @@ void	calculate_normal(t_hit *hit)
 	};
 
 	lut[hit->object->type](hit);
-	hit->refl = 1.0f;
-	if (dot_product(hit->ray.direction, hit->normal) <= 0)
-		return ;
-	hit->normal = -hit->normal;
-	mat = hit->object->mat;
-	if (hit->object->type != PLANE && hit->object->mat && \
-		is_flag((t_mtl *)mat, REFRACT_IDX) && mat->illum != 4)
-		hit->refl = mat->opt_dens;
+	if (dot_product(hit->ray.direction, hit->normal) > 0)
+	{
+		hit->normal = -hit->normal;
+		if (hit->inside_ri == 1.0f && is_flag(mat, REFRACT_IDX)
+			&& mat->illum != 4 && hit->object->type != PLANE)
+			hit->inside_ri = mat->opt_dens;
+	}
 }

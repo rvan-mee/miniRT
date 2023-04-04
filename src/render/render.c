@@ -143,6 +143,7 @@ static void	render_pixel(t_minirt *data, int32_t x, int32_t y)
 	{
 		pos = (t_fvec2){(float)x, (float)y} + g_aa_offs[samp];
 		hits[hit_i].ray = get_cam_ray(&data->scene->camera, pos[X], pos[Y]);
+		hits[hit_i].inside_ri = 1.0f;
 		if (trace(data->scene, &hits[hit_i].ray, hits + hit_i))
 			hit_i++;
 		if (SMART_AA && (samp == 2 || samp == 4 || samp == 8) && \
@@ -152,7 +153,7 @@ static void	render_pixel(t_minirt *data, int32_t x, int32_t y)
 	}
 	t_fvec col = {};
 	while (hit_i--)
-		col += shade(data->scene, hits + hit_i, 0);
+		col += shade(data->scene, hits + hit_i, 1.0f);
 	if (samp <= MAX_SAMPLES)
 		samp++;
 	col /= (float) samp;

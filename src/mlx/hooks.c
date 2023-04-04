@@ -78,7 +78,7 @@ void	mouse_hook(mouse_key_t t, action_t a, modifier_key_t m, t_minirt *data)
 						(float) mouse[X] + 0.5f, (float) mouse[Y] + 0.5f);
 	if (!trace(scene, &hit.ray, &hit))
 		return ;
-	if (hit.refl == 1.0f && is_flag(hit.object->mat, REFRACT_IDX))
+	if (hit.inside_ri == 1.0f && is_flag(hit.object->mat, REFRACT_IDX))
 		refl_idx = hit.object->mat->opt_dens;
 	else
 		refl_idx = 1.0f;
@@ -86,5 +86,5 @@ void	mouse_hook(mouse_key_t t, action_t a, modifier_key_t m, t_minirt *data)
 		hit.distance, hit.hit[X], hit.hit[Y], hit.hit[Z],
 		hit.normal[X], hit.normal[Y], hit.normal[Z],
 		hit.bary[X], hit.bary[Y], hit.bary[Z],
-		hit.refl, refl_idx);
+		hit.inside_ri, refl_idx);
 }

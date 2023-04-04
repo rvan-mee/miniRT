@@ -37,7 +37,10 @@ static bool	get_name(char *path, char **dst)
 	size_t	len;
 	char	*start;
 
-	len = ft_strlen(path) - 4;
+	len = ft_strlen(path);
+	if (len <= 4)
+		return (false);
+	len -= 4;
 	start = ft_strrchr(path, '/');
 	if (start != NULL)
 		start++;

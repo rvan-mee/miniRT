@@ -12,6 +12,7 @@
 
 #include <render.h>
 #include <ft_math.h>
+#define SHADOW_BRIGHTNESS_CUTOFF 0.001f
 
 static
 t_fvec	phong_light(t_object *light, t_fvec dir, t_phong args)
@@ -40,13 +41,14 @@ t_fvec	in_shadow(t_scene *scene, t_object *light, t_phong cols)
 	t_hit			s_hit;
 
 	s_hit.ray.direction = normalize_vector(l_rel);
-	if (dot_product(s_hit.ray.direction, hit->normal) < 0)
+	cols.brightness = light->light.brightness * scene->scale / dist_sq;
+	if (cols.brightness < SHADOW_BRIGHTNESS_CUTOFF
+		|| dot_product(s_hit.ray.direction, hit->normal) < 0)
 		return ((t_fvec){});
 	s_hit.ray = get_biased_ray(hit->hit, s_hit.ray.direction, hit->normal);
 	if (intersect_bvh(&scene->bvh, &s_hit.ray, &s_hit) && \
 		dist_sq > s_hit.distance * s_hit.distance)
 		return ((t_fvec){});
-	cols.brightness = light->light.brightness * scene->scale / dist_sq;
 	return (phong_light(light, s_hit.ray.direction, cols));
 }
 

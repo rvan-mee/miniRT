@@ -69,7 +69,8 @@ t_fvec	use_material(t_scene *scene, t_hit *hit, float contrib)
 	mat = object->mat;
 	p_args = init_struct(hit->object, hit);
 	colour = get_ambient(scene, p_args.ka);
-	colour += phong(scene, p_args);
+	if (hit->inside_ri == 1.0f)
+		colour += phong(scene, p_args);
 	if (is_flag(mat, REFRACT_IDX))
 		colour += fresnel(scene, p_args.ks, hit, contrib);
 	else if (mat->illum == 3 && contrib > 0)

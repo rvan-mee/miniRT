@@ -21,8 +21,6 @@ float	intersect_face(const t_object *obj, const t_ray *ray, t_hit *hit)
 	const float		det = dot_product(tr->v0v1, pvec);
 	t_tri_intersect	isect;
 
-	if (rt_absf(det) < FLOAT_EPSILON)
-		return (MISS);
 	isect.inv_det = 1.0f / det;
 	isect.tvec = ray->origin - tr->vert[0];
 	isect.u = dot_product(isect.tvec, pvec) * isect.inv_det;

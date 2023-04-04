@@ -15,9 +15,15 @@ NAME := miniRT
 CC = gcc
 
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += -march=native -O3 -pthread
-CFLAGS += -g #-fsanitize=address
+CFLAGS += #-fsanitize=address
+CFLAGS += $(OFLAGS)
+OFLAGS += -march=native -O3 -flto=auto -fuse-linker-plugin -fno-math-errno \
+		  -freciprocal-math -fno-signed-zeros -fno-trapping-math -fsingle-precision-constant
 INCLUDE += -I $(INCD)
+
+ifdef DEBUG
+	CFLAGS += -g
+endif
 
 # SOURCE FILES
 SRCD := src/
@@ -177,6 +183,7 @@ MLX42_N := libmlx42.a
 MLX42_I := $(addprefix $(MLX42_D), $(INCD))
 MLX42_L := $(addprefix $(MLX42_D), $(MLX42_N))
 
+LINKER_FLAGS += -pthread
 LINKER_FLAGS += -lglfw
 LINKER_FLAGS += -lm
 INCLUDE += -I $(MLX42_I)
@@ -260,7 +267,7 @@ $(OBJD)%.o: $(SRCD)%.c $(HEADERS)
 	$(COMPILE) -c -o $@ $<
 
 $(LIBFT_L):
-	@$(MAKE) -C $(LIBFT_D)
+	@$(MAKE) -C $(LIBFT_D) OFLAGS="$(OFLAGS)"
 
 $(MLX42_L):
 	@$(MAKE) -C $(MLX42_D)

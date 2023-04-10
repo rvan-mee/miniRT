@@ -15,7 +15,6 @@
 #include <inttypes.h>
 #include <string.h>
 #include <ft_math.h>
-#include <endian.h>
 
 #define GAMMA_A	1.055f
 #define GAMMA_B	0.055f
@@ -60,7 +59,7 @@ static void	put_pixel(mlx_image_t *img, uint32_t col, int32_t x, int32_t y)
 	uint32_t		*px;
 
 	px = (uint32_t *) img->pixels;
-	px[offs] = htole32(col);
+	px[offs] = col;
 }
 
 /*

@@ -96,4 +96,7 @@ float	get_ray_bias(t_fvec normal, t_fvec dir);
 t_ray	get_biased_ray(t_fvec origin, t_fvec direction, t_fvec normal);
 t_fvec	reflect_ray(t_scene *scene, t_hit *hit, float contrib);
 
+t_fvec	encode_gamma(t_fvec rgb);
+t_fvec	decode_gamma(t_fvec srgb);
+
 #endif //RENDER_H

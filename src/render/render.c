@@ -16,41 +16,12 @@
 #include <string.h>
 #include <ft_math.h>
 
-#define GAMMA_A	1.055f
-#define GAMMA_B	0.055f
-#define GAMMA	2.4f
-#define LINEAR_CUTOFF	0.0031308f
-#define LINEAR_FACTOR	12.92f
-
 #ifndef MAX_SAMPLES
 # define MAX_SAMPLES	16
 #endif
 #ifndef SMART_AA
 # define SMART_AA		1
 #endif
-
-static uint32_t	encode_gamma(t_fvec rgb)
-{
-	uint8_t		channel;
-	uint32_t	colour;
-
-	channel = 0;
-	while (channel < 3)
-	{
-		if (rgb[channel] <= LINEAR_CUTOFF)
-			rgb[channel] *= LINEAR_FACTOR;
-		else
-			rgb[channel] = GAMMA_A * powf(rgb[channel], 1.0f / GAMMA) - GAMMA_B;
-		++channel;
-	}
-	rgb[3] = 1.0f;
-	rgb = min_vec(rgb * 0xFF, (t_fvec){255.f, 255.f, 255.f, 255.f});
-	// This produces a little endian uint on linux -- mlx_put_pixel does not
-	// seem to like that very much, but we can assign it to the pixels (if they
-	// are cast to a uint32_t *) directly!
-	colour = (uint32_t) __builtin_convertvector(rgb, t_bvec);
-	return (colour);
-}
 
 static void	put_pixel(mlx_image_t *img, uint32_t col, int32_t x, int32_t y)
 {
@@ -157,7 +128,10 @@ static void	render_pixel(t_minirt *data, int32_t x, int32_t y)
 		samp++;
 	col /= (float) samp;
 	col = 1.0f - exp_fvec(col * data->scene->camera.camera.exposure);
-	put_pixel(data->img, encode_gamma(col), x, y);
+	col = encode_gamma(col);
+	col[3] = 1.0f;
+	col = min_vec(col * 0xFF, (t_fvec){255.f, 255.f, 255.f, 255.f});
+	put_pixel(data->img, (uint32_t) __builtin_convertvector(col, t_bvec), x, y);
 }
 
 static void	render(t_minirt	*data, t_render *block)

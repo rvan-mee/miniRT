@@ -11,29 +11,6 @@
 /* ************************************************************************** */
 
 #include <texture.h>
-#include <math.h>
-
-#define GAMMA_A	1.055f
-#define GAMMA_B	0.055f
-#define GAMMA	2.4f
-#define LINEAR_CUTOFF	0.04045f
-#define LINEAR_FACTOR	12.92f
-
-static t_fvec	decode_gamma(t_fvec col)
-{
-	uint8_t	idx;
-
-	idx = 0;
-	while (idx < 3)
-	{
-		if (col[idx] < LINEAR_CUTOFF)
-			col[idx] /= LINEAR_FACTOR;
-		else
-			col[idx] = powf((GAMMA_B + col[idx]) / GAMMA_A, GAMMA);
-		++idx;
-	}
-	return (col);
-}
 
 t_fvec	get_uv_colour(t_bmp *texture, float u, float v)
 {

@@ -113,6 +113,7 @@ SRCS := main.c										\
 		render/texture/get_texture_cyl.c			\
 		render/texture/get_texture_triangle.c		\
 		render/texture/get_texture_face.c			\
+		render/gamma.c								\
 		\
 		bvh/new_bvh.c								\
 		bvh/morton.c								\

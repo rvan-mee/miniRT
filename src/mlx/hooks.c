@@ -74,8 +74,8 @@ void	mouse_hook(mouse_key_t t, action_t a, modifier_key_t m, t_minirt *data)
 		return ;
 	scene = data->scene;
 	mlx_get_mouse_pos(data->mlx, mouse + X, mouse + Y);
-	hit.ray = get_cam_ray(&scene->camera,
-						(float) mouse[X] + 0.5f, (float) mouse[Y] + 0.5f);
+	hit.ray = get_cam_ray(&scene->camera, \
+				(float) mouse[X] + 0.5f, (float) mouse[Y] + 0.5f);
 	if (!trace(scene, &hit.ray, &hit))
 		return ;
 	if (hit.inside_ri == 1.0f && is_flag(hit.object->mat, REFRACT_IDX))

@@ -15,7 +15,7 @@
 
 float	get_ray_bias(t_fvec normal, t_fvec dir)
 {
-	return (rt_maxf(0.05f * (1.0f - rt_absf(dot_product(normal, dir))), 0.005f));
+	return (rt_maxf(0.05f * (1.0f - rt_absf(dot_product(normal, dir))), .005f));
 }
 
 t_ray	get_biased_ray(t_fvec origin, t_fvec direction, t_fvec normal)

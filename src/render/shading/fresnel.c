@@ -66,16 +66,16 @@ t_fvec	transmit_ray(t_scene *scene, t_hit *hit, float contrib, t_fresnel f)
 	const t_mtl	*mat = hit->object->mat;
 	const float	transm = get_transmittance(mat);
 	t_hit		r_hit;
-	t_fvec		r_dir;
 	t_fvec		colour;
 
 	contrib *= transm * (1.0f - f.refl_ratio);
 	if (contrib < CONTRIB_CUTOFF)
 		return ((t_fvec){});
 	if (mat->illum == 4)
-		return ((1.0f - f.refl_ratio) * no_refract(scene, hit, contrib, transm));
-	r_dir = refract(hit->ray.direction, hit->normal, hit->inside_ri, f.refr_index);
-	r_hit.ray = get_biased_ray(hit->hit, r_dir, hit->normal);
+		return ((1.f - f.refl_ratio) * no_refract(scene, hit, contrib, transm));
+	r_hit.ray.direction = refract(hit->ray.direction, hit->normal, \
+							hit->inside_ri, f.refr_index);
+	r_hit.ray = get_biased_ray(hit->hit, r_hit.ray.direction, hit->normal);
 	r_hit.inside_ri = f.refr_index;
 	if (!trace(scene, &r_hit.ray, &r_hit))
 		return ((t_fvec){});
@@ -86,6 +86,7 @@ t_fvec	transmit_ray(t_scene *scene, t_hit *hit, float contrib, t_fresnel f)
 }
 
 static const float	g_refl_cost = 1.0f / MAX_REFLECTION_DEPTH;
+
 t_fvec	fresnel(t_scene *scene, t_fvec ks, t_hit *hit, float contrib)
 {
 	const t_mtl	*mat = hit->object->mat;
@@ -103,7 +104,9 @@ t_fvec	fresnel(t_scene *scene, t_fvec ks, t_hit *hit, float contrib)
 	{
 		if (f.refl_ratio == 1.0f)
 			contrib -= g_refl_cost;
-		col += f.refl_ratio * reflect_ray(scene, hit, f.refl_ratio * contrib) * ks;
+		else
+			contrib *= f.refl_ratio;
+		col += f.refl_ratio * reflect_ray(scene, hit, contrib) * ks;
 	}
 	return (col);
 }

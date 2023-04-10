@@ -57,6 +57,7 @@ static t_phong	init_struct(t_object *obj, t_hit *hit)
 }
 
 static const float	g_refl_cost = 1.0f / MAX_REFLECTION_DEPTH;
+
 static
 t_fvec	use_material(t_scene *scene, t_hit *hit, float contrib)
 {

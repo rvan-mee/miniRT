@@ -17,8 +17,7 @@ CC = gcc
 CFLAGS += -Wall -Werror -Wextra
 CFLAGS += #-fsanitize=address
 CFLAGS += $(OFLAGS)
-OFLAGS += -march=native -O3 -flto=auto -fuse-linker-plugin -fno-math-errno \
-		  -freciprocal-math -fno-signed-zeros -fno-trapping-math -fsingle-precision-constant
+OFLAGS += -march=native -O3 -fno-math-errno -freciprocal-math -fno-signed-zeros -fno-trapping-math
 INCLUDE += -I $(INCD)
 
 ifdef DEBUG
@@ -193,9 +192,11 @@ ifeq ($(shell uname -s), Darwin)
 	GLFW := $(shell brew --prefix glfw)/lib
 	LINKER_FLAGS += -L $(GLFW)
 	CORE_COUNT = $(shell sysctl -n hw.ncpu)
+	OFLAGS += -flto
 else
 	LINKER_FLAGS += -ldl
 	CORE_COUNT = $(shell grep '^processor' /proc/cpuinfo | wc -l)
+	OFLAGS += -fsingle-precision-constant -flto=auto -fuse-linker-plugin
 endif
 
 DEFINES := -DTHREAD_C=$(CORE_COUNT) $(OPTIONS)

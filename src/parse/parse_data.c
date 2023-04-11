@@ -26,6 +26,13 @@ static const size_t	g_arrparams[ARR_COUNT][3] = {\
 	{offsetof(t_conf_data, meshes), 4, sizeof(t_mesh)},					\
 };
 
+static void	destroy_mesh(t_mesh *mesh, void *ign)
+{
+	(void) ign;
+	free(mesh->name);
+	free(mesh->faces);
+}
+
 bool	cleanup_parse(void *anything, t_conf_data *data)
 {
 	free(anything);
@@ -36,6 +43,8 @@ bool	cleanup_parse(void *anything, t_conf_data *data)
 	dynarr_delete(&data->v);
 	dynarr_delete(&data->vt);
 	dynarr_delete(&data->vn);
+	if (data->meshes.arr)
+		dynarr_foreach(&data->meshes, (t_foreach) destroy_mesh, NULL);
 	dynarr_delete(&data->meshes);
 	dynarr_delete(&data->materials);
 	return (false);
@@ -67,13 +76,6 @@ static void	set_mtl_pointers(t_object *obj, t_conf_data *data)
 		obj->mat = NULL;
 	else
 		obj->mat = dynarr_get(&data->materials, obj->mat_idx - 1);
-}
-
-static void	destroy_mesh(t_mesh *mesh, void *ign)
-{
-	(void) ign;
-	free(mesh->name);
-	free(mesh->faces);
 }
 
 // This function does really set the scene

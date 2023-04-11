@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/11/10 18:16:39 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/11/19 12:18:19 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2023/04/11 15:30:23 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,9 +128,9 @@ t_parse_err	parse_newmtl(char **linep, t_object *object, t_conf_data *conf)
 	}
 	if (err != SUCCESS)
 		return (err_cleanup(&mtl, err));
-	if (!dynarr_addone(&conf->materials, &mtl))
-		return (err_cleanup(&mtl, DYNARR));
 	if (!check_properties(&mtl))
 		return (err_cleanup(&mtl, MTL_ERR));
+	if (!dynarr_addone(&conf->materials, &mtl))
+		return (err_cleanup(&mtl, DYNARR));
 	return (SUCCESS);
 }

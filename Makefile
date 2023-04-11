@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2023/03/06 12:14:44 by lsinke        ########   odam.nl          #
+#    Updated: 2023/04/11 15:30:43 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,9 @@ NAME := miniRT
 CC = gcc
 
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += #-fsanitize=address
+CFLAGS += #-fsanitize=address -Og -g
 CFLAGS += $(OFLAGS)
-OFLAGS += -march=native -O3 -fno-math-errno -freciprocal-math -fno-signed-zeros -fno-trapping-math
+OFLAGS += -march=native -fno-math-errno -freciprocal-math -fno-signed-zeros -fno-trapping-math -O3
 INCLUDE += -I $(INCD)
 
 ifdef DEBUG
@@ -181,7 +181,7 @@ LIBS += $(LIBFT_L)
 MLX42_D := $(LIBD)MLX42/
 MLX42_N := libmlx42.a
 MLX42_I := $(addprefix $(MLX42_D), $(INCD))
-MLX42_L := $(addprefix $(MLX42_D), $(MLX42_N))
+MLX42_L := $(addprefix $(MLX42_D)/build/, $(MLX42_N))
 
 LINKER_FLAGS += -pthread
 LINKER_FLAGS += -lglfw
@@ -259,7 +259,7 @@ RESOURCES = scenes/models/bmw.obj			\
 # RECIPES
 all: $(NAME) $(TEST_LIB)
 
-$(NAME): $(LIBS) $(OBJP) $(RESOURCES)
+$(NAME): $(LIBS) $(OBJP) #$(RESOURCES)
 	@echo "Compiling main executable!"
 	$(COMPILE) $(OBJP) $(LIBS) $(LINKER_FLAGS) -o $(NAME)
 
@@ -272,19 +272,18 @@ $(LIBFT_L):
 	@$(MAKE) -C $(LIBFT_D) OFLAGS="$(OFLAGS)"
 
 $(MLX42_L):
-	@$(MAKE) -C $(MLX42_D)
+	@cmake $(MLX42_D) -B $(MLX42_D)/build && cmake --build $(MLX42_D)/build --parallel
 
 clean:
 	@rm -rf $(OBJD)
 	@echo "Done cleaning $(CURDIR)/$(OBJD)"
 	@$(MAKE) -C $(LIBFT_D) clean
-	@$(MAKE) -C $(MLX42_D) clean
+	@rm -rf $(MLX42_D)/build
 
 fclean:
 	@rm -f $(NAME)
 	@$(MAKE) clean
 	@$(MAKE) -C $(LIBFT_D) fclean
-	@$(MAKE) -C $(MLX42_D) fclean
 
 re: fclean
 	@$(MAKE)

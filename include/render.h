@@ -21,6 +21,15 @@
 # ifndef MAX_REFLECTION_DEPTH
 #  define MAX_REFLECTION_DEPTH	16
 # endif
+# ifndef MAX_SAMPLES
+#  define MAX_SAMPLES	16
+# endif
+# ifndef SMART_AA
+#  define SMART_AA		1
+# endif
+# ifndef CHEAP_AA
+#  define CHEAP_AA		0
+# endif
 
 // Max stack (depth 16) is about 18k with O3, 25k with O0
 // the default max stack on cluster macs is 8MB - we could go deeper!
@@ -33,6 +42,8 @@ typedef float			t_fvec2 \
 	__attribute__ ((vector_size(2 * sizeof(float))));
 typedef uint8_t			t_bvec \
 	__attribute__ ((vector_size(4 * sizeof(uint8_t))));
+typedef int32_t			t_ivec2 \
+	__attribute__ ((vector_size (2 * sizeof(int32_t))));
 
 typedef struct s_ray {
 	t_fvec	origin;
@@ -72,6 +83,12 @@ typedef struct s_fresnel_data {
 	float	refr_index;
 }	t_fresnel;
 
+typedef struct s_sample_info {
+	t_hit		hits[MAX_SAMPLES];
+	uint16_t	counted;
+	uint8_t		hit_cnt[MAX_SAMPLES];
+}	t_sinfo;
+
 bool	trace(t_scene *scene, t_ray *ray, t_hit *hit);
 
 bool	intersect_bvh(const t_bvh *bvh, t_cray *ray, t_hit *hit);
@@ -88,6 +105,9 @@ t_ray	get_cam_ray(t_object *camera, float x, float y);
 
 void	start_render(t_minirt *data, void *func_data);
 t_fvec	shade(t_scene *scene, t_hit *hit, float contrib);
+
+t_ivec2	cast_cam_rays(t_scene *scene, t_sinfo *info, int32_t x, int32_t y);
+t_fvec	shade_samples(t_scene *scene, t_sinfo *samples, int32_t sample_n, int32_t hit_n);
 
 t_fvec	phong(t_scene *scene, t_phong args);
 t_fvec	fresnel(t_scene *scene, t_fvec ks, t_hit *hit, float contrib);

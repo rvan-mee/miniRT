@@ -16,16 +16,8 @@
 #include <string.h>
 #include <ft_math.h>
 
-#ifndef MAX_SAMPLES
-# define MAX_SAMPLES	16
-#endif
-#ifndef SMART_AA
-# define SMART_AA		1
-#endif
-
 static void	put_pixel(mlx_image_t *img, uint32_t col, int32_t x, int32_t y)
 {
-//	mlx_put_pixel(img, x, y, col);
 	const int32_t	offs = (y * (int32_t) img->width + x);
 	uint32_t		*px;
 
@@ -33,64 +25,26 @@ static void	put_pixel(mlx_image_t *img, uint32_t col, int32_t x, int32_t y)
 	px[offs] = col;
 }
 
-/*
- * 0: Just the center pixel
- * 1-2: 2x super sampling
- * 1-4: 4x
- * 1-8: 8x
- * 1-16: 16x
- */
-static const t_fvec2	g_aa_offs[] = {
-	{0.50f, 0.50f},
-	{0.35f, 0.05f}, {0.65f, 0.95f},
-	{0.05f, 0.65f}, {0.95f, 0.35f},
-	{0.45f, 0.35f}, {0.55f, 0.65f}, {0.35f, 0.55f}, {0.65f, 0.45f},
-	{0.55f, 0.15f}, {0.45f, 0.85f}, {0.15f, 0.45f}, {0.85f, 0.55f},
-	{0.75f, 0.25f}, {0.25f, 0.75f}, {0.25f, 0.25f}, {0.75f, 0.75f},
-};
-
-bool	enough_hits(t_hit hits[], size_t samp, size_t hit_i)
+static void	no_supersampling(t_minirt *data, int32_t x, int32_t y)
 {
-	uint32_t	counted;
-	uint8_t		hit_c[MAX_SAMPLES + 1];
-	size_t		i;
-	size_t		j;
+	t_hit		hit;
+	t_fvec2		pos;
+	t_fvec		colour;
+	uint32_t	pix_col;
 
-	if (hit_i == 0)
-		return (true);
-	bzero(hit_c, sizeof(hit_c));
-	i = hit_i;
-	counted = 0;
-	while (i--)
-	{
-		if (counted & (1 << i))
-			continue ;
-		hit_c[i]++;
-		counted |= (1 << i);
-		j = i;
-		while (j--)
-		{
-			if ((counted & (1 << j)) || \
-				hits[i].object != hits[j].object)
-				continue ;
-			hit_c[i]++;
-			counted |= (1 << j);
-		}
-	}
-	if (hit_c[hit_i - 1] == samp + 1)
-		return (true);
-	// Previous if will return if all values are the same
-	if (samp == 2)
-		return (false);
-	counted = 0;
-	j = 0;
-	i = 0;
-	while (i < hit_i)
-		counted += hit_c[i++], j++;
-	if (samp == 4) // At most 2 diff objs
-		return (j + (counted != samp + 1) <= 2);
-//	if (sample == 8) // At most 3 diff objs
-	return (j + (counted != samp + 1) <= 4);
+	pos = (t_fvec2){(float) x, (float) y} + 0.5f;
+	hit.ray = get_cam_ray(&data->scene->camera, pos[X], pos[Y]);
+	hit.inside_ri = 1.0f;
+	colour = (t_fvec){};
+	if (!trace(data->scene, &hit.ray, &hit))
+		return (put_pixel(data->img, 0xFF000000, x, y));
+	colour = shade(data->scene, &hit, 1.0f);
+	colour = 1.0f - exp_fvec(colour * data->scene->camera.camera.exposure);
+	colour = encode_gamma(colour);
+	colour[3] = 1.0f;
+	colour = min_vec(colour * 0xFF, (t_fvec){255.f, 255.f, 255.f, 255.f});
+	pix_col = (uint32_t) __builtin_convertvector(colour, t_bvec);
+	put_pixel(data->img, pix_col, x, y);
 }
 
 /*
@@ -102,31 +56,19 @@ bool	enough_hits(t_hit hits[], size_t samp, size_t hit_i)
  */
 static void	render_pixel(t_minirt *data, int32_t x, int32_t y)
 {
-	t_hit	hits[MAX_SAMPLES + 1];
-	size_t	hit_i;
-	size_t	samp;
-	t_fvec2	pos;
+	t_ivec2	counts; // Sample count, hit count
+	t_sinfo	info;
+	t_fvec	col;
 
-	hit_i = 0;
-	samp = 0;
-	while (samp <= MAX_SAMPLES)
-	{
-		pos = (t_fvec2){(float)x, (float)y} + g_aa_offs[samp];
-		hits[hit_i].ray = get_cam_ray(&data->scene->camera, pos[X], pos[Y]);
-		hits[hit_i].inside_ri = 1.0f;
-		if (trace(data->scene, &hits[hit_i].ray, hits + hit_i))
-			hit_i++;
-		if (SMART_AA && (samp == 2 || samp == 4 || samp == 8) && \
-			enough_hits(hits, samp, hit_i))
-			break ;
-		++samp;
-	}
-	t_fvec col = {};
-	while (hit_i--)
-		col += shade(data->scene, hits + hit_i, 1.0f);
-	if (samp <= MAX_SAMPLES)
-		samp++;
-	col /= (float) samp;
+	if (MAX_SAMPLES == 0)
+		return (no_supersampling(data, x, y));
+	info = (t_sinfo){};
+	counts = cast_cam_rays(data->scene, &info, x, y);
+	if (counts[1] == 0)
+		return (put_pixel(data->img, 0xFF000000, x, y));
+	col = shade_samples(data->scene, &info, counts[0], counts[1]);
+	//while (counts[1]-- && info.hit_cnt[counts[1]])
+	//	col += shade(data->scene, info.hits + counts[1], 1.0f) * info.hit_cnt[counts[1]];
 	col = 1.0f - exp_fvec(col * data->scene->camera.camera.exposure);
 	col = encode_gamma(col);
 	col[3] = 1.0f;

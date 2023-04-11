@@ -12,8 +12,6 @@
 
 #include <render.h>
 #include <thread.h>
-#include <inttypes.h>
-#include <string.h>
 #include <ft_math.h>
 
 static void	put_pixel(mlx_image_t *img, uint32_t col, int32_t x, int32_t y)
@@ -35,7 +33,6 @@ static void	no_supersampling(t_minirt *data, int32_t x, int32_t y)
 	pos = (t_fvec2){(float) x, (float) y} + 0.5f;
 	hit.ray = get_cam_ray(&data->scene->camera, pos[X], pos[Y]);
 	hit.inside_ri = 1.0f;
-	colour = (t_fvec){};
 	if (!trace(data->scene, &hit.ray, &hit))
 		return (put_pixel(data->img, 0xFF000000, x, y));
 	colour = shade(data->scene, &hit, 1.0f);
@@ -48,7 +45,7 @@ static void	no_supersampling(t_minirt *data, int32_t x, int32_t y)
 }
 
 /*
- * Uses slightly modified rotated grid anti aliasing.
+ * Uses slightly modified rotated grid antialiasing.
  *
  * More importantly, checks if there's been more than one object we collided
  * with (or it's reflective/refractive) so we don't need to supersample every
@@ -56,19 +53,16 @@ static void	no_supersampling(t_minirt *data, int32_t x, int32_t y)
  */
 static void	render_pixel(t_minirt *data, int32_t x, int32_t y)
 {
-	t_ivec2	counts; // Sample count, hit count
 	t_sinfo	info;
 	t_fvec	col;
 
 	if (MAX_SAMPLES == 0)
 		return (no_supersampling(data, x, y));
 	info = (t_sinfo){};
-	counts = cast_cam_rays(data->scene, &info, x, y);
-	if (counts[1] == 0)
+	cast_cam_rays(data->scene, &info, x, y);
+	if (info.hit_count == 0)
 		return (put_pixel(data->img, 0xFF000000, x, y));
-	col = shade_samples(data->scene, &info, counts[0], counts[1]);
-	//while (counts[1]-- && info.hit_cnt[counts[1]])
-	//	col += shade(data->scene, info.hits + counts[1], 1.0f) * info.hit_cnt[counts[1]];
+	col = shade_samples(data->scene, &info);
 	col = 1.0f - exp_fvec(col * data->scene->camera.camera.exposure);
 	col = encode_gamma(col);
 	col[3] = 1.0f;

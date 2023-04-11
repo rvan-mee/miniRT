@@ -110,15 +110,20 @@ t_fvec	shade_samples(t_scene *scene, t_sinfo *samples, int32_t sample_n, int32_t
 	t_fvec	col;
 	t_hit	*hit;
 	uint8_t	i;
+	uint8_t	weight;
 
 	col = (t_fvec){};
 	i = 0;
 	while (i < hit_n)
 	{
-		if (samples->hit_cnt[i] != 0 || CHEAP_AA)
+		if (CHEAP_AA)
+			weight = samples->hit_cnt[i];
+		else
+			weight = 1;
+		if (weight != 0)
 		{
 			hit = samples->hits + i;
-			col += shade(scene, hit, 1.0f) * (float) (CHEAP_AA || samples->hit_cnt[i]);
+			col += shade(scene, hit, 1.0f) * (float) weight;
 		}
 		++i;
 	}

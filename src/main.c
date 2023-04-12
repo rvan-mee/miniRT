@@ -17,11 +17,6 @@
 #include <thread.h>
 #include <scene.h>
 
-void	f(void)
-{
-	system("leaks -q miniRT");
-}
-
 static bool	init_data(t_minirt *data, int argc, char **argv)
 {
 	*data = (t_minirt){
@@ -62,7 +57,6 @@ int	main(int argc, char *argv[])
 {
 	t_minirt	data;
 
-	atexit(f);
 	if (!init_data(&data, argc, argv) || \
 		!init_render_data(&data))
 		return (cleanup(&data, EXIT_FAILURE));

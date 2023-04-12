@@ -15,13 +15,15 @@ NAME := miniRT
 CC = gcc
 
 CFLAGS += -Wall -Werror -Wextra
-CFLAGS += #-fsanitize=address -Og -g
 CFLAGS += $(OFLAGS)
-OFLAGS += -march=native -fno-math-errno -freciprocal-math -fno-signed-zeros -fno-trapping-math -O3
+OFLAGS += -march=native -fno-math-errno -freciprocal-math -fno-signed-zeros -fno-trapping-math
 INCLUDE += -I $(INCD)
 
 ifdef DEBUG
 	CFLAGS += -g
+	OFLAGS += -Og
+else
+	OFLAGS += -O3
 endif
 
 # SOURCE FILES

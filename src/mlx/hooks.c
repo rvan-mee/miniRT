@@ -6,23 +6,18 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/12 12:12:27 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2023/03/13 16:12:23 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2023/04/12 15:12:49 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <thread.h>
 #include <mlx.h>
 #include <render.h>
-#define INFO_FORMAT "hit at x=%d,y=%d: objects[%lu]\n\t\
-					dist=%f\n\thit=(%f, %f, %f)\n\t\
-					normal=(%f, %f, %f)\n\tbary=(%f, %f, %f)\n\t\
-					refractive idx=%f/%f (exiting/entering)\n"
-
-static void	create_picture(t_minirt *data, enum keys key)
-{
-	(void)key;
-	create_bmp(data->img);
-}
+#define INFO_FORMAT "\thit at\n\t\
+x=%d,y=%d: objects[%lu]\n\t\
+dist=%f\n\thit=(%f, %f, %f)\n\t\
+normal=(%f, %f, %f)\n\tbary=(%f, %f, %f)\n\t\
+refractive idx=%f/%f (exiting/entering)\n"
 
 // MLX_KEY_MENU is the last var inside the enum
 static void	(*g_hook_func[MLX_KEY_MENU + 1])(t_minirt *, enum keys) = {\
@@ -33,7 +28,6 @@ static void	(*g_hook_func[MLX_KEY_MENU + 1])(t_minirt *, enum keys) = {\
 	[MLX_KEY_D] = move_cam,								\
 	[MLX_KEY_Q] = move_cam,								\
 	[MLX_KEY_E] = move_cam,								\
-	[MLX_KEY_P] = create_picture,						\
 	[MLX_KEY_UP] = rotate_cam,							\
 	[MLX_KEY_DOWN] = rotate_cam,						\
 	[MLX_KEY_LEFT] = rotate_cam,						\
@@ -59,6 +53,11 @@ void	keyhook(mlx_key_data_t keydata, t_minirt *data)
 		quit_working(data->thread);
 		clear_job_lst(data->thread);
 		mlx_close_window(data->mlx);
+	}
+	else if (keydata.key == MLX_KEY_P && keydata.action == MLX_PRESS)
+	{
+		wait_till_done(data->thread);
+		create_bmp(data->img);
 	}
 }
 

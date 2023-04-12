@@ -6,7 +6,7 @@
 /*   By: lsinke <lsinke@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/12/10 18:32:19 by lsinke        #+#    #+#                 */
-/*   Updated: 2022/12/10 18:32:19 by lsinke        ########   odam.nl         */
+/*   Updated: 2023/04/12 12:30:23 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 #include <bvh.h>
 #include <stdio.h>
 #include <inttypes.h>
+#include <unistd.h>
 #define TIME_1	"Creating bvh took %"
 #define TIME_2	"ms\n"
+#define ALLOC_FAIL "Creating bvh failed, can't allocate memory\n"
 
 static inline uint32_t	get_alloc_req(uint32_t n)
 {
@@ -100,7 +102,7 @@ bool	new_bvh(t_object *objects, uint32_t length, t_bvh *dst)
 	builder.length = length;
 	builder.node_idx = length;
 	if (!alloc_builder(&builder, length))
-		return (NULL);
+		return (dprintf(STDERR_FILENO, ALLOC_FAIL), NULL);
 	generate_codes(&builder);
 	success = sort_codes(builder.keys, length);
 	if (success)
@@ -108,8 +110,9 @@ bool	new_bvh(t_object *objects, uint32_t length, t_bvh *dst)
 		final_len = cluster_td(&builder, 0, 0, length - 1);
 		merge_nodes(&builder, 0, final_len, 1);
 		*dst = (t_bvh){objects, builder.clusters, builder.node_idx - 1, length};
+		printf(TIME_1 PRIu64 TIME_2, get_time_ms() - start);
 	}
-	free_builder(&builder, success);
-	printf(TIME_1 PRIu64 TIME_2, get_time_ms() - start);
-	return (success);
+	else
+		dprintf(STDERR_FILENO, ALLOC_FAIL);
+	return (free_builder(&builder, success), success);
 }

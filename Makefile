@@ -6,7 +6,7 @@
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/09/11 19:43:19 by lsinke        #+#    #+#                  #
-#    Updated: 2023/04/11 15:30:43 by rvan-mee      ########   odam.nl          #
+#    Updated: 2023/04/12 15:16:11 by rvan-mee      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -296,7 +296,7 @@ $(RESOURCES) &: $(RES_PARTS)
 
 get_resources: $(RESOURCES)
 
-clean_resoures:
+clean_resources:
 	@rm -f $(RES_ARCHIVE)
 	@rm -f $(RESOURCES)
 

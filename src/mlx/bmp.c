@@ -6,7 +6,7 @@
 /*   By: rvan-mee <rvan-mee@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/08 19:15:41 by rvan-mee      #+#    #+#                 */
-/*   Updated: 2022/10/28 20:49:46 by rvan-mee      ########   odam.nl         */
+/*   Updated: 2023/04/12 15:06:48 by rvan-mee      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void	create_bmp(mlx_image_t *img)
 	{
 		if (!data.data)
 			perror("Failed to allocate memory");
+		free(data.data);
 		close(fd);
 		return ;
 	}

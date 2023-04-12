@@ -90,7 +90,7 @@ t_fvec	shade(t_scene *scene, t_hit *hit, float contrib)
 	object = hit->object;
 	if (object->mat)
 		return (use_material(scene, hit, contrib));
-	p_args = (t_phong){ // todo: also look at this!
+	p_args = (t_phong){
 		.cam_hit = hit,
 		.kd = object->colour,
 		.ks = (t_fvec){0.04f, 0.04f, 0.04f},

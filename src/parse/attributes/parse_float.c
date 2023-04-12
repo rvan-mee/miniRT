@@ -17,7 +17,7 @@ bool	parse_float(char **linep, float *dst, float min, float max)
 {
 	char	*end;
 
-	*dst = strtof(*linep, &end); // change later to ft_
+	*dst = strtof(*linep, &end);
 	if (*linep == end || !ft_isdigit(end[-1]))
 		return (false);
 	*linep = end;

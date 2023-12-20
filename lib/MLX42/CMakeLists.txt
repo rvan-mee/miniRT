@@ -40,6 +40,7 @@ if(UNIX)
 		-Wall
 		-Werror
 		-Wunreachable-code
+		-fPIE
 		
 		# Some low priority warnings that are annoying.
 		-Wno-char-subscripts

@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         ::::::::             #
-#    Makefile                                           :+:    :+:             #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                      +:+                     #
 #    By: lsinke <lsinke@student.codam.nl>             +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/04/20 12:19:17 by lsinke        #+#    #+#                  #
-#    Updated: 2022/04/20 12:19:17 by lsinke        ########   odam.nl          #
+#    Updated: 2023/12/20 16:06:55 by rvan-mee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ OBJS = $(SRCS:.c=.o)
 OBJS_PREFIXED = $(addprefix $(OBJ_DIR), $(OBJS))
 
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra $(OFLAGS)
+CFLAGS = -Wall -Werror -Wextra -Wno-unused-result  $(OFLAGS)
 ifdef DEBUG
 	CFLAGS += -g
 endif
